@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/baby.png">
+  <link rel="mask-icon" href="/images/baby.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="act_triggering.cpp吾日4省吾身: 我是谁我在哪我在干嘛我想干嘛？  我想不用act_triggering 这个ros node(一定要camera跑起来才能用,而且还要linux电脑断网,调硬件很麻烦), 我想直接写一个publisher接收到trigger之后就publish hallucinatory cube face image.   这样就可以脱离硬件了. 让一切脱离硬">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rubix Cube">
+<meta property="og:url" content="http://yoursite.com/1987/10/20/Rubix-Cube/index.html">
+<meta property="og:site_name" content="TheSong">
+<meta property="og:description" content="act_triggering.cpp吾日4省吾身: 我是谁我在哪我在干嘛我想干嘛？  我想不用act_triggering 这个ros node(一定要camera跑起来才能用,而且还要linux电脑断网,调硬件很麻烦), 我想直接写一个publisher接收到trigger之后就publish hallucinatory cube face image.   这样就可以脱离硬件了. 让一切脱离硬">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="1987-10-20T07:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-26T23:09:32.554Z">
+<meta property="article:author" content="Nansong Yi">
+<meta property="article:tag" content="rubix">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/1987/10/20/Rubix-Cube/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Rubix Cube | TheSong</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TheSong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/1987/10/20/Rubix-Cube/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rubix Cube
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 1987-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="1987-10-20T00:00:00-07:00">1987-10-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-26 15:09:32" itemprop="dateModified" datetime="2020-02-26T15:09:32-08:00">2020-02-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/talk-to-myself/" itemprop="url" rel="index"><span itemprop="name">talk to myself</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="act-triggering-cpp"><a href="#act-triggering-cpp" class="headerlink" title="act_triggering.cpp"></a>act_triggering.cpp</h2><p><strong>吾日4省吾身</strong>: 我是谁我在哪我在干嘛我想干嘛？</p>
+<ul>
+<li><p>我想不用<code>act_triggering</code> 这个ros node(一定要camera跑起来才能用,而且还要linux电脑断网,调硬件很麻烦), 我想直接写一个publisher接收到trigger之后就publish hallucinatory cube face image. </p>
+</li>
+<li><p>这样就可以脱离硬件了. 让一切脱离硬件、最后才能更好地软硬结合、因为可以提高develop效率.</p>
+</li>
+<li><p>所以我想搞清楚 在<code>act_triggering.cpp</code>这个node里面到底哪里publish了image、publish的condition是什么.</p>
+</li>
+</ul>
+<h3 id="class-AVTCamera"><a href="#class-AVTCamera" class="headerlink" title="class: AVTCamera"></a>class: AVTCamera</h3><p>Member variable:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CameraParam cam_param;</span><br><span class="line">VmbInt64_t nPLS; <span class="comment">// Payload size value</span></span><br><span class="line">AVT::VmbAPI::FeaturePtr pFeature; <span class="comment">// Generic feature pointer 淦、好像和 CameraPtr 一样的、工具人</span></span><br><span class="line">AVT::VmbAPI::VimbaSystem &amp;sys;</span><br><span class="line">AVT::VmbAPI::CameraPtr camera;</span><br><span class="line">AVT::VmbAPI::FramePtrVector frames; <span class="comment">// Frame array</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// img最终在 class FrameObserver里面publish的.</span></span><br><span class="line">pImagePublisher-&gt;PublishImage(<span class="built_in">image</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码里面大量出现这样的重复段落 其实就是在check camera-&gt;GetFeatureByName()、 camera-&gt;SetValue() 等操作是否成功、不成功的话 一直循环 知道操作成功</span></span><br><span class="line"><span class="comment">// 感觉可以优化成一个pattern? 简洁一点不confuse?</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">AVTCamera::SetAcquisitionFramRate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">double</span> &amp; fps)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    VmbErrorType err;</span><br><span class="line">    err = camera-&gt;GetFeatureByName(<span class="string">"AcquisitionFrameRateAbs"</span>, pFeature);</span><br><span class="line">    <span class="keyword">if</span> (err == VmbErrorSuccess)</span><br><span class="line">    &#123;</span><br><span class="line">        err = pFeature-&gt;SetValue(fps); </span><br><span class="line">        <span class="keyword">if</span> (VmbErrorSuccess == err)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">bool</span> bIsCommandDone = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">do</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (VmbErrorSuccess != pFeature-&gt;IsCommandDone(bIsCommandDone))</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">while</span> (<span class="literal">false</span> == bIsCommandDone);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            ROS_ERROR(<span class="string">"failed to set AcquisitionFrameRateAbs feature"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ROS_ERROR(<span class="string">"failed to open AcquisitionFrameRateAbs feature"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>我太菜了看不懂c++、不知道<code>Frames</code>这个variable哪里跑出来的. 嗯 还有 目前完全找不到 trigger condition.</p>
+</li>
+<li><p>我感觉逻辑应该是、command sender发过来一个随意什么string然后这个node就会拍照 然后 publish到corresponding ros topic. 诶其实 有这个应该就可以写一个node去hallucinate 魔方的face image了、但是看不明白真难受</p>
+</li>
+<li><p>但是这个trigger到底是啥呢、callback function里面就只有一个<code>AVTCamera::TriggerImage</code> 啥也莫得了啊.难道要看看这三句话在干嘛?</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">err = camera-&gt;GetFeatureByName(<span class="string">"TriggerSoftware"</span>, pFeature);</span><br><span class="line">err = pFeature-&gt;RunCommand();</span><br><span class="line">VmbErrorSuccess != pFeature-&gt;IsCommandDone(bIsCommandDone);</span><br><span class="line"></span><br><span class="line"><span class="comment">//让我们来看看 lib</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// Method:      RunCommand()</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// Purpose:     Executes a feature of type Command</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="function">IMEXPORT    VmbErrorType <span class="title">RunCommand</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// Method:      IsCommandDone()</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// Purpose:     Indicates whether the execution of a feature of type Command has finished</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// Parameters:</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// [out]    bool&amp;    isDone     True when execution has finished</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="function">IMEXPORT    VmbErrorType <span class="title">IsCommandDone</span><span class="params">( <span class="keyword">bool</span> &amp;isDone )</span> <span class="keyword">const</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>所以pFeature是某个feature pointer用来执行某些命令 然后check 命令done? 那是不是要看看 每次用到这个feature pointer的时候它到底是个嘛feature? 好了本宝宝要去tkd了.</p>
+</li>
+<li><p>我猜 <code>bIsCommandDone</code> 是bool is command done缩写</p>
+</li>
+<li><p>感觉好像理解一些了、”TriggerSoftware”就是让camera拍照的pFeature.</p>
+</li>
+<li><p>我怎么感觉我废话好多. 我冷你三.</p>
+</li>
+</ul>
+<hr>
+<h2 id="Face-Detector-cpp"><a href="#Face-Detector-cpp" class="headerlink" title="Face_Detector.cpp"></a>Face_Detector.cpp</h2><ul>
+<li>目前遇到bug, 在c++, <code>cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8)</code>的时候, 为什么会出现8UC3 这是个什么东西?? 难道是opencv 版本的问题?</li>
+</ul>
+<h3 id="Stanford-Rubiks-Cube-Project"><a href="#Stanford-Rubiks-Cube-Project" class="headerlink" title="Stanford Rubiks Cube Project:"></a>Stanford Rubiks Cube Project:</h3><ul>
+<li><a href="http://cs231n.stanford.edu/reports/2015/pdfs/jaykevin_final.pdf" target="_blank" rel="noopener">Rubiks Cube Localization, Face Detection, and Interactive Solving</a></li>
+<li><a href="https://github.com/jayhack/ConvCube" target="_blank" rel="noopener">github reference</a></li>
+</ul>
+<hr>
+<h3 id="我在干嘛"><a href="#我在干嘛" class="headerlink" title="我在干嘛???"></a>我在干嘛???</h3><p>🌲<strong>憨憨学英语</strong></p>
+<ul>
+<li><p>revoke = cancel = withdraw = repeal 撤销、吊销、取消、撤回</p>
+</li>
+<li><p>hallucinatory = of or resembling a hallucination(v: hallucinate).   </p>
+</li>
+<li><p>Theora streaming video. theora是个啥xx玩意儿.</p>
+</li>
+<li><p>an assortment of = a variety of</p>
+</li>
+<li><p>as our algorithms are performing objectively well offline</p>
+</li>
+</ul>
+<p>🌲<strong>哈宝儿听音乐</strong></p>
+<ul>
+<li><p>歌名: Family 歌手: 新秀</p>
+<p><em>Hook</em>:</p>
+<p>你们一直等待</p>
+<p>舍不得把手放开</p>
+<p>可我却转过身来 把你们推开</p>
+<p>转眼来</p>
+<p>鬓角慢慢变灰白</p>
+<p>此刻我才知悔改</p>
+<p>你们的爱</p>
+<p>不明白 这么多年来</p>
+<p>哦谢谢你们的爱</p>
+<p>我才明白</p>
+<p>等我想追上来 可时间 步伐 太快</p>
+</li>
+</ul>
+<p>🌲<strong>莽莽学c++</strong></p>
+<ul>
+<li><p>顺嘴提一下c++ class里面有个convention, member variable通常会有前缀m, 比如我想定义一个叫做Robot的成员变量, 那么通常会定义成mRobot, 以便和普通变量区分, 因为一般定义在hpp里面 但是你在cpp里面用到的时候 会疑惑这个xx变量是哪里的 我咋从来没看到过declaration呢,但是你看到mRobot就知道这个xx是某个class的成员变量然后去找相应的hpp看看就不会confuse了.</p>
+</li>
+<li><p>c++ terminology中英对照表</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br></pre></td><td class="code"><pre><span class="line">abstract                                抽象的</span><br><span class="line">abstraction                             抽象体</span><br><span class="line">access                                  存取，取用</span><br><span class="line">access function                         存取函数</span><br><span class="line">address-of <span class="keyword">operator</span>                     取地址运算符 &amp;</span><br><span class="line">algorithm                               算法</span><br><span class="line">argument                                实参</span><br><span class="line"><span class="built_in">array</span>                                   数组</span><br><span class="line">arrow <span class="keyword">operator</span> arrow                    运算符 -&gt;</span><br><span class="line">assignment                              赋值</span><br><span class="line">assignment <span class="keyword">operator</span>                     赋值运算符</span><br><span class="line">associated                              相应的，相关的</span><br><span class="line">associative container                   关联式容器（对应于sequential container）</span><br><span class="line">base <span class="class"><span class="keyword">class</span>                              基类</span></span><br><span class="line"><span class="class"><span class="title">best</span> <span class="title">viable</span> <span class="title">function</span>                    最佳可行函数（从 <span class="title">viable</span> <span class="title">functions</span> 中挑出最佳温和者）</span></span><br><span class="line"><span class="class"><span class="title">binding</span>                                 绑定</span></span><br><span class="line"><span class="class"><span class="title">bit</span>                                     位</span></span><br><span class="line"><span class="class"><span class="title">bitwise</span>                                 “以<span class="title">bit</span>为单元的。。。” <span class="title">bitwise</span> <span class="title">copy</span></span></span><br><span class="line"><span class="class"><span class="title">block</span>                                   块</span></span><br><span class="line"><span class="class"><span class="title">boolean</span>                                 布尔值（真假值，<span class="title">true</span>, <span class="title">false</span>）</span></span><br><span class="line"><span class="class"><span class="title">byte</span>                                    字节（8<span class="title">bits</span> 所组成的一个单元）</span></span><br><span class="line"><span class="class"><span class="title">call</span> <span class="title">operator</span>   <span class="title">call</span>                    运算符() (与<span class="title">function</span> <span class="title">call</span> <span class="title">operator</span> 同)</span></span><br><span class="line"><span class="class"><span class="title">chain</span>                                   链(<span class="title">chain</span> <span class="title">of</span> <span class="title">function</span> <span class="title">calls</span>)</span></span><br><span class="line"><span class="class"><span class="title">child</span> <span class="title">class</span>                             子类（或称 <span class="title">derived</span> <span class="title">class</span>, <span class="title">subtype</span>）</span></span><br><span class="line"><span class="class"><span class="title">class</span>                                   类</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">body</span>                              类本身</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">declaration</span>                       类声明， 类声明式</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">definition</span>                        类定义， 类定义式子</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">derivation</span> <span class="title">list</span>                   类派生列</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">head</span>                              类表头</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">template</span>                          类模板</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">template</span> <span class="title">partial</span> <span class="title">specializations</span>  类模板局部特殊化</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">template</span> <span class="title">specializaiton</span>           类模板特殊化</span></span><br><span class="line"><span class="class"><span class="title">cleanup</span>                                 清理</span></span><br><span class="line"><span class="class"><span class="title">candidate</span> <span class="title">function</span>                      候选函数(在暗示重载解析程序中出现的候选函数)</span></span><br><span class="line"><span class="class"><span class="title">command</span> <span class="title">line</span>                            命令行　</span></span><br><span class="line"><span class="class"><span class="title">compiler</span>                                编译器</span></span><br><span class="line"><span class="class"><span class="title">component</span>                               组件</span></span><br><span class="line"><span class="class"><span class="title">concrete</span>                                具体的</span></span><br><span class="line"><span class="class"><span class="title">container</span>                               容器（可存放数据的一种结果，例如<span class="title">list</span>, <span class="title">map</span>, <span class="title">set</span>)</span></span><br><span class="line"><span class="class"><span class="title">context</span>                                 上下文， 背景关系，上下脉络</span></span><br><span class="line"><span class="class"><span class="title">const</span>                                   常量（<span class="title">constant</span> 的缩写，相对于变数 <span class="title">variable</span>）</span></span><br><span class="line"><span class="class"><span class="title">constant</span>                                不变的，相对于<span class="title">mutable</span>（易变的）</span></span><br><span class="line"><span class="class"><span class="title">constructor</span>                             构造函数（与<span class="title">class</span>同名的一种<span class="title">member</span> <span class="title">function</span>） <span class="title">ctor</span></span></span><br><span class="line"><span class="class"><span class="title">data</span> <span class="title">member</span>                             数据成员，成员变量</span></span><br><span class="line"><span class="class"><span class="title">declaration</span>                             声明，声明式</span></span><br><span class="line"><span class="class"><span class="title">deduction</span>                               推导(例：<span class="title">template</span> <span class="title">argument</span> <span class="title">deduction</span>)</span></span><br><span class="line"><span class="class"><span class="title">definition</span>                              定义</span></span><br><span class="line"><span class="class"><span class="title">dereference</span>                             提领（取出指标所指物体的内容）</span></span><br><span class="line"><span class="class"><span class="title">dereference</span> <span class="title">operator</span>                    提领预算法 *</span></span><br><span class="line"><span class="class"><span class="title">derived</span> <span class="title">class</span>                           派生类</span></span><br><span class="line"><span class="class"><span class="title">destructor</span> (<span class="title">dtor</span>)                       析构函数</span></span><br><span class="line"><span class="class"><span class="title">directive</span>                               指令（例：<span class="title">using</span> <span class="title">directive</span>）</span></span><br><span class="line"><span class="class"><span class="title">dot</span> <span class="title">operator</span> <span class="title">dot</span>                        运算符</span></span><br><span class="line"><span class="class"><span class="title">dynamic</span> <span class="title">binding</span>                         动态绑定</span></span><br><span class="line"><span class="class"><span class="title">entity</span>                                  实体</span></span><br><span class="line"><span class="class"><span class="title">encapsulation</span>                           封装</span></span><br><span class="line"><span class="class"><span class="title">enclosing</span> <span class="title">class</span>                         外围类</span></span><br><span class="line"><span class="class"><span class="title">enum</span>(<span class="title">enumeration</span>)                       枚举</span></span><br><span class="line"><span class="class"><span class="title">enumerators</span>                             枚举成员</span></span><br><span class="line"><span class="class"><span class="title">equality</span> <span class="title">operator</span>                       等号运算符==</span></span><br><span class="line"><span class="class"><span class="title">evaluate</span>                                评估，求值，核定</span></span><br><span class="line"><span class="class"><span class="title">exception</span>                               异常，异常情况</span></span><br><span class="line"><span class="class"><span class="title">exception</span> <span class="title">declaration</span>                   异常声明</span></span><br><span class="line"><span class="class"><span class="title">exception</span> <span class="title">handing</span>                       异常处理，异常处理机制</span></span><br><span class="line"><span class="class"><span class="title">exception</span> <span class="title">specification</span>                 异常规格</span></span><br><span class="line"><span class="class"><span class="title">exit</span>                                    退出</span></span><br><span class="line"><span class="class"><span class="title">explicit</span>                                显式，明显的，明白的</span></span><br><span class="line"><span class="class"><span class="title">export</span>                                  导出</span></span><br><span class="line"><span class="class"><span class="title">expression</span>                              表达式</span></span><br><span class="line"><span class="class"><span class="title">facility</span>                                机制</span></span><br><span class="line"><span class="class"><span class="title">flush</span>                                   清理，扫清</span></span><br><span class="line"><span class="class"><span class="title">formal</span> <span class="title">parameter</span>                        形式参数</span></span><br><span class="line"><span class="class"><span class="title">forward</span> <span class="title">declaration</span>                     前置声明</span></span><br><span class="line"><span class="class"><span class="title">function</span>                                函数</span></span><br><span class="line"><span class="class"><span class="title">function</span> <span class="title">call</span> <span class="title">operator</span>                  与<span class="title">operator</span> 同</span></span><br><span class="line"><span class="class"><span class="title">function</span> <span class="title">object</span>                         函数对象</span></span><br><span class="line"><span class="class"><span class="title">function</span> <span class="title">overloaded</span> <span class="title">resolustion</span>         函数重载决议程序</span></span><br><span class="line"><span class="class"><span class="title">function</span> <span class="title">signature</span>                      函数签名</span></span><br><span class="line"><span class="class"><span class="title">function</span> <span class="title">template</span>                       函数模板</span></span><br><span class="line"><span class="class"><span class="title">generic</span>                                 泛型，一般化的</span></span><br><span class="line"><span class="class"><span class="title">generic</span> <span class="title">algorithm</span>                       泛型算法</span></span><br><span class="line"><span class="class"><span class="title">global</span>                                  全局的</span></span><br><span class="line"><span class="class"><span class="title">global</span> <span class="title">scope</span> <span class="title">resolution</span> <span class="title">operator</span>        全局生存空间运算符:</span>:</span><br><span class="line">handler                                 句柄</span><br><span class="line">header file                             头文件（放置各种类型定义，数据结构，函数声明的文件）</span><br><span class="line">hierarchy                               层次体系（base <span class="class"><span class="keyword">class</span> 和<span class="title">derived</span> <span class="title">class</span> 派生类）</span></span><br><span class="line"><span class="class"><span class="title">implement</span>                               实现</span></span><br><span class="line"><span class="class"><span class="title">implementation</span>                          实现品，实现物，编译器</span></span><br><span class="line"><span class="class"><span class="title">implicit</span>                                隐式，暗自的(<span class="title">explicit</span> 显式)  </span></span><br><span class="line"><span class="class"><span class="title">increment</span> <span class="title">operator</span>                      自增运算符++</span></span><br><span class="line"><span class="class"><span class="title">inheritance</span>                             继承，继承机制</span></span><br><span class="line"><span class="class"><span class="title">inline</span>                                  内敛</span></span><br><span class="line"><span class="class"><span class="title">inline</span> <span class="title">expansion</span>                        内敛扩展</span></span><br><span class="line"><span class="class"><span class="title">initialization</span>                          初始化（操作）</span></span><br><span class="line"><span class="class"><span class="title">initialization</span> <span class="title">list</span>                     初值列</span></span><br><span class="line"><span class="class"><span class="title">initialize</span>                              初始化</span></span><br><span class="line"><span class="class"><span class="title">intance</span>                                 实体（常指根据<span class="title">class</span>而产生出来的<span class="title">object</span>）</span></span><br><span class="line"><span class="class"><span class="title">instantiated</span>                            具体化（应用于<span class="title">template</span>）</span></span><br><span class="line"><span class="class"><span class="title">invoke</span>                                  调用，唤起</span></span><br><span class="line"><span class="class"><span class="title">iterate</span>                                 迭代（回圈一个轮回一个轮回地进行）</span></span><br><span class="line"><span class="class"><span class="title">iterator</span>                                迭代器</span></span><br><span class="line"><span class="class"><span class="title">iteration</span>                               迭代（回圈中的每一次轮回称之为<span class="title">igeinteration</span>）</span></span><br><span class="line"><span class="class"><span class="title">lifetime</span>                                生命期，生命周期</span></span><br><span class="line"><span class="class"><span class="title">linker</span>                                  连接器</span></span><br><span class="line"><span class="class"><span class="title">literal</span> <span class="title">constant</span>                        文字常量</span></span><br><span class="line"><span class="class"><span class="title">list</span>                                    链表</span></span><br><span class="line"><span class="class"><span class="title">local</span>                                   局部的</span></span><br><span class="line"><span class="class"><span class="title">lvalue</span>                                  左值</span></span><br><span class="line"><span class="class"><span class="title">manipulator</span>                             操作器</span></span><br><span class="line"><span class="class"><span class="title">mechanism</span>                               机制</span></span><br><span class="line"><span class="class"><span class="title">member</span>                                  成员</span></span><br><span class="line"><span class="class"><span class="title">member</span> <span class="title">access</span> <span class="title">operator</span>                  成员取用运算符（<span class="title">dot</span>, <span class="title">arrow</span>）</span></span><br><span class="line"><span class="class"><span class="title">member</span> <span class="title">function</span>                         成员函数</span></span><br><span class="line"><span class="class"><span class="title">member</span> <span class="title">initialization</span> <span class="title">list</span>              成员初始化列表</span></span><br><span class="line"><span class="class"><span class="title">memberwise</span>                              以 <span class="title">member</span> 为单元的。。例 <span class="title">memberwise</span> <span class="title">copy</span></span></span><br><span class="line"><span class="class"><span class="title">mutable</span>                                 可变的，易变的 相对于 <span class="title">constant</span> 不变的</span></span><br><span class="line"><span class="class"><span class="title">most</span> <span class="title">derived</span> <span class="title">class</span>                      最末层的派生类</span></span><br><span class="line"><span class="class"><span class="title">namespace</span>                               命名空间</span></span><br><span class="line"><span class="class"><span class="title">nested</span> <span class="title">class</span>                            嵌套类</span></span><br><span class="line"><span class="class"><span class="title">operand</span>                                 操作数</span></span><br><span class="line"><span class="class"><span class="title">operation</span>                               操作行为</span></span><br><span class="line"><span class="class"><span class="title">operator</span>                                运算符</span></span><br><span class="line"><span class="class"><span class="title">option</span>                                  选项</span></span><br><span class="line"><span class="class"><span class="title">overflow</span>                                上限溢位（相对于 <span class="title">underflow</span>）</span></span><br><span class="line"><span class="class"><span class="title">overhead</span>                                额外负担</span></span><br><span class="line"><span class="class"><span class="title">overload</span>                                重载</span></span><br><span class="line"><span class="class"><span class="title">overloaded</span> <span class="title">function</span>                     重载函数</span></span><br><span class="line"><span class="class"><span class="title">overloaded</span> <span class="title">operator</span>                     重载运算符</span></span><br><span class="line"><span class="class"><span class="title">overloaded</span> <span class="title">set</span>                          重载集合</span></span><br><span class="line"><span class="class"><span class="title">override</span>                                改写。意指在<span class="title">derived</span> <span class="title">class</span> 中重新定义<span class="title">virtual</span> <span class="title">function</span></span></span><br><span class="line"><span class="class"><span class="title">parameter</span> <span class="title">list</span>                          参数表</span></span><br><span class="line"><span class="class"><span class="title">parent</span> <span class="title">class</span>                            父类</span></span><br><span class="line"><span class="class"><span class="title">parse</span>                                   解析</span></span><br><span class="line"><span class="class"><span class="title">partial</span> <span class="title">specialization</span>                  局部特殊化定义</span></span><br><span class="line"><span class="class"><span class="title">pass</span> <span class="title">by</span> <span class="title">address</span>                         传址</span></span><br><span class="line"><span class="class"><span class="title">pass</span> <span class="title">by</span> <span class="title">reference</span>                       传址</span></span><br><span class="line"><span class="class"><span class="title">pass</span> <span class="title">by</span> <span class="title">value</span>                           传值</span></span><br><span class="line"><span class="class">                                        </span></span><br><span class="line"><span class="class">                                        </span></span><br><span class="line"><span class="class"><span class="title">platform</span>                                平台</span></span><br><span class="line"><span class="class"><span class="title">pointer</span>                                 指针</span></span><br><span class="line"><span class="class"><span class="title">polymorphism</span>                            多态</span></span><br><span class="line"><span class="class"><span class="title">preprocessor</span>                            预处理器</span></span><br><span class="line"><span class="class"><span class="title">programming</span>                             编程，程序设计，程序化</span></span><br><span class="line"><span class="class"><span class="title">project</span>                                 工程</span></span><br><span class="line"><span class="class"><span class="title">qualified</span>                               限定的</span></span><br><span class="line"><span class="class"><span class="title">qualifier</span>                               限定词</span></span><br><span class="line"><span class="class"><span class="title">raise</span>                                   发生(常同来表示发出一个 <span class="title">exception</span>)</span></span><br><span class="line"><span class="class"><span class="title">rank</span>                                    等级，分类</span></span><br><span class="line"><span class="class"><span class="title">raw</span>                                     未经处理的</span></span><br><span class="line"><span class="class"><span class="title">reference</span>  <span class="title">C</span>++                          之中类似 <span class="title">pointer</span> 指针的东西，意义相当于“化身”</span></span><br><span class="line"><span class="class"><span class="title">represent</span>                               表述，表现</span></span><br><span class="line"><span class="class"><span class="title">resolve</span>                                 决议。为表达式中的符号名称寻找对应声明的过程。</span></span><br><span class="line"><span class="class"><span class="title">resolution</span>                              决议程序，决议过程</span></span><br><span class="line"><span class="class"><span class="title">rvalue</span>                                  右值</span></span><br><span class="line"><span class="class"><span class="title">scope</span>                                   生存空间</span></span><br><span class="line"><span class="class"><span class="title">scope</span> <span class="title">operator</span>                          生存空间运算符</span></span><br><span class="line"><span class="class"><span class="title">scope</span> <span class="title">resolution</span> <span class="title">operator</span>               生存空间决议运算符（与<span class="title">scope</span> <span class="title">operator</span> 同）</span></span><br><span class="line"><span class="class"><span class="title">sequential</span>  <span class="title">container</span>                   循环容器</span></span><br><span class="line"><span class="class"><span class="title">signature</span>                               见<span class="title">function</span> <span class="title">signature</span></span></span><br><span class="line"><span class="class"><span class="title">specialization</span>                          特殊化，特殊化定义，特殊化声明</span></span><br><span class="line"><span class="class"><span class="title">stack</span>                                   堆栈</span></span><br><span class="line"><span class="class"><span class="title">stack</span> <span class="title">unwinding</span>                         堆栈展开</span></span><br><span class="line"><span class="class"><span class="title">statement</span>                               语句</span></span><br><span class="line"><span class="class"><span class="title">stream</span>                                  流</span></span><br><span class="line"><span class="class"><span class="title">string</span>                                  字符串</span></span><br><span class="line"><span class="class"><span class="title">subscript</span> <span class="title">operator</span>                      下标运算符</span></span><br><span class="line"><span class="class"><span class="title">subtype</span>                                 子型别</span></span><br><span class="line"><span class="class"><span class="title">target</span>                                  目标</span></span><br><span class="line"><span class="class"><span class="title">template</span>                                模板</span></span><br><span class="line"><span class="class"><span class="title">template</span> <span class="title">argument</span> <span class="title">deduction</span>             模板变量推导</span></span><br><span class="line"><span class="class"><span class="title">template</span> <span class="title">explicit</span> <span class="title">specialization</span>        范本明白特殊化</span></span><br><span class="line"><span class="class"><span class="title">template</span> <span class="title">parameter</span>                      模板参数</span></span><br><span class="line"><span class="class"><span class="title">text</span> <span class="title">file</span>                               程序代码文件</span></span><br><span class="line"><span class="class"><span class="title">throw</span>                                   抛出</span></span><br><span class="line"><span class="class"><span class="title">token</span>                                   词法单元</span></span><br><span class="line"><span class="class"><span class="title">type</span>                                    型别</span></span><br><span class="line"><span class="class"><span class="title">underflow</span>                               下溢</span></span><br><span class="line"><span class="class"><span class="title">unqualified</span>                             未经资格修饰（而直接取用）</span></span><br><span class="line"><span class="class"><span class="title">unwinding</span>                               见<span class="title">stack</span> <span class="title">unwinding</span></span></span><br><span class="line"><span class="class"><span class="title">variable</span>                                变量</span></span><br><span class="line"><span class="class"><span class="title">vector</span>                                  向量</span></span><br><span class="line"><span class="class"><span class="title">viable</span>                                  可实行的</span></span><br><span class="line"><span class="class"><span class="title">viable</span>  <span class="title">function</span>                        可行函数</span></span><br><span class="line"><span class="class"><span class="title">volatile</span>                                易变的</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/rubix/" rel="tag"><i class="fa fa-tag"></i> rubix</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/1987/10/20/Unorganized-Notes/" rel="prev" title="Unorganized Notes">
+      <i class="fa fa-chevron-left"></i> Unorganized Notes
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/24/hello-world/" rel="next" title="Hello World">
+      Hello World <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#act-triggering-cpp"><span class="nav-number">1.</span> <span class="nav-text">act_triggering.cpp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#class-AVTCamera"><span class="nav-number">1.1.</span> <span class="nav-text">class: AVTCamera</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Face-Detector-cpp"><span class="nav-number">2.</span> <span class="nav-text">Face_Detector.cpp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stanford-Rubiks-Cube-Project"><span class="nav-number">2.1.</span> <span class="nav-text">Stanford Rubiks Cube Project:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#我在干嘛"><span class="nav-number">2.2.</span> <span class="nav-text">我在干嘛???</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Nansong Yi"
+      src="/images/baby.png">
+  <p class="site-author-name" itemprop="name">Nansong Yi</p>
+  <div class="site-description" itemprop="description">TheSong is named after IG.TheShy</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nansongyi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nansongyi" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nansong@uw.edu" title="E-Mail → mailto:nansong@uw.edu" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://nansongyi.me/" title="http:&#x2F;&#x2F;nansongyi.me" rel="noopener" target="_blank">web</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://silencial.github.io/" title="https:&#x2F;&#x2F;silencial.github.io&#x2F;" rel="noopener" target="_blank">silencial</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://3monks.org/en/" title="https:&#x2F;&#x2F;3monks.org&#x2F;en&#x2F;" rel="noopener" target="_blank">sky</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Nansong Yi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      script.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+    </div>
+</body>
+</html>
