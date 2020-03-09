@@ -3,7 +3,7 @@
   <title>TheSong</title>
   
   
-  <link href="/atom.xml" rel="self"/>
+  <link href="/rss.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
   <updated>2020-03-09T05:31:57.536Z</updated>
