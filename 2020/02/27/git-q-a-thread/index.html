@@ -28,7 +28,7 @@
 <meta property="og:description" content="Case: git push 不给其他argsDiscription: clone下来一个repo, 我新建一个branch叫做my_branch然后push到remote&#x2F;origin, 使用的命令是git push, 然后我在别的地儿再重新clone这个repo, git checkout my_branch的时候是到origin&#x2F;my_branch, 而没有一个local的不带origin&#x2F;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-27T20:37:54.000Z">
-<meta property="article:modified_time" content="2020-03-09T07:22:37.348Z">
+<meta property="article:modified_time" content="2020-03-12T08:47:19.249Z">
 <meta property="article:author" content="Nansong Yi">
 <meta property="article:tag" content="Git">
 <meta name="twitter:card" content="summary">
@@ -224,7 +224,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-09 00:22:37" itemprop="dateModified" datetime="2020-03-09T00:22:37-07:00">2020-03-09</time>
+                <time title="Modified: 2020-03-12 01:47:19" itemprop="dateModified" datetime="2020-03-12T01:47:19-07:00">2020-03-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -315,7 +315,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add -D</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
 
 <p>The ssh-agent at present has the key mapped with the work Github account, and you can do a Git push to the work repository. This requires a bit of manual effort, though.</p>
-<h4 id="Setting-the-git-remote-Url-for-the-local-repositories"><a href="#Setting-the-git-remote-Url-for-the-local-repositories" class="headerlink" title="Setting the git remote Url for the local repositories"></a>Setting the git remote Url for the local repositories</h4><p>Once we have local Git repositories cloned /created, ensure the Git config user name and email is exactly what you want. GitHub identifies the author of any commit from the email id attached with the commit description.</p>
+<h3 id="Setting-the-git-remote-Url-for-the-local-repositories"><a href="#Setting-the-git-remote-Url-for-the-local-repositories" class="headerlink" title="Setting the git remote Url for the local repositories"></a>Setting the git remote Url for the local repositories</h3><p>Once we have local Git repositories cloned /created, ensure the Git config user name and email is exactly what you want. GitHub identifies the author of any commit from the email id attached with the commit description.</p>
 <p>To list the config name and email in the local Git directory, do <code>*git config user.name*</code>and <code>*git config user.email*</code>. If it’s not found, update accordingly.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.name <span class="string">"User 1"</span>   // Updates git config user name</span><br><span class="line">$ git config user.email <span class="string">"user1@workMail.com"</span></span><br></pre></td></tr></table></figure>
 
@@ -336,8 +336,7 @@
 <p>Ensure the string between @ and : matches the Host we have given in the SSH config.</p>
 <p><strong>If you are creating a new repository on local:</strong></p>
 <p>Initialize Git in the project folder <code>git init</code>.</p>
-<p>Create the new repository in the GitHub account and then add it as the Git remote to the local repository.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin git@github.com-work_user1:work_user1/repo_name.git</span><br></pre></td></tr></table></figure>
+<h3 id="Create-the-new-repository-in-the-GitHub-account-and-then-add-it-as-the-Git-remote-to-the-local-repository"><a href="#Create-the-new-repository-in-the-GitHub-account-and-then-add-it-as-the-Git-remote-to-the-local-repository" class="headerlink" title="Create the new repository in the GitHub account and then add it as the Git remote to the local repository."></a>Create the new repository in the GitHub account and then add it as the Git remote to the local repository.</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin git@github.com-work_user1:work_user1/repo_name.git</span><br></pre></td></tr></table></figure>
 
 <p>Ensure the string between @ and : matches the Host we have given in the SSH config.</p>
 <p>Push the initial commit to the GitHub repository:</p>
@@ -352,6 +351,8 @@
 </ul>
 </li>
 </ul>
+<h3 id="Tips"><a href="#Tips" class="headerlink" title="Tips:"></a>Tips:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d <span class="string">"branch name"</span> 删除branch</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -414,7 +415,7 @@
       <i class="fa fa-chevron-left"></i> tmux review
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/02/27/Latex-Math-Cheat-Sheet/" rel="next" title="Latex Math Cheat Sheet">
+    <a href="/2020/02/27/Latex-Math-Cheat-Sheet-NSConflict-TheSong96-mac10.15.3/" rel="next" title="Latex Math Cheat Sheet">
       Latex Math Cheat Sheet <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -476,7 +477,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-git-push-不给其他args"><span class="nav-number">1.</span> <span class="nav-text">Case: git push 不给其他args</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-How-to-manage-multiple-GitHub-accounts-on-a-single-machine-with-SSH-keys"><span class="nav-number">2.</span> <span class="nav-text">Case:   How to manage multiple GitHub accounts on a single machine with SSH keys</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Generating-the-SSH-keys"><span class="nav-number">2.1.</span> <span class="nav-text">1. Generating the SSH keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Adding-the-new-SSH-key-to-the-corresponding-GitHub-account"><span class="nav-number">2.2.</span> <span class="nav-text">2. Adding the new SSH key to the corresponding GitHub account</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Registering-the-new-SSH-Keys-with-the-ssh-agent"><span class="nav-number">2.3.</span> <span class="nav-text">3 . Registering the new SSH Keys with the ssh-agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Creating-the-SSH-config-File"><span class="nav-number">2.4.</span> <span class="nav-text">4. Creating the SSH config File</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-One-active-SSH-key-in-the-ssh-agent-at-a-time"><span class="nav-number">2.5.</span> <span class="nav-text">5. One active SSH key in the ssh-agent at a time</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Setting-the-git-remote-Url-for-the-local-repositories"><span class="nav-number">2.5.1.</span> <span class="nav-text">Setting the git remote Url for the local repositories</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-While-Cloning-Repositories"><span class="nav-number">2.6.</span> <span class="nav-text">6. While Cloning Repositories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-For-Locally-Existing-Repositories"><span class="nav-number">2.7.</span> <span class="nav-text">7. For Locally Existing Repositories</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-git-push-不给其他args"><span class="nav-number">1.</span> <span class="nav-text">Case: git push 不给其他args</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-How-to-manage-multiple-GitHub-accounts-on-a-single-machine-with-SSH-keys"><span class="nav-number">2.</span> <span class="nav-text">Case:   How to manage multiple GitHub accounts on a single machine with SSH keys</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Generating-the-SSH-keys"><span class="nav-number">2.1.</span> <span class="nav-text">1. Generating the SSH keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Adding-the-new-SSH-key-to-the-corresponding-GitHub-account"><span class="nav-number">2.2.</span> <span class="nav-text">2. Adding the new SSH key to the corresponding GitHub account</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Registering-the-new-SSH-Keys-with-the-ssh-agent"><span class="nav-number">2.3.</span> <span class="nav-text">3 . Registering the new SSH Keys with the ssh-agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Creating-the-SSH-config-File"><span class="nav-number">2.4.</span> <span class="nav-text">4. Creating the SSH config File</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-One-active-SSH-key-in-the-ssh-agent-at-a-time"><span class="nav-number">2.5.</span> <span class="nav-text">5. One active SSH key in the ssh-agent at a time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Setting-the-git-remote-Url-for-the-local-repositories"><span class="nav-number">2.6.</span> <span class="nav-text">Setting the git remote Url for the local repositories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-While-Cloning-Repositories"><span class="nav-number">2.7.</span> <span class="nav-text">6. While Cloning Repositories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-For-Locally-Existing-Repositories"><span class="nav-number">2.8.</span> <span class="nav-text">7. For Locally Existing Repositories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-the-new-repository-in-the-GitHub-account-and-then-add-it-as-the-Git-remote-to-the-local-repository"><span class="nav-number">2.9.</span> <span class="nav-text">Create the new repository in the GitHub account and then add it as the Git remote to the local repository.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips"><span class="nav-number">2.10.</span> <span class="nav-text">Tips:</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -492,7 +493,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
