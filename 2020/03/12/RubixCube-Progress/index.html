@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/baby.png">
+  <link rel="mask-icon" href="/images/baby.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Palatino:300,300italic,400,400italic,700,700italic|Monaco:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Terminology praperation: face, sub-cubes a Rubik’s cube has 6 faces, each face has 9 sub-cubes. Overview: Original goal Goal Changes: Focus on Vision + Pose Estimation1. Vision: Rubix Cube Face Detect">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RubixCube Progress">
+<meta property="og:url" content="https://thesong96.github.io/2020/03/12/RubixCube-Progress/index.html">
+<meta property="og:site_name" content="TheSong">
+<meta property="og:description" content="Terminology praperation: face, sub-cubes a Rubik’s cube has 6 faces, each face has 9 sub-cubes. Overview: Original goal Goal Changes: Focus on Vision + Pose Estimation1. Vision: Rubix Cube Face Detect">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/GR2rHwj.png">
+<meta property="og:image" content="https://i.imgur.com/5PpoioY.png">
+<meta property="og:image" content="https://i.imgur.com/glB41wO.png">
+<meta property="og:image" content="https://i.imgur.com/wRWtuxF.png">
+<meta property="og:image" content="https://i.imgur.com/g0nVVCD.png">
+<meta property="og:image" content="https://i.imgur.com/COQFEjU.png">
+<meta property="og:image" content="https://i.imgur.com/wIPFoTZ.png">
+<meta property="og:image" content="https://i.imgur.com/4N7cCip.png">
+<meta property="article:published_time" content="2020-03-13T05:45:20.000Z">
+<meta property="article:modified_time" content="2020-03-13T08:37:26.824Z">
+<meta property="article:author" content="Nansong Yi">
+<meta property="article:tag" content="rubix cube">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/GR2rHwj.png">
+
+<link rel="canonical" href="https://thesong96.github.io/2020/03/12/RubixCube-Progress/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>RubixCube Progress | TheSong</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/rss.xml" title="TheSong" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TheSong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/12/RubixCube-Progress/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RubixCube Progress
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-12 22:45:20" itemprop="dateCreated datePublished" datetime="2020-03-12T22:45:20-07:00">2020-03-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-13 01:37:26" itemprop="dateModified" datetime="2020-03-13T01:37:26-07:00">2020-03-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/talk-to-myself/" itemprop="url" rel="index"><span itemprop="name">talk to myself</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Terminology praperation:</p>
+<p><strong>face</strong>, <strong>sub-cubes</strong></p>
+<p>a Rubik’s cube has 6 faces, each face has 9 sub-cubes.</p>
+<h2 id="Overview-Original-goal"><a href="#Overview-Original-goal" class="headerlink" title="Overview: Original goal"></a>Overview: Original goal</h2><p><img src="https://i.imgur.com/GR2rHwj.png" alt="image-20200312224833356"></p>
+<h2 id="Goal-Changes-Focus-on-Vision-Pose-Estimation"><a href="#Goal-Changes-Focus-on-Vision-Pose-Estimation" class="headerlink" title="Goal Changes: Focus on Vision + Pose Estimation"></a>Goal Changes: Focus on Vision + Pose Estimation</h2><h3 id="1-Vision-Rubix-Cube-Face-Detection"><a href="#1-Vision-Rubix-Cube-Face-Detection" class="headerlink" title="1. Vision: Rubix Cube Face Detection"></a>1. Vision: Rubix Cube Face Detection</h3><h4 id="Problems-from-old-algorithm"><a href="#Problems-from-old-algorithm" class="headerlink" title="Problems from old algorithm:"></a>Problems from old algorithm:</h4><ul>
+<li>Only using HSV color filter,  sensitive to brigtness, background, camera exposure time, etc.<img src="https://i.imgur.com/5PpoioY.png" alt="image-20200312231316045"></li>
+<li>Requires the cube to be at a fixed positon.</li>
+</ul>
+<p><img src="https://i.imgur.com/glB41wO.png" alt="image-20200312231701442"></p>
+<h4 id="New-Approach"><a href="#New-Approach" class="headerlink" title="New Approach:"></a>New Approach:</h4><p>a) doesn’t require fixed position anymore.</p>
+<ul>
+<li>Object detection algorithm, such as Yolo, Faster-RCNN, will be used to draw a bounding box of Rubik’s Cube</li>
+<li>Hwo to create Dataset? <a href="http://labelme.csail.mit.edu/Release3.0/" target="_blank" rel="noopener">MIT LabelMe</a>, see the following labeling example (including <strong>image with bounding box</strong> &amp; bounding box <strong>Description XML</strong> file)</li>
+</ul>
+<p><img src="https://i.imgur.com/wRWtuxF.png" alt="image-20200312234614078"></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">annotation</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filename</span>&gt;</span>b.jpg<span class="tag">&lt;/<span class="name">filename</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">folder</span>&gt;</span>users/nansong//rubiks_cube_faces<span class="tag">&lt;/<span class="name">folder</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">source</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">submittedBy</span>&gt;</span>NANSONG YI<span class="tag">&lt;/<span class="name">submittedBy</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">imagesize</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">nrows</span>&gt;</span>618<span class="tag">&lt;/<span class="name">nrows</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ncols</span>&gt;</span>824<span class="tag">&lt;/<span class="name">ncols</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">imagesize</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">object</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>cube<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">deleted</span>&gt;</span>0<span class="tag">&lt;/<span class="name">deleted</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">verified</span>&gt;</span>0<span class="tag">&lt;/<span class="name">verified</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">occluded</span>&gt;</span>no<span class="tag">&lt;/<span class="name">occluded</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">attributes</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">parts</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">hasparts</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ispartof</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">parts</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">date</span>&gt;</span>12-03-20 23:34:30:873<span class="tag">&lt;/<span class="name">date</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>0<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">type</span>&gt;</span>bounding_box<span class="tag">&lt;/<span class="name">type</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">polygon</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">username</span>&gt;</span>anonymous<span class="tag">&lt;/<span class="name">username</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pt</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">x</span>&gt;</span>185<span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">y</span>&gt;</span>160<span class="tag">&lt;/<span class="name">y</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">time</span>&gt;</span>12-03-20 23:34:13:394<span class="tag">&lt;/<span class="name">time</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pt</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pt</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">x</span>&gt;</span>439<span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">y</span>&gt;</span>160<span class="tag">&lt;/<span class="name">y</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">time</span>&gt;</span>12-03-20 23:34:18:815<span class="tag">&lt;/<span class="name">time</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pt</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pt</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">x</span>&gt;</span>439<span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">y</span>&gt;</span>409<span class="tag">&lt;/<span class="name">y</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">time</span>&gt;</span>undefined<span class="tag">&lt;/<span class="name">time</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pt</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pt</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">x</span>&gt;</span>185<span class="tag">&lt;/<span class="name">x</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">y</span>&gt;</span>409<span class="tag">&lt;/<span class="name">y</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">time</span>&gt;</span>undefined<span class="tag">&lt;/<span class="name">time</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pt</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">closed_date</span>&gt;</span>12-03-20 23:34:18:815<span class="tag">&lt;/<span class="name">closed_date</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">polygon</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">annotation</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>b) <strong>NOTE: __This part(</strong>sub-cube color detection__) needs more literature review to figure out the best way to extract color infomation</p>
+<ul>
+<li>Then we will get a cropped image that <strong>ONLY</strong> contains Rubik’s Cube</li>
+</ul>
+<p><img src="https://i.imgur.com/g0nVVCD.png" alt="image-20200313001353864"></p>
+<ul>
+<li>followed by a few traditional CV algorithms?<ul>
+<li><a href="https://towardsdatascience.com/introduction-to-image-segmentation-with-k-means-clustering-83fd0a9e2fc3" target="_blank" rel="noopener">Kmeans</a></li>
+<li><a href="https://jayrambhia.com/blog/superpixels-slic" target="_blank" rel="noopener">SLIC</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Canny_edge_detector" target="_blank" rel="noopener">Canny edge detector</a>, <a href="https://github.com/hkociemba/RubiksCube-TwophaseSolver" target="_blank" rel="noopener">RubiksCube-TwophaseSolver</a>?</li>
+</ul>
+</li>
+<li>A small neoral network doing regression to get the the center of 9 sub-cubes.</li>
+<li>Use a SVM (or any other classifier?) to classify the colors near centers of 9 sub-cubes.</li>
+</ul>
+<h3 id="2-3D-Pose-Estimation-Position-Orientation"><a href="#2-3D-Pose-Estimation-Position-Orientation" class="headerlink" title="2.  3D Pose Estimation ( Position + Orientation )"></a>2.  3D Pose Estimation ( Position + Orientation )</h3><p><em>Actually this is a very difficult problem, see this <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8972349" target="_blank" rel="noopener">benchmark paper</a></em> by <a href="https://homes.cs.washington.edu/~bolingy/" target="_blank" rel="noopener">Boling Yang</a> from CSE.</p>
+<p><img src="https://i.imgur.com/COQFEjU.png" alt="image-20200313004912581"></p>
+<ul>
+<li><p><strong>Baseline</strong> : </p>
+<ul>
+<li><p><strong>Postion</strong>(given by Bounding Box of obeject) + <strong>Depth</strong>(given by depth sensor, such as <a href="https://www.amazon.com/Intel-Realsense-D435-Webcam-FPS/dp/B07BLS5477/ref=sr_1_1?dchild=1&keywords=intel+realsense&qid=1584085987&sr=8-1" target="_blank" rel="noopener">Intel Real Sense Depth Camera</a>)</p>
+<ul>
+<li><p>See my derivation of <a href="https://thesong96.github.io/2020/02/27/Camera-Matrix/">Intrisic and Extrinsic Matrix</a> and <a href="http://www.cs.cmu.edu/~16385/s17/Slides/11.1_Camera_matrix.pdf" target="_blank" rel="noopener">Slides from CMU</a></p>
+<p><img src="https://i.imgur.com/wIPFoTZ.png" alt="image-20200313005049644"></p>
+</li>
+</ul>
+</li>
+<li><p><strong>Orientaion</strong></p>
+<ul>
+<li>It might work? Need further comfirm(review code from another project).</li>
+<li>Don’t have a very good idea now, even the one above works, the precision won’t be accurate enough to play Rubik’s Cube. But it should work on <strong>Inspection Robot</strong>, which Mike Gagnier is working on.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Other 3D Pose Estimation Methods Using Deep Learning (<strong>Can Estimate Orientation</strong>, but need to further check precision): </p>
+<ul>
+<li><a href="https://github.com/NVlabs/Deep_Object_Pose" target="_blank" rel="noopener">NVLabs DOPE</a></li>
+<li><a href="https://github.com/yuxng/PoseCNN" target="_blank" rel="noopener">PoseCNN</a></li>
+<li><a href="https://arxiv.org/pdf/1611.10010.pdf" target="_blank" rel="noopener">Deep Cuboid Detection: Beyond 2D Bounding Boxes</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="My-work"><a href="#My-work" class="headerlink" title="My work"></a>My work</h2><p><img src="https://i.imgur.com/4N7cCip.png" alt="image-20200313011207210"></p>
+<h3 id="Make-things-be-independent-of-hardware"><a href="#Make-things-be-independent-of-hardware" class="headerlink" title="Make things be independent of hardware"></a>Make things be independent of hardware</h3><ul>
+<li><a href="https://github.com/macs-lab/avt_camera/blob/nansong/demo/2020win/src/avt_virtual.cpp" target="_blank" rel="noopener"><code>AVTCameraVirtual.cpp</code></a>, fake camera node publishing images to corresponding ROS topic.<ul>
+<li>reduce the period duration iterating development of Computer Vision algorithms.</li>
+</ul>
+</li>
+</ul>
+<h3 id="Successfully-Run-Detection-Algorithm-YOLOv3"><a href="#Successfully-Run-Detection-Algorithm-YOLOv3" class="headerlink" title="Successfully Run Detection Algorithm - YOLOv3"></a>Successfully Run Detection Algorithm - YOLOv3</h3><iframe src="https://drive.google.com/file/d/1sGPFjf89Tvn7T7r4yjPIvM7C4FuMsiPf/preview" width="640" height="480"></iframe>
+
+<p>Open in your own browser: <a href="https://drive.google.com/file/d/1Fkj4UnyI5GAwdWwwG1ZFn23XGpjD4hsi/preview" target="_blank" rel="noopener">Video Link</a></p>
+<ul>
+<li><strong>Troubleshooting</strong>: <ul>
+<li>too slow(FPS:0.1), why?? I have GPU on my desktop.</li>
+<li></li>
+</ul>
+</li>
+<li>need more work on <strong>Collecting Dataset</strong><ul>
+<li>a better software tool helping collect data more effectively?</li>
+</ul>
+</li>
+<li>Try other <strong>lastest implementation</strong> of detetion algorithms, since this one <a href="https://github.com/leggedrobotics/darknet_ros" target="_blank" rel="noopener">YOLO ROS: Real-Time Object Detection for ROS</a> is a little out of date.</li>
+</ul>
+<h3 id="Help-Maintanence-of-our-GitHub-repo-ROS-related-project"><a href="#Help-Maintanence-of-our-GitHub-repo-ROS-related-project" class="headerlink" title="Help Maintanence of our GitHub repo, ROS related project"></a>Help Maintanence of our GitHub repo, ROS related project</h3><ul>
+<li><p><a href="https://github.com/macs-lab/macs-rosinstalls" target="_blank" rel="noopener">rosinstall, wstool</a>, easier to reproduce previous work</p>
+</li>
+<li><p><a href="https://catkin-tools.readthedocs.io/en/latest/" target="_blank" rel="noopener">catkin tool</a></p>
+<p>  Why <code>catkin_tool</code> instead of <code>catkin_make</code> ?</p>
+<ul>
+<li><p><a href="https://catkin-tools.readthedocs.io/en/latest/cheat_sheet.html" target="_blank" rel="noopener">catkin_tools cheatsheet</a></p>
+</li>
+<li><p><a href="https://catkin-tools.readthedocs.io/en/latest/migration.html" target="_blank" rel="noopener">Migrating from catkin_make to catkin_tools &amp; differences</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
+<li>Literature<ul>
+<li><a href="http://cs231n.stanford.edu/reports/2015/pdfs/jaykevin_final.pdf" target="_blank" rel="noopener">Rubiks Cube Localization, Face Detection, and Interactive Solving</a></li>
+<li>[Automated Rubik’s Cube Recognition](<a href="https://stacks.stanford.edu/file/druid:yj296hj2790/Ng_Rubiks" target="_blank" rel="noopener">https://stacks.stanford.edu/file/druid:yj296hj2790/Ng_Rubiks</a> Cube_Reconstruction_from_Images.pdf)</li>
+<li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8972349" target="_blank" rel="noopener">Benchmarking Robot Manipulation With the Rubik’s Cube</a></li>
+</ul>
+</li>
+<li>Github<ul>
+<li><a href="https://github.com/leggedrobotics/darknet_ros" target="_blank" rel="noopener">YOLO ROS: Real-Time Object Detection for ROS</a></li>
+<li><a href="https://github.com/yehengchen/YOLOv3-ROS" target="_blank" rel="noopener">Real-time Screw Grasp Detection With ROS</a></li>
+<li><a href="https://github.com/eriklindernoren/PyTorch-YOLOv3" target="_blank" rel="noopener">Pytorch Implementation of YOLOv3</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>谢谢老板🐱~.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/reward.png" alt="Nansong Yi WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Nansong Yi Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/rss.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/rubix-cube/" rel="tag"><i class="fa fa-tag"></i> rubix cube</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/08/Python-Comments-Style/" rel="prev" title="Python Comments Style">
+      <i class="fa fa-chevron-left"></i> Python Comments Style
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/10/20/TODO-POST/" rel="next" title="TODO POST">
+      TODO POST <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview-Original-goal"><span class="nav-number">1.</span> <span class="nav-text">Overview: Original goal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Goal-Changes-Focus-on-Vision-Pose-Estimation"><span class="nav-number">2.</span> <span class="nav-text">Goal Changes: Focus on Vision + Pose Estimation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Vision-Rubix-Cube-Face-Detection"><span class="nav-number">2.1.</span> <span class="nav-text">1. Vision: Rubix Cube Face Detection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Problems-from-old-algorithm"><span class="nav-number">2.1.1.</span> <span class="nav-text">Problems from old algorithm:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#New-Approach"><span class="nav-number">2.1.2.</span> <span class="nav-text">New Approach:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3D-Pose-Estimation-Position-Orientation"><span class="nav-number">2.2.</span> <span class="nav-text">2.  3D Pose Estimation ( Position + Orientation )</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#My-work"><span class="nav-number">3.</span> <span class="nav-text">My work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Make-things-be-independent-of-hardware"><span class="nav-number">3.1.</span> <span class="nav-text">Make things be independent of hardware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Successfully-Run-Detection-Algorithm-YOLOv3"><span class="nav-number">3.2.</span> <span class="nav-text">Successfully Run Detection Algorithm - YOLOv3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Help-Maintanence-of-our-GitHub-repo-ROS-related-project"><span class="nav-number">3.3.</span> <span class="nav-text">Help Maintanence of our GitHub repo, ROS related project</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">3.3.1.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Nansong Yi"
+      src="/images/baby.png">
+  <p class="site-author-name" itemprop="name">Nansong Yi</p>
+  <div class="site-description" itemprop="description">TheSong is named after IG.TheShy</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nansongyi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nansongyi" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nansong@uw.edu" title="E-Mail → mailto:nansong@uw.edu" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://nansongyi.me/" title="http:&#x2F;&#x2F;nansongyi.me" rel="noopener" target="_blank">my web</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://silencial.github.io/" title="https:&#x2F;&#x2F;silencial.github.io&#x2F;" rel="noopener" target="_blank">silencial</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://3monks.org/en/" title="https:&#x2F;&#x2F;3monks.org&#x2F;en&#x2F;" rel="noopener" target="_blank">sky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.twistedwg.com/pages/class.html" title="http:&#x2F;&#x2F;www.twistedwg.com&#x2F;pages&#x2F;class.html" rel="noopener" target="_blank">twistedwg</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Nansong Yi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      script.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+
+    </div>
+</body>
+</html>
