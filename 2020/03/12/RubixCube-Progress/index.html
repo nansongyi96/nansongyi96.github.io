@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Terminology praperation: face, sub-cubes a Rubik’s cube has 6 faces, each face has 9 sub-cubes. Previous Work Overview My Focus: Vision + Pose Estimation1. Vision: Rubix Cube Face DetectionProblems fr">
+  <meta name="description" content="Terminology praperation: face, sub-cubes a Rubik’s cube has 6 faces, each face has 9 sub-cubes. Previous Work Overview  image-20200312224833356  My Focus: Vision + Pose Estimation 1. Vision: Rubix Cub">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RubixCube Progress">
 <meta property="og:url" content="https://thesong96.github.io/2020/03/12/RubixCube-Progress/index.html">
 <meta property="og:site_name" content="TheSong">
-<meta property="og:description" content="Terminology praperation: face, sub-cubes a Rubik’s cube has 6 faces, each face has 9 sub-cubes. Previous Work Overview My Focus: Vision + Pose Estimation1. Vision: Rubix Cube Face DetectionProblems fr">
+<meta property="og:description" content="Terminology praperation: face, sub-cubes a Rubik’s cube has 6 faces, each face has 9 sub-cubes. Previous Work Overview  image-20200312224833356  My Focus: Vision + Pose Estimation 1. Vision: Rubix Cub">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.imgur.com/GR2rHwj.png">
 <meta property="og:image" content="https://i.imgur.com/5PpoioY.png">
@@ -260,112 +260,134 @@
         <p>Terminology praperation:</p>
 <p><strong>face</strong>, <strong>sub-cubes</strong></p>
 <p>a Rubik’s cube has 6 faces, each face has 9 sub-cubes.</p>
-<h2 id="Previous-Work-Overview"><a href="#Previous-Work-Overview" class="headerlink" title="Previous Work Overview"></a><a href="https://www.youtube.com/watch?v=Kjj0HcvhKNU" target="_blank" rel="noopener">Previous Work Overview</a></h2><p><img src="https://i.imgur.com/GR2rHwj.png" alt="image-20200312224833356"></p>
-<h2 id="My-Focus-Vision-Pose-Estimation"><a href="#My-Focus-Vision-Pose-Estimation" class="headerlink" title="My Focus: Vision + Pose Estimation"></a>My Focus: Vision + Pose Estimation</h2><h3 id="1-Vision-Rubix-Cube-Face-Detection"><a href="#1-Vision-Rubix-Cube-Face-Detection" class="headerlink" title="1. Vision: Rubix Cube Face Detection"></a>1. Vision: Rubix Cube Face Detection</h3><h4 id="Problems-from-old-algorithm"><a href="#Problems-from-old-algorithm" class="headerlink" title="Problems from old algorithm:"></a>Problems from old algorithm:</h4><p>(why Perception in real time: offline motion planning -&gt; online motion planning, cube state)</p>
+<h2 id="previous-work-overview"><a href="https://www.youtube.com/watch?v=Kjj0HcvhKNU" target="_blank" rel="noopener">Previous Work Overview</a></h2>
+<figure>
+<img src="https://i.imgur.com/GR2rHwj.png" alt="image-20200312224833356" /><figcaption>image-20200312224833356</figcaption>
+</figure>
+<h2 id="my-focus-vision-pose-estimation">My Focus: Vision + Pose Estimation</h2>
+<h3 id="vision-rubix-cube-face-detection">1. Vision: Rubix Cube Face Detection</h3>
+<h4 id="problems-from-old-algorithm">Problems from old algorithm:</h4>
+<p>(why Perception in real time: offline motion planning -&gt; online motion planning, cube state)</p>
 <ul>
-<li>Only using HSV color filter, sensitive to brigtness, background, camera exposure time, etc.<img src="https://i.imgur.com/5PpoioY.png" alt="image-20200312231316045"></li>
+<li>Only using HSV color filter, sensitive to brigtness, background, camera exposure time, etc.<img src="https://i.imgur.com/5PpoioY.png" alt="image-20200312231316045" /></li>
 <li>Requires the cube to be at a fixed positon.</li>
 </ul>
-<p><img src="https://i.imgur.com/glB41wO.png" alt="image-20200312231701442"></p>
-<h4 id="New-Approach"><a href="#New-Approach" class="headerlink" title="New Approach:"></a>New Approach:</h4><p>a) doesn’t require fixed position anymore.</p>
+<figure>
+<img src="https://i.imgur.com/glB41wO.png" alt="image-20200312231701442" /><figcaption>image-20200312231701442</figcaption>
+</figure>
+<h4 id="new-approach">New Approach:</h4>
+<ol type="a">
+<li>doesn’t require fixed position anymore.</li>
+</ol>
 <ul>
 <li>Object detection algorithm, such as Yolo, Faster-RCNN, will be used to draw a bounding box of Rubik’s Cube.</li>
 <li>How to create Dataset? <a href="http://labelme.csail.mit.edu/Release3.0/" target="_blank" rel="noopener">MIT LabelMe</a>, see the following labeling example (including <strong>image with bounding box</strong> &amp; bounding box <strong>Description XML</strong> file).</li>
 </ul>
-<p><img src="https://i.imgur.com/wRWtuxF.png" alt="image-20200312234614078"></p>
-<p>b) <strong>NOTE</strong> : This part(<strong>sub-cube color detection</strong>) needs more literature review to figure out the best way to extract color infomation</p>
+<figure>
+<img src="https://i.imgur.com/wRWtuxF.png" alt="image-20200312234614078" /><figcaption>image-20200312234614078</figcaption>
+</figure>
+<ol start="2" type="a">
+<li><strong>NOTE</strong> : This part(<strong>sub-cube color detection</strong>) needs more literature review to figure out the best way to extract color infomation</li>
+</ol>
 <ul>
 <li>Then we will get a cropped image that <strong>ONLY</strong> contains Rubik’s Cube</li>
 </ul>
-<p><img src="https://i.imgur.com/g0nVVCD.png" alt="image-20200313001353864"></p>
+<figure>
+<img src="https://i.imgur.com/g0nVVCD.png" alt="image-20200313001353864" /><figcaption>image-20200313001353864</figcaption>
+</figure>
 <ul>
-<li>followed by a few traditional CV algorithms?<ul>
+<li>followed by a few traditional CV algorithms?
+<ul>
 <li><a href="https://towardsdatascience.com/introduction-to-image-segmentation-with-k-means-clustering-83fd0a9e2fc3" target="_blank" rel="noopener">Kmeans</a></li>
 <li><a href="https://jayrambhia.com/blog/superpixels-slic" target="_blank" rel="noopener">SLIC</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Canny_edge_detector" target="_blank" rel="noopener">Canny edge detector</a>, <a href="https://github.com/hkociemba/RubiksCube-TwophaseSolver" target="_blank" rel="noopener">RubiksCube-TwophaseSolver</a>?</li>
-</ul>
-</li>
+</ul></li>
 <li>A small neural network doing regression to get the the center of 9 sub-cubes.</li>
 <li>Use a SVM (or any other classifier?) to classify the colors near centers of 9 sub-cubes.</li>
 </ul>
-<h3 id="2-3D-Pose-Estimation-Position-Orientation"><a href="#2-3D-Pose-Estimation-Position-Orientation" class="headerlink" title="2.  3D Pose Estimation ( Position + Orientation )"></a>2.  3D Pose Estimation ( Position + Orientation )</h3><p><em>Actually this is a very difficult problem, see this <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8972349" target="_blank" rel="noopener">benchmark paper</a></em> by <a href="https://homes.cs.washington.edu/~bolingy/" target="_blank" rel="noopener">Boling Yang</a> from CSE.</p>
-<p><img src="https://i.imgur.com/COQFEjU.png" alt="image-20200313004912581"></p>
+<h3 id="d-pose-estimation-position-orientation">2. 3D Pose Estimation ( Position + Orientation )</h3>
+<p><em>Actually this is a very difficult problem, see this <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=8972349" target="_blank" rel="noopener">benchmark paper</a></em> by <a href="https://homes.cs.washington.edu/~bolingy/" target="_blank" rel="noopener">Boling Yang</a> from CSE.</p>
+<figure>
+<img src="https://i.imgur.com/COQFEjU.png" alt="image-20200313004912581" /><figcaption>image-20200313004912581</figcaption>
+</figure>
 <ul>
 <li><p><a href="https://www.youtube.com/watch?v=2R_wtJPTzQM" target="_blank" rel="noopener">Conventional Pose Estimation Method</a> 1. Model of Cube 2. Feature points are easy to extract</p>
 <ul>
-<li><p><strong>Postion</strong>(given by Bounding Box of obeject) + <strong>Depth</strong>(given by depth sensor, such as <a href="https://www.amazon.com/Intel-Realsense-D435-Webcam-FPS/dp/B07BLS5477/ref=sr_1_1?dchild=1&keywords=intel+realsense&qid=1584085987&sr=8-1" target="_blank" rel="noopener">Intel Real Sense Depth Camera</a>)</p>
+<li><p><strong>Postion</strong>(given by Bounding Box of obeject) + <strong>Depth</strong>(given by depth sensor, such as <a href="https://www.amazon.com/Intel-Realsense-D435-Webcam-FPS/dp/B07BLS5477/ref=sr_1_1?dchild=1&amp;keywords=intel+realsense&amp;qid=1584085987&amp;sr=8-1" target="_blank" rel="noopener">Intel Real Sense Depth Camera</a>)</p>
 <ul>
-<li><p>See my derivation of <a href="https://thesong96.github.io/2020/02/27/Camera-Matrix/">Intrisic and Extrinsic Matrix</a> and <a href="http://www.cs.cmu.edu/~16385/s17/Slides/11.1_Camera_matrix.pdf" target="_blank" rel="noopener">Slides from CMU</a></p>
-<p><img src="https://i.imgur.com/wIPFoTZ.png" alt="image-20200313005049644"></p>
-</li>
+<li>See my derivation of <a href="https://thesong96.github.io/2020/02/27/Camera-Matrix/">Intrisic and Extrinsic Matrix</a> and <a href="http://www.cs.cmu.edu/~16385/s17/Slides/11.1_Camera_matrix.pdf" target="_blank" rel="noopener">Slides from CMU</a></li>
 </ul>
-</li>
+<figure>
+<img src="https://i.imgur.com/wIPFoTZ.png" alt="image-20200313005049644" /><figcaption>image-20200313005049644</figcaption>
+</figure></li>
 <li><p><strong>Orientaion</strong></p>
 <ul>
 <li>It might work? Need further comfirm(review code from another project).</li>
 <li>Don’t have a very good idea now, even the one above works, the precision won’t be accurate enough to play Rubik’s Cube. But it should work on <strong>Inspection Robot</strong>, which Mike Gagnier is working on.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Learning Based 3D Pose Estimation Methods: Using Deep Learning (<strong>Can Estimate Orientation</strong>, but need to further check precision): </p>
+</ul></li>
+</ul></li>
+<li><p>Learning Based 3D Pose Estimation Methods: Using Deep Learning (<strong>Can Estimate Orientation</strong>, but need to further check precision):</p>
 <ul>
 <li><a href="https://github.com/NVlabs/Deep_Object_Pose" target="_blank" rel="noopener">NVLabs DOPE</a></li>
 <li><a href="https://github.com/yuxng/PoseCNN" target="_blank" rel="noopener">PoseCNN</a></li>
 <li><a href="https://arxiv.org/pdf/1611.10010.pdf" target="_blank" rel="noopener">Deep Cuboid Detection: Beyond 2D Bounding Boxes</a></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="My-work"><a href="#My-work" class="headerlink" title="My work"></a>My work</h2><p><img src="https://i.imgur.com/4N7cCip.png" alt="image-20200313011207210"></p>
-<h3 id="Make-things-be-independent-of-hardware"><a href="#Make-things-be-independent-of-hardware" class="headerlink" title="Make things be independent of hardware"></a>Make things be independent of hardware</h3><ul>
+<h2 id="my-work">My work</h2>
+<figure>
+<img src="https://i.imgur.com/4N7cCip.png" alt="image-20200313011207210" /><figcaption>image-20200313011207210</figcaption>
+</figure>
+<h3 id="make-things-be-independent-of-hardware">Make things be independent of hardware</h3>
+<ul>
 <li><a href="https://github.com/macs-lab/avt_camera/blob/nansong/demo/2020win/src/avt_virtual.cpp" target="_blank" rel="noopener"><code>AVTCameraVirtual.cpp</code></a>, fake camera node publishing images to corresponding ROS topic.</li>
 <li><strong>Why</strong>: development will be faster.</li>
 </ul>
-<h3 id="Successfully-Run-Detection-Algorithm-YOLOv3"><a href="#Successfully-Run-Detection-Algorithm-YOLOv3" class="headerlink" title="Successfully Run Detection Algorithm - YOLOv3"></a>Successfully Run Detection Algorithm - YOLOv3</h3><iframe src="https://drive.google.com/file/d/1sGPFjf89Tvn7T7r4yjPIvM7C4FuMsiPf/preview" width="640" height="480"></iframe>
-
+<h3 id="successfully-run-detection-algorithm---yolov3">Successfully Run Detection Algorithm - YOLOv3</h3>
+<iframe src="https://drive.google.com/file/d/1sGPFjf89Tvn7T7r4yjPIvM7C4FuMsiPf/preview" width="640" height="480">
+</iframe>
 <p>Open in your own browser: <a href="https://drive.google.com/file/d/1Fkj4UnyI5GAwdWwwG1ZFn23XGpjD4hsi/preview" target="_blank" rel="noopener">Video Link</a></p>
 <ul>
-<li><p><strong>Troubleshooting</strong>: </p>
+<li><strong>Troubleshooting</strong>:
 <ul>
 <li>too slow(FPS:0.1), why?? I have GPU on my desktop.</li>
-</ul>
-</li>
+</ul></li>
 <li><p>need more work on <strong>Collecting Dataset</strong></p>
 <ul>
 <li>a better software tool helping collect data more effectively?</li>
+</ul></li>
+<li><p>Try other <strong>lastest implementation</strong> of detetion algorithms, since this one <a href="https://github.com/leggedrobotics/darknet_ros" target="_blank" rel="noopener">YOLO ROS: Real-Time Object Detection for ROS</a> is a little out of date.</p></li>
 </ul>
-</li>
-<li><p>Try other <strong>lastest implementation</strong> of detetion algorithms, since this one <a href="https://github.com/leggedrobotics/darknet_ros" target="_blank" rel="noopener">YOLO ROS: Real-Time Object Detection for ROS</a> is a little out of date.</p>
-</li>
-</ul>
-<h3 id="Maintanence-of-lab-GitHub-repo-ROS-related-project"><a href="#Maintanence-of-lab-GitHub-repo-ROS-related-project" class="headerlink" title="Maintanence of lab GitHub repo, ROS related project"></a>Maintanence of lab GitHub repo, ROS related project</h3><ul>
+<h3 id="maintanence-of-lab-github-repo-ros-related-project">Maintanence of lab GitHub repo, ROS related project</h3>
+<ul>
 <li><a href="https://github.com/macs-lab/macs-rosinstalls" target="_blank" rel="noopener">rosinstall, wstool</a>, easier to reproduce previous work</li>
-<li><a href="https://catkin-tools.readthedocs.io/en/latest/" target="_blank" rel="noopener">catkin tool</a>, Why <code>catkin_tool</code> instead of <code>catkin_make</code> ?<ul>
+<li><a href="https://catkin-tools.readthedocs.io/en/latest/" target="_blank" rel="noopener">catkin tool</a>, Why <code>catkin_tool</code> instead of <code>catkin_make</code> ?
+<ul>
 <li><a href="https://catkin-tools.readthedocs.io/en/latest/cheat_sheet.html" target="_blank" rel="noopener">catkin_tools cheatsheet</a></li>
 <li><a href="https://catkin-tools.readthedocs.io/en/latest/migration.html" target="_blank" rel="noopener">Migrating from catkin_make to catkin_tools &amp; differences</a></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="Future-Work"><a href="#Future-Work" class="headerlink" title="Future Work"></a>Future Work</h2><ul>
+<h2 id="future-work">Future Work</h2>
+<ul>
 <li>Run detection algorithm in real time</li>
-<li>Collect rubix cube face dataset for detection </li>
+<li>Collect rubix cube face dataset for detection</li>
 <li>More literature review and experiments to find the best way to detect and classify colors on 9 sub-cubes</li>
 <li>Talk to Hui more about Pose Estimation (Especially Estimate Orientaion)</li>
 </ul>
-<hr>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
-<li>Literature<ul>
+<hr />
+<h4 id="reference">Reference</h4>
+<ul>
+<li>Literature
+<ul>
 <li><a href="http://cs231n.stanford.edu/reports/2015/pdfs/jaykevin_final.pdf" target="_blank" rel="noopener">Rubiks Cube Localization, Face Detection, and Interactive Solving</a></li>
 <li><a href="https://drive.google.com/file/d/1WlT0NJI2aWvk0jPU5TzAIQqcgC3lDmKm/view?usp=sharing" target="_blank" rel="noopener">Automated Rubik’s Cube Recognition</a></li>
-<li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8972349" target="_blank" rel="noopener">Benchmarking Robot Manipulation With the Rubik’s Cube</a></li>
-</ul>
-</li>
-<li>Github<ul>
+<li><a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=8972349" target="_blank" rel="noopener">Benchmarking Robot Manipulation With the Rubik’s Cube</a></li>
+</ul></li>
+<li>Github
+<ul>
 <li><a href="https://github.com/leggedrobotics/darknet_ros" target="_blank" rel="noopener">YOLO ROS: Real-Time Object Detection for ROS</a></li>
 <li><a href="https://github.com/yehengchen/YOLOv3-ROS" target="_blank" rel="noopener">Real-time Screw Grasp Detection With ROS</a></li>
 <li><a href="https://github.com/eriklindernoren/PyTorch-YOLOv3" target="_blank" rel="noopener">Pytorch Implementation of YOLOv3</a></li>
-</ul>
-</li>
+</ul></li>
 </ul>
 
     </div>
@@ -491,7 +513,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Previous-Work-Overview"><span class="nav-number">1.</span> <span class="nav-text">Previous Work Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#My-Focus-Vision-Pose-Estimation"><span class="nav-number">2.</span> <span class="nav-text">My Focus: Vision + Pose Estimation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Vision-Rubix-Cube-Face-Detection"><span class="nav-number">2.1.</span> <span class="nav-text">1. Vision: Rubix Cube Face Detection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Problems-from-old-algorithm"><span class="nav-number">2.1.1.</span> <span class="nav-text">Problems from old algorithm:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#New-Approach"><span class="nav-number">2.1.2.</span> <span class="nav-text">New Approach:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3D-Pose-Estimation-Position-Orientation"><span class="nav-number">2.2.</span> <span class="nav-text">2.  3D Pose Estimation ( Position + Orientation )</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#My-work"><span class="nav-number">3.</span> <span class="nav-text">My work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Make-things-be-independent-of-hardware"><span class="nav-number">3.1.</span> <span class="nav-text">Make things be independent of hardware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Successfully-Run-Detection-Algorithm-YOLOv3"><span class="nav-number">3.2.</span> <span class="nav-text">Successfully Run Detection Algorithm - YOLOv3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maintanence-of-lab-GitHub-repo-ROS-related-project"><span class="nav-number">3.3.</span> <span class="nav-text">Maintanence of lab GitHub repo, ROS related project</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future-Work"><span class="nav-number">4.</span> <span class="nav-text">Future Work</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">4.0.1.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#previous-work-overview"><span class="nav-number">1.</span> <span class="nav-text">Previous Work Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#my-focus-vision-pose-estimation"><span class="nav-number">2.</span> <span class="nav-text">My Focus: Vision + Pose Estimation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vision-rubix-cube-face-detection"><span class="nav-number">2.1.</span> <span class="nav-text">1. Vision: Rubix Cube Face Detection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#problems-from-old-algorithm"><span class="nav-number">2.1.1.</span> <span class="nav-text">Problems from old algorithm:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#new-approach"><span class="nav-number">2.1.2.</span> <span class="nav-text">New Approach:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-pose-estimation-position-orientation"><span class="nav-number">2.2.</span> <span class="nav-text">2. 3D Pose Estimation ( Position + Orientation )</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#my-work"><span class="nav-number">3.</span> <span class="nav-text">My work</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#make-things-be-independent-of-hardware"><span class="nav-number">3.1.</span> <span class="nav-text">Make things be independent of hardware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#successfully-run-detection-algorithm---yolov3"><span class="nav-number">3.2.</span> <span class="nav-text">Successfully Run Detection Algorithm - YOLOv3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maintanence-of-lab-github-repo-ros-related-project"><span class="nav-number">3.3.</span> <span class="nav-text">Maintanence of lab GitHub repo, ROS related project</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#future-work"><span class="nav-number">4.</span> <span class="nav-text">Future Work</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#reference"><span class="nav-number">4.0.1.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -745,7 +767,7 @@ window.addEventListener('pjax:success', () => {
     };
     (function () {
       var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
       script.defer = true;
       document.head.appendChild(script);
     })();

@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="COLOR RECOGNITION FOR RUBIK’S CUBE ROBOTProblems Color Drifting(offline methods are always ineffectiveness and can not work well in continuous change circumstance.) When the brightness of the light ch">
+  <meta name="description" content="COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT Problems  Color Drifting(offline methods are always ineffectiveness and can not work well in continuous change circumstance.)  When the brightness of the light">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Color Recognition of Rubiks Cube - CRRC Review">
 <meta property="og:url" content="https://thesong96.github.io/2020/03/18/Color-Recognition-of-Rubiks-Cube-CRRC-Review/index.html">
 <meta property="og:site_name" content="TheSong">
-<meta property="og:description" content="COLOR RECOGNITION FOR RUBIK’S CUBE ROBOTProblems Color Drifting(offline methods are always ineffectiveness and can not work well in continuous change circumstance.) When the brightness of the light ch">
+<meta property="og:description" content="COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT Problems  Color Drifting(offline methods are always ineffectiveness and can not work well in continuous change circumstance.)  When the brightness of the light">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.imgur.com/g0nVVCD.png">
 <meta property="og:image" content="https://i.imgur.com/5PdAHJg.png">
@@ -251,52 +251,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="COLOR-RECOGNITION-FOR-RUBIK’S-CUBE-ROBOT"><a href="#COLOR-RECOGNITION-FOR-RUBIK’S-CUBE-ROBOT" class="headerlink" title="COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT"></a><a href="https://arxiv.org/pdf/1901.03470.pdf" target="_blank" rel="noopener">COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT</a></h2><h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><ul>
-<li>Color Drifting(offline methods are always ineffectiveness and can not work well in continuous change circumstance.)<ul>
-<li>When the brightness of the light changes, most of features of orange and red in the color space will shift, which result in the overlap distribution of orange and red colors. </li>
-</ul>
-</li>
-</ul>
-<h3 id="Approaches"><a href="#Approaches" class="headerlink" title="Approaches:"></a>Approaches:</h3><p>啥也不是 忍不住喷一下. 什么👻玩意儿, 就把KNN的distance metric加了个weight, 然后美其名曰Dynamicweightlabelpropagation, 菜. 就这也好意思放arxiv?</p>
+        <h2 id="color-recognition-for-rubiks-cube-robot"><a href="https://arxiv.org/pdf/1901.03470.pdf" target="_blank" rel="noopener">COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT</a></h2>
+<h3 id="problems">Problems</h3>
 <ul>
-<li>Offline<ul>
-<li>SB-ELM: Scatter balance &amp; extreme learning machine 看不懂这个、啥玩意儿啊！</li>
+<li>Color Drifting(offline methods are always ineffectiveness and can not work well in continuous change circumstance.)
+<ul>
+<li>When the brightness of the light changes, most of features of orange and red in the color space will shift, which result in the overlap distribution of orange and red colors.</li>
+</ul></li>
 </ul>
-</li>
-<li>Online<ul>
-<li>WLHP: 啥也不是. </li>
+<h3 id="approaches">Approaches:</h3>
+<p>啥也不是 忍不住喷一下. 什么👻玩意儿, 就把KNN的distance metric加了个weight, 然后美其名曰Dynamicweightlabelpropagation, 菜. 就这也好意思放arxiv?</p>
+<ul>
+<li>Offline
+<ul>
+<li>SB-ELM: Scatter balance &amp; extreme learning machine 看不懂这个、啥玩意儿啊！</li>
+</ul></li>
+<li>Online
+<ul>
+<li>WLHP: 啥也不是.</li>
 <li>WLHP*: Optimized WLHP. 啥也不是.</li>
 <li>DWLP: 啥也不是.</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<h2 id="Rubiks-Cube-Localization-Face-Detection-and-Interactive-Solving"><a href="#Rubiks-Cube-Localization-Face-Detection-and-Interactive-Solving" class="headerlink" title="Rubiks Cube Localization, Face Detection, and Interactive Solving"></a><a href="http://cs231n.stanford.edu/reports/2015/pdfs/jaykevin_final.pdf" target="_blank" rel="noopener">Rubiks Cube Localization, Face Detection, and Interactive Solving</a></h2><h3 id="Approaches-1"><a href="#Approaches-1" class="headerlink" title="Approaches:"></a>Approaches:</h3><ul>
-<li><p>Cube Localization via Convolutional Neural Networks</p>
-</li>
-<li><p>Finding Cube Pieces via SLIC Superpixel Classification</p>
+<h2 id="rubiks-cube-localization-face-detection-and-interactive-solving"><a href="http://cs231n.stanford.edu/reports/2015/pdfs/jaykevin_final.pdf" target="_blank" rel="noopener">Rubiks Cube Localization, Face Detection, and Interactive Solving</a></h2>
+<h3 id="approaches-1">Approaches:</h3>
+<ul>
+<li><p>Cube Localization via Convolutional Neural Networks</p></li>
+<li>Finding Cube Pieces via SLIC Superpixel Classification
 <ul>
 <li>Given an image, run MiniBatch Kmeans on pixel values and assign each pixel to its corresponding centroid to encourage clustering of similar pixels. (This helps with superpixel segmentation)</li>
 <li>Run SLIC superpixel segmentation on the resulting Kmeans image, producing a set of candidate superpixels for cube pieces</li>
 <li>For each candidate superpixel, we collect a histogram of HSV pixel values within and calculate up to the third moment of the covered area, appending all into a feature vector</li>
-<li>Based on a random forest classifier trained on handlabelled ground-truth data, we then classify all resulting superpixels as cube piece or otherwise.<br><img src="https://i.imgur.com/g0nVVCD.png" alt="image-20200313001353864"></li>
-</ul>
-</li>
-<li><p>Pinpointing Centers of Cube Faces?</p>
-</li>
-<li><p>Bootstrap Learning for Data Acquisition</p>
-</li>
+<li>Based on a random forest classifier trained on handlabelled ground-truth data, we then classify all resulting superpixels as cube piece or otherwise. <img src="https://i.imgur.com/g0nVVCD.png" alt="image-20200313001353864" /></li>
+</ul></li>
+<li><p>Pinpointing Centers of Cube Faces?</p></li>
+<li><p>Bootstrap Learning for Data Acquisition</p></li>
 <li><p>Extracting Cube Face Information</p>
 <ul>
 <li><p>Given our predictions for the centers of the cube faces (and specifically, the corners of the center cube), we were able to calculate a projective transform to orient the cube and extract the color information from the faces. We were then able to classify the colors of each square by using a manually-tuned SVM????</p>
-<p>  <img src="https://i.imgur.com/5PdAHJg.png" alt="image-20200318144148342"></p>
-</li>
+<figure>
+<img src="https://i.imgur.com/5PdAHJg.png" alt="image-20200318144148342" /><figcaption>image-20200318144148342</figcaption>
+</figure></li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<hr>
+<hr />
 <p>🌲莽莽问问题:</p>
 <ul>
-<li>rubix cube 的8个corner pieces总共有多少种orientation state? $3^8 / 3 = 3^7$ ?</li>
+<li>rubix cube 的8个corner pieces总共有多少种orientation state? <span class="math inline">\(3^8 / 3 = 3^7\)</span> ?</li>
 <li>rubix cube 的12个edge pieces总共有多少种orientation state?</li>
 <li>So finally, what’s the the total number of state space?</li>
 </ul>
@@ -424,7 +425,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#COLOR-RECOGNITION-FOR-RUBIK’S-CUBE-ROBOT"><span class="nav-number">1.</span> <span class="nav-text">COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Problems"><span class="nav-number">1.1.</span> <span class="nav-text">Problems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Approaches"><span class="nav-number">1.2.</span> <span class="nav-text">Approaches:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rubiks-Cube-Localization-Face-Detection-and-Interactive-Solving"><span class="nav-number">2.</span> <span class="nav-text">Rubiks Cube Localization, Face Detection, and Interactive Solving</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Approaches-1"><span class="nav-number">2.1.</span> <span class="nav-text">Approaches:</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#color-recognition-for-rubiks-cube-robot"><span class="nav-number">1.</span> <span class="nav-text">COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#problems"><span class="nav-number">1.1.</span> <span class="nav-text">Problems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#approaches"><span class="nav-number">1.2.</span> <span class="nav-text">Approaches:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rubiks-cube-localization-face-detection-and-interactive-solving"><span class="nav-number">2.</span> <span class="nav-text">Rubiks Cube Localization, Face Detection, and Interactive Solving</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#approaches-1"><span class="nav-number">2.1.</span> <span class="nav-text">Approaches:</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -678,7 +679,7 @@ window.addEventListener('pjax:success', () => {
     };
     (function () {
       var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
       script.defer = true;
       document.head.appendChild(script);
     })();

@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Goal:  review SPNet Dense Block需要搞明白.   What is BLD ?????? review dataset    SPNetSkewering Position Network   Dense Block? we have two version of SPNet (shallow&#x2F;dense). A shallower version() has 3 an">
+  <meta name="description" content="Goal:  review SPNet  Dense Block需要搞明白.  What is BLD ?????? review dataset   SPNet Skewering Position Network  spnet   Dense Block? we have two version of SPNet (shallow&#x2F;dense). A shallower version() h">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Review - Transfer depends on Acquisition: Analyzing Manipulation Strategies for Robotic Feeding">
 <meta property="og:url" content="https://thesong96.github.io/2020/02/28/Review-Transfer-depends-on-Acquisition-Analyzing-Manipulation-Strategies/index.html">
 <meta property="og:site_name" content="TheSong">
-<meta property="og:description" content="Goal:  review SPNet Dense Block需要搞明白.   What is BLD ?????? review dataset    SPNetSkewering Position Network   Dense Block? we have two version of SPNet (shallow&#x2F;dense). A shallower version() has 3 an">
+<meta property="og:description" content="Goal:  review SPNet  Dense Block需要搞明白.  What is BLD ?????? review dataset   SPNet Skewering Position Network  spnet   Dense Block? we have two version of SPNet (shallow&#x2F;dense). A shallower version() h">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.imgur.com/4HVZJjk.png">
 <meta property="og:image" content="https://i.imgur.com/J0KEEId.png">
@@ -254,63 +254,61 @@
       
         <p><strong>Goal</strong>:</p>
 <ul>
-<li>review SPNet<ul>
+<li>review SPNet
+<ul>
 <li>Dense Block需要搞明白.</li>
-</ul>
-</li>
+</ul></li>
 <li>What is BLD ??????</li>
-<li>review dataset </li>
+<li>review dataset</li>
 </ul>
-<hr>
-<h3 id="SPNet"><a href="#SPNet" class="headerlink" title="SPNet"></a>SPNet</h3><p>Skewering Position Network</p>
-<p><img src="https://i.imgur.com/4HVZJjk.png" alt="spnet"></p>
+<hr />
+<h3 id="spnet">SPNet</h3>
+<p>Skewering Position Network</p>
+<figure>
+<img src="https://i.imgur.com/4HVZJjk.png" alt="spnet" /><figcaption>spnet</figcaption>
+</figure>
 <ul>
-<li><p>Dense Block? we have two version of SPNet (shallow/dense). A shallower version() has 3 and 6 inner layers in each dense block and a deeper version has 6 and 12 inner layers respectively.</p>
-</li>
-<li><p>We tested multiple versions of SPNet with varying dense block sizes and angle resolutions. All the network variants including the simple SPNet were trained with the dataset until the training loss stabilized, and for the binary masks, they reached a similar test accuracy of 96.5%. However, the <code>F1 score</code> of the dense block SPNet was 11.76% higher than the simple SPNet. The <code>recall</code> of the dense block SPNet was higher than that of the simple SPNet while their precisions were similar.</p>
+<li>Dense Block? we have two version of SPNet (shallow/dense). A shallower version() has 3 and 6 inner layers in each dense block and a deeper version has 6 and 12 inner layers respectively.</li>
+<li>We tested multiple versions of SPNet with varying dense block sizes and angle resolutions. All the network variants including the simple SPNet were trained with the dataset until the training loss stabilized, and for the binary masks, they reached a similar test accuracy of 96.5%. However, the <code>F1 score</code> of the dense block SPNet was 11.76% higher than the simple SPNet. The <code>recall</code> of the dense block SPNet was higher than that of the simple SPNet while their precisions were similar.
 <ul>
-<li>what’s the difference between simple and dense block SPNet?</li>
-<li>recap criteria: F1 score, recall, true positive, false negative, etc </li>
-</ul>
-</li>
-<li><p>Rotation Mask, according to the tutorial script, pred_rmasks.shape = (1, 289, 19) why 19?</p>
-</li>
-<li><p>The rotation mask consists of 17 × 17 × a grid cells, where a is the angle resolution represented by the number of classes for the discretized angles between [0, π).</p>
-</li>
-<li><p>why discretized angles to <code>#a</code> classes: </p>
+<li>what's the difference between simple and dense block SPNet?</li>
+<li>recap criteria: F1 score, recall, true positive, false negative, etc</li>
+</ul></li>
+<li>Rotation Mask, according to the tutorial script, pred_rmasks.shape = (1, 289, 19) why 19?</li>
+<li>The rotation mask consists of 17 × 17 × a grid cells, where a is the angle resolution represented by the number of classes for the discretized angles between [0, π).</li>
+<li>why discretized angles to <code>#a</code> classes:
 <ul>
 <li>the rotation classification was more reliable than rotation regression for our early test cases.</li>
-<li>we can handle the rotation free annotation as a class among other specific rotations. <ul>
+<li>we can handle the rotation free annotation as a class among other specific rotations.
+<ul>
 <li>(rotation free? means any rotation is ok for that food item, according to the note below)</li>
-</ul>
-</li>
-<li>here, we set angle resolution to be 18, there are a total of 19 classes: class 0 represents any rotation while class 1 ∼ 18 denote specific angles, $(class id−1)×10°$. `````````````````</li>
-</ul>
-</li>
+</ul></li>
+<li>here, we set angle resolution to be 18, there are a total of 19 classes: class 0 represents any rotation while class 1 ∼ 18 denote specific angles, <span class="math inline">\((class id−1)×10°\)</span>. `````````````````</li>
+</ul></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torchvision.transforms <span class="keyword">as</span> transforms</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">from</span> bite_selection_package.model.spnet <span class="keyword">import</span> DenseSPNet</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">spnet_tutorial</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># initialize DenseSPNet and load the trained checkpoint</span></span><br><span class="line">    spnet = DenseSPNet()</span><br><span class="line">    checkpoint = torch.load(<span class="string">'../checkpoint/spnet_ckpt.pth'</span>)</span><br><span class="line">    spnet.load_state_dict(checkpoint[<span class="string">'net'</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># prepare an input image</span></span><br><span class="line">    img = Image.open(<span class="string">'./sample.jpg'</span>)</span><br><span class="line">    img = img.resize((<span class="number">136</span>, <span class="number">136</span>))</span><br><span class="line">    trans = transforms.ToTensor()</span><br><span class="line">    inp = torch.stack([trans(img)])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># get predictions</span></span><br><span class="line">    spnet.eval()</span><br><span class="line">    pred_bmasks, pred_rmasks = spnet(inp)</span><br><span class="line"></span><br><span class="line">    print(pred_bmasks.shape, pred_rmasks.shape)</span><br><span class="line">    <span class="comment"># print and visualize predicted masks</span></span><br><span class="line">    print(<span class="string">'rotation mask: '</span>)</span><br><span class="line">    print(pred_rmasks.data)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'visualize binary mask for skewering locations'</span>)</span><br><span class="line">    bm_arr = pred_bmasks.data[<span class="number">0</span>].sigmoid().view(<span class="number">17</span>, <span class="number">17</span>).numpy()</span><br><span class="line"></span><br><span class="line">    print(bm_arr.shape)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    spnet_tutorial()</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>why not <code>Mask-RCNN</code>: We developed SPNet running on top of RetinaNet instead of extending Mask RCNN because we do not need pixel-wise mask generation and masks over the entire input scene – SPNet runs only for the food item we want to acquire.</li>
 <li>why dense block: we adopt the dense block structure from <code>DenseNet</code> in order to increase the representation power of the network.</li>
 </ul>
-<h3 id="DataSet"><a href="#DataSet" class="headerlink" title="DataSet"></a>DataSet</h3><p><img src="https://i.imgur.com/J0KEEId.png" alt="SPNet prformance"></p>
+<h3 id="dataset">DataSet</h3>
+<figure>
+<img src="https://i.imgur.com/J0KEEId.png" alt="SPNet prformance" /><figcaption>SPNet prformance</figcaption>
+</figure>
 <ul>
 <li><p>small: Cantaloupes, bananas, and strawberries</p>
-<p>  long: carrots and celeries</p>
-<p>  round: eggs</p>
-<p>  We generated the masks with specific rules for each category for effective feeding, so that SPNet learns our category-dependent strategies (see Fig.4), like skewering long items at their ends with the tines perpendicular(fork tine?? 怎么个垂直，是fork的切面?) to the item’s long axis.</p>
-</li>
+<p>long: carrots and celeries</p>
+<p>round: eggs</p>
+<p>We generated the masks with specific rules for each category for effective feeding, so that SPNet learns our category-dependent strategies (see Fig.4), like skewering long items at their ends with the tines perpendicular(fork tine?? 怎么个垂直，是fork的切面?) to the item’s long axis.</p></li>
 </ul>
-<h3 id="Bite-Acquisition-Experiments"><a href="#Bite-Acquisition-Experiments" class="headerlink" title="Bite Acquisition Experiments"></a>Bite Acquisition Experiments</h3><ul>
-<li><p>Using each of these strategies, ourautonomous robotic system skewered 2 plates of 5 pieces of each of these 6 food items, thus totalling to 3 skewering position strategies × 2 plates × 5 pieces × 6 food items = 180 trials. <strong>Since both the baseline and SPNet methods are capable of letting the user select the food item to acquire, our system attempted skewering each item only once</strong>. This is in contrast to BLD, which doesn’t let the user choose and thus is free to retry food items. We restrict BLD to 30 attempts to match the number of trials used for the other methods</p>
-</li>
-<li><p><strong>check the experiment video to see how exactly we do it</strong>. </p>
-<p>  For two of the food items, bananas, and strawberries, we also compared two skewering approach angle strategies: <em>vertical and angled</em>. We had two discrete manipulation primitives for the angled primitive, one with horizontal tines and one with vertical. Bananas often slip off the fork, so we tilted the fork by 45 degrees to orient the tines more horizontally. When skewering strawberries, the tines tend to slip on the rounded surface without penetrating it. Therefore, we tilted the fork in the other direction to so that the tines skewered the strawberry vertically. Using SPNet, we skewered 2 plates of 5 items for bananas and strawberries, resulting in 20 additional trials which we compared with the vertical performance of the above experiment.<img src="https://i.imgur.com/zb9XuEk.jpg" alt="image-20200304155034047"></p>
-</li>
+<h3 id="bite-acquisition-experiments">Bite Acquisition Experiments</h3>
+<ul>
+<li><p>Using each of these strategies, ourautonomous robotic system skewered 2 plates of 5 pieces of each of these 6 food items, thus totalling to 3 skewering position strategies × 2 plates × 5 pieces × 6 food items = 180 trials. <strong>Since both the baseline and SPNet methods are capable of letting the user select the food item to acquire, our system attempted skewering each item only once</strong>. This is in contrast to BLD, which doesn’t let the user choose and thus is free to retry food items. We restrict BLD to 30 attempts to match the number of trials used for the other methods</p></li>
+<li><p><strong>check the experiment video to see how exactly we do it</strong>.</p>
+<p>For two of the food items, bananas, and strawberries, we also compared two skewering approach angle strategies: <em>vertical and angled</em>. We had two discrete manipulation primitives for the angled primitive, one with horizontal tines and one with vertical. Bananas often slip off the fork, so we tilted the fork by 45 degrees to orient the tines more horizontally. When skewering strawberries, the tines tend to slip on the rounded surface without penetrating it. Therefore, we tilted the fork in the other direction to so that the tines skewered the strawberry vertically. Using SPNet, we skewered 2 plates of 5 items for bananas and strawberries, resulting in 20 additional trials which we compared with the vertical performance of the above experiment.<img src="https://i.imgur.com/zb9XuEk.jpg" alt="image-20200304155034047" /></p></li>
 <li></li>
 </ul>
-<hr>
+<hr />
 <p><strong>憨憨学英语</strong>🌲</p>
 <ul>
 <li>Heterogeneous 异构的</li>
@@ -441,7 +439,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SPNet"><span class="nav-number">1.</span> <span class="nav-text">SPNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DataSet"><span class="nav-number">2.</span> <span class="nav-text">DataSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bite-Acquisition-Experiments"><span class="nav-number">3.</span> <span class="nav-text">Bite Acquisition Experiments</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#spnet"><span class="nav-number">1.</span> <span class="nav-text">SPNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dataset"><span class="nav-number">2.</span> <span class="nav-text">DataSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bite-acquisition-experiments"><span class="nav-number">3.</span> <span class="nav-text">Bite Acquisition Experiments</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -695,7 +693,7 @@ window.addEventListener('pjax:success', () => {
     };
     (function () {
       var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
       script.defer = true;
       document.head.appendChild(script);
     })();

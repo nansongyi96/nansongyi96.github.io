@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="吾日4省吾身: 我是谁我在哪我在干嘛我想干嘛？ Read Image and Convert type1234567&quot;&quot;&quot;Syntax: cv2.imread(path, flag)Parameters:path: A string representing the path of the image to be read.flag: It specifies the way in which i">
+  <meta name="description" content="吾日4省吾身: 我是谁我在哪我在干嘛我想干嘛？ Read Image and Convert type 1234567&quot;&quot;&quot;Syntax: cv2.imread(path, flag)Parameters:path: A string representing the path of the image to be read.flag: It specifies the way in which">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenCV Python Review">
 <meta property="og:url" content="https://thesong96.github.io/2020/02/26/OpenCV-Python-Review/index.html">
 <meta property="og:site_name" content="TheSong">
-<meta property="og:description" content="吾日4省吾身: 我是谁我在哪我在干嘛我想干嘛？ Read Image and Convert type1234567&quot;&quot;&quot;Syntax: cv2.imread(path, flag)Parameters:path: A string representing the path of the image to be read.flag: It specifies the way in which i">
+<meta property="og:description" content="吾日4省吾身: 我是谁我在哪我在干嘛我想干嘛？ Read Image and Convert type 1234567&quot;&quot;&quot;Syntax: cv2.imread(path, flag)Parameters:path: A string representing the path of the image to be read.flag: It specifies the way in which">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-26T21:20:34.000Z">
 <meta property="article:modified_time" content="2020-03-12T05:13:34.340Z">
@@ -241,20 +241,17 @@
 
       
         <p><strong>吾日4省吾身</strong>: 我是谁我在哪我在干嘛我想干嘛？</p>
-<h2 id="Read-Image-and-Convert-type"><a href="#Read-Image-and-Convert-type" class="headerlink" title="Read Image and Convert type"></a>Read Image and Convert type</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Syntax: cv2.imread(path, flag)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Parameters:</span></span><br><span class="line"><span class="string">path: A string representing the path of the image to be read.</span></span><br><span class="line"><span class="string">flag: It specifies the way in which image should be read. It’s default value is cv2.IMREAD_COLOR</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
-
+<h2 id="read-image-and-convert-type">Read Image and Convert type</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Syntax: cv2.imread(path, flag)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Parameters:</span></span><br><span class="line"><span class="string">path: A string representing the path of the image to be read.</span></span><br><span class="line"><span class="string">flag: It specifies the way in which image should be read. It’s default value is cv2.IMREAD_COLOR</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
 <p><strong>Note:</strong> The image should be in the working directory or a full path of image should be given.</p>
 <p>All three types of flags are described below:</p>
 <p><strong><code>1, 0, 1</code></strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">cv2.IMREAD_COLOR: It specifies to load a color image. Any transparency of image will be neglected. It is the default flag. Alternatively, we can pass integer value 1 for this flag.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">cv2.IMREAD_GRAYSCALE: It specifies to load an image in grayscale mode. Alternatively, we can pass integer value 0 for this flag.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">cv2.IMREAD_UNCHANGED: It specifies to load an image as such including alpha channel. Alternatively, we can pass integer value -1 for this flag.</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
-
 <p>在c++, <code>cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8)</code>的时候, 为什么会出现<code>8UC3</code> 这是个什么东西 淦</p>
 <p>the following are from <a href="https://docs.opencv.org/2.4/modules/core/doc/basic_structures.html" target="_blank" rel="noopener">OpenCV doc</a></p>
 <ul>
-<li><p>Any primitive type from the list can be defined by an identifier in the form <code>CV_&lt;bit-depth&gt;{U|S|F}C(&lt;number_of_channels&gt;)</code></p>
-</li>
-<li><p>For example, <code>CV_8UC1</code> means a 8-bit single-channel array, <code>CV_32FC2</code> means a 2-channel (complex) floating-point array, and so on.</p>
-</li>
+<li><p>Any primitive type from the list can be defined by an identifier in the form <code>CV_&lt;bit-depth&gt;{U|S|F}C(&lt;number_of_channels&gt;)</code></p></li>
+<li><p>For example, <code>CV_8UC1</code> means a 8-bit single-channel array, <code>CV_32FC2</code> means a 2-channel (complex) floating-point array, and so on.</p></li>
 </ul>
 
     </div>
@@ -381,7 +378,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Read-Image-and-Convert-type"><span class="nav-number">1.</span> <span class="nav-text">Read Image and Convert type</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#read-image-and-convert-type"><span class="nav-number">1.</span> <span class="nav-text">Read Image and Convert type</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -635,7 +632,7 @@ window.addEventListener('pjax:success', () => {
     };
     (function () {
       var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
       script.defer = true;
       document.head.appendChild(script);
     })();
