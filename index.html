@@ -222,7 +222,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-13 02:16:44" itemprop="dateModified" datetime="2020-03-13T02:16:44-07:00">2020-03-13</time>
+                <time title="Modified: 2020-03-16 10:28:29" itemprop="dateModified" datetime="2020-03-16T10:28:29-07:00">2020-03-16</time>
               </span>
 
           
@@ -314,6 +314,561 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/21/MuSHR-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/21/MuSHR-Review/" class="post-title-link" itemprop="url">MuSHR Review</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-21 14:56:23" itemprop="dateCreated datePublished" datetime="2020-03-21T14:56:23-07:00">2020-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-22 23:16:16" itemprop="dateModified" datetime="2020-03-22T23:16:16-07:00">2020-03-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PRL/" itemprop="url" rel="index"><span itemprop="name">PRL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Acknowledgement: Xiangyu Xie.</p>
+<p>This review is mainly done by Xiangyu Xie. 我只是做了一点微小的工作.</p>
+<h1 id="Lab0"><a href="#Lab0" class="headerlink" title="Lab0"></a>Lab0</h1><ul>
+<li><strong>Localization</strong>: Determine the pose of a robot relative to a given map of the environment.</li>
+<li><strong>Mapping</strong>: Construct a map.</li>
+<li><strong>Planning</strong>: </li>
+</ul>
+<h2 id="Bayes-filter-bayesian-update-rule"><a href="#Bayes-filter-bayesian-update-rule" class="headerlink" title="Bayes filter(bayesian update rule)"></a>Bayes filter(bayesian update rule)</h2><p>The <strong>Bayes filter algorithm</strong> includes two steps, the first step is prediction (push belief through dynamics given action), the second step is correction (apply Bayes rule given measurement).</p>
+<p>$$<br>\begin{equation}<br>\begin{aligned}<br>\overline{bel}\left(x_{t}\right) &amp;= \int p\left(x_{t} \mid u_{t}, x_{t-1}\right) bel\left(x_{t-1}\right) d x_{t-1} \<br>bel\left(x_{t}\right) &amp;= \eta p\left(z_{t} \mid x_{t}\right) \overline{bel}\left(x_{t}\right)<br>\end{aligned}<br>\end{equation}<br>$$</p>
+<h2 id="Kalman-filter"><a href="#Kalman-filter" class="headerlink" title="Kalman filter"></a>Kalman filter</h2><p><strong>Assumptions</strong>:</p>
+<ol>
+<li>Linear dynamics $p(x_t | u_t, x_{t-1}) = A_{t} x_{t-1}+B_{t} u_{t}+\varepsilon_{t}$, where $\varepsilon_t \sim \mathcal{N}(0, R_t)$</li>
+<li>Linear measurement model $p(z_t | x_t) = C_{t} x_{t}+\delta_{t}$, where $\delta_t \sim \mathcal{N}(0, Q_t)$</li>
+<li>Initial belief $bel(x_0)$ is a gaussian distribution<br>$$<br>bel\left(x_{0}\right)=p\left(x_{0}\right)=\operatorname{det}\left(2 \pi \Sigma_{0}\right)^{-\frac{1}{2}} \exp \left{-\frac{1}{2}\left(x_{0}-\mu_{0}\right)^{T} \Sigma_{0}^{-1}\left(x_{0}-\mu_{0}\right)\right}<br>$$</li>
+</ol>
+<p><strong>Algorithm</strong>:</p>
+<p>$$<br>\mathbf{\text{Algorithm Kalman_filter(}}\mu_{t-1}, \Sigma_{t-1}, u_t, z_t \mathbf{):} \<br>\begin{align<em>}<br>\bar{\mu}<em>{t} &amp;=A</em>{t} \mu_{t-1}+B_{t} u_{t} \<br>\bar{\Sigma}<em>{t} &amp;=A</em>{t} \Sigma_{t-1} A_{t}^{T}+R_{t} \<br>K_{t} &amp;=\bar{\Sigma}<em>{t} C</em>{t-1}^{T}\left(C_{t} \bar{\Sigma}<em>{t} C</em>{t}^{T}+Q_{t}\right)^{-1} \<br>\mu_{t} &amp;=\bar{\mu}<em>{t}+K</em>{t}\left(z_{t}-C_{t} \bar{\mu}<em>{t}\right) \<br>\Sigma</em>{t} &amp;=\left(I-K_{t} C_{t}\right) \bar{\Sigma}<em>{t} \<br>&amp;\text{return } \mu</em>{t}, \Sigma_{t}<br>\end{align</em>}<br>$$</p>
+<aside class="notice">
+TODO(Nansong): 
+- derive the bayes update rule for Kalman filter and EKF(which represent the present the state (also obeservation?) as probability distribution, i.e gussian distribution, arbitrary distribution)
+- derive the bayes update rule by hand for particle filter(which represent the state as particles)
+- analyze the pros and cons, i.e computational and storage expenses, which one is faster. or differences between Kalman Filter and Particle Filter, and specify cases where which algorithms fits better.
+</aside>
+
+
+
+
+<h1 id="Lab1"><a href="#Lab1" class="headerlink" title="Lab1"></a>Lab1</h1><h2 id="Motion-model"><a href="#Motion-model" class="headerlink" title="Motion model"></a>Motion model</h2><ul>
+<li><strong>Kinematic model</strong>: map wheel speeds to robot velocities.</li>
+<li><strong>Dynamic model</strong>: map wheel torques to robot accelerations.</li>
+</ul>
+<p>Consider only kinematic model $p(x_t | u_t, x_{t-1})$ for now (assume we can set the speed directly), then $x = [x, y, \theta]^T$, $u = [V, \delta]^T$, where $\theta$ is the heading and $\delta$ is the steering angle.</p>
+<p>Now we will derive the motion model for rear axel. Note that a rigid body undergoing rotation and translation can be viewed as pure rotation about a instant center of rotation:</p>
+<blockquote>
+<p>Notes:</p>
+<ul>
+<li>How to find CoR? find two points(in our case, front wheels and rear wheels) in a rigid body and find their velocity vectors, the crosspoint of perpendicular lines of two velocity vectors is the CoR.<br><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_cdea034260cfff09d98139707f3140b0.png" alt=""></li>
+</ul>
+</blockquote>
+<p><mark>TODO: come up with or find other motion model examples apart from race car.</mark></p>
+<p>$$<br>\begin{align<em>}<br>&amp;\dot{x}=V \cos (\theta)\<br>&amp;\dot{y}=V \sin (\theta)\<br>&amp;\dot{\theta}=\omega=\frac{V \tan \delta}{L}<br>\end{align</em>}<br>$$</p>
+<p>With numerical integration we can get<br>$$<br>x_{t+1}=x_{t}+\frac{L}{\tan (\delta)}\left(\sin \left(\theta_{t+1}\right)-\sin \left(\theta_{t}\right)\right) \<br>y_{t+1}=y_{t}+\frac{L}{\tan (\delta)}\left(-\cos \left(\theta_{t+1}\right)+\cos \left(\theta_{t}\right)\right) \<br>\theta_{t+1}=\theta_{t}+\frac{v}{L} \tan (\delta) \Delta t \quad<br>$$</p>
+<h3 id="noise"><a href="#noise" class="headerlink" title="noise"></a>noise</h3><ol>
+<li>Control signal error: $\hat{V} \sim \mathcal{N}(V, \sigma_v^2)$, $\hat{\delta} \sim \mathcal{N}(\delta, \sigma_\delta^2)$</li>
+<li>Incorrect physics (the Kinematic Model is inaccurate): $\hat{x} \sim \mathcal{N}\left(x, \sigma_{x}^{2}\right)$, $\hat{y} \sim \mathcal{N}\left(y, \sigma_{y}^{2}\right)$, $\hat{\theta} \sim \mathcal{N}\left(\theta, \sigma_{\theta}^{2}\right)$</li>
+</ol>
+<h2 id="Sensor-model"><a href="#Sensor-model" class="headerlink" title="Sensor model"></a>Sensor model</h2><p>$p(z_t | x_t, m)$ is the probability of sensor reading $z_t$ given state $x_t$ and map $m$. Calculate simulated sensor reading $z^*$ form $x$ and $m$ and then compare with $z$. </p>
+<p>Assume individual beams are conditionally independent given map <mark>(may result in overconfidence problem)</mark>:<br>$$<br>p\left(z_{t} | x_{t}, m\right)=\prod_{i=1}^{K} p\left(z_{t}^{k} | x_{t}, m\right)<br>$$</p>
+<h3 id="noise-1"><a href="#noise-1" class="headerlink" title="noise"></a>noise</h3><ol>
+<li><p>Simple measurement noise in distance value<br> $$<br> p_{\text {hit }}\left(z_{t}^{k} | x_{t}, m\right)=\begin{cases}<br> \eta \mathcal{N}\left(z_{t}^{k} ; z_{t}^{k *}, \sigma_{\text {hit }}^{2}\right) &amp; \text { if } 0 \leq z_{t}^{k} \leq z_{\max } \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+<li><p>Presence of unexpected objects<br> $$<br> p_{\text {short }}\left(z_{t}^{k} | x_{t}, m\right)=\begin{cases}<br> \eta \lambda_{\text {short }} e^{-\lambda_{\text {short }} z_{t}^{k}} &amp; \text { if } 0 \leq z_{t}^{k} \leq z_{t}^{k *} \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+<li><p>Laser returns max range when no objects<br> $$<br> p_{\max }\left(z_{t}^{k} | x_{t}, m\right)=I\left(z=z_{\max }\right)=\begin{cases}<br> 1 &amp; \text { if } z=z_{\max } \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+<li><p>Failures in sensing<br> $$<br> p_{\text {rand }}\left(z_{t}^{k} | x_{t}, m\right)=\begin{cases}<br> \frac{1}{z_{\max }} &amp; \text { if } 0 \leq z_{t}^{k}&lt;z_{\max } \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+</ol>
+<p>Combine these 4 model to get<br>$$<br>p\left(z_{t}^{k} | x_{t}, m\right)=\begin{pmatrix}<br>z_{\mathrm{hit}} \<br>z_{\text {short }} \<br>z_{\text {max }} \<br>z_{\text {rand }}<br>\end{pmatrix}^{T} \begin{pmatrix}<br>p_{\text {hit }}(z_{t}^{k} | x_{t}, m) \<br>p_{\text {short }}(z_{t}^{k} | x_{t}, m) \<br>p_{\text {max }}(z_{t}^{k} | x_{t}, m) \<br>p_{\text {rand }}(z_{t}^{k} | x_{t}, m)<br>\end{pmatrix}<br>$$</p>
+<h2 id="Particle-filter"><a href="#Particle-filter" class="headerlink" title="Particle filter"></a>Particle filter</h2><p>The particle filter is an alternative <strong>nonparametric</strong> implementation of the Bayes filter. The key idea is to represent the posterior $bel(x_t)$ by a set of random state samples (particles) drawn from this posterior.<br>$$<br>\mathbf{\text{Algorithm Particle_filter(}} \mathcal{X}<em>{t-1}, u_t, z_t \mathbf{):} \<br>\begin{align*}<br>&amp;\bar{\mathcal{X}}</em>{t}=\mathcal{X}<em>{t}=\emptyset \<br>&amp;\text{for } m=1 \text{ to } M \text{ do} \<br>&amp;\qquad \text{sample } x</em>{t}^{[m]} \sim p\left(x_{t} \mid u_{t}, x_{t-1}^{[m]}\right) \<br>&amp;\qquad {w_{t}^{[m]}=p\left(z_{t} \mid x_{t}^{[m]}\right)} \<br>&amp;\qquad {\bar{\mathcal{X}}<em>{t}=\bar{\mathcal{X}}</em>{t}+\left\langle x_{t}^{[m]}, w_{t}^{[m]}\right\rangle} \<br>&amp;\text{endfor } \<br>&amp;\text{for } m = 1 \text{ to } M \text{ do} \<br>&amp;\qquad \text{draw } i \text{ with probability } \propto w_{t}^{[i]} \<br>&amp;\qquad \text{add } x_t^{[i]} \text{ to } \mathcal{X}_t \<br>&amp;\text{endfor} \<br>&amp;\text{return } \mathcal{X}_t<br>\end{align*}<br>$$</p>
+<p>We first sample $x_t$ from the state transition distribution, then calculate the <strong>importance factor</strong>, $w_t$. In the next loop, we do the <strong>resampling</strong>/<strong>importance sampling</strong>, to change the distribution of particles from $\overline{bel}(x_t)$ to $bel(x_t)$.</p>
+<h3 id="resample"><a href="#resample" class="headerlink" title="resample"></a>resample</h3><p>Resampling can cause high-variance (low-entropy) problem, where particles are depleted. Possible fixes:</p>
+<ol>
+<li>If the variance of weights low, don’t resample.</li>
+<li>Use low-variance sampling.</li>
+</ol>
+<aside class="notice">
+TODO(Nansong)
+- explain normal importance sampling?
+- differece between importance sampling and low-varience sampling? or is low-varience sampling is one method of importance sampling ?
+</aside>
+
+<p>$$<br>\mathbf{\text{Algorithm Low_variance_sampler(}} \mathcal{X}<em>{t}, \mathcal{W}</em>{t} \mathbf{):} \<br>\begin{align<em>}<br>&amp;\bar{X}<em>{t}=\emptyset \<br>&amp;r=\operatorname{rand}\left(0 ; M^{-1}\right) \<br>&amp;c=w</em>{t}^{[1]} \<br>&amp;i=1 \<br>&amp;\text{for } m=1 \text{ to } M \text{ do} \<br>&amp;\qquad U=r+(m-1) \cdot M^{-1} \<br>&amp;\qquad \text{while } U &gt; c \<br>&amp;\qquad\quad i=i+1 \<br>&amp;\qquad\quad c=c+w_{t}^{[i]} \<br>&amp;\qquad \text{endwhile} \<br>&amp;\qquad \text{add } x_{t}^{[i]} \text{ to } \bar{X}_{t} \<br>&amp;\text{endfor } \<br>&amp;\text{return } \bar{\mathcal{X}}_t<br>\end{align</em>}<br>$$</p>
+<p><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_4843cc831aa0cfd6384fbe8c8d4a1135.png" alt=""></p>
+<aside class="notice">
+TODO(Nansong):
+- give a python implementation of this low varience resample algorithm
+- give a python implementation of importance sampling of arbitrary probability distribution
+</aside>
+
+
+
+<h3 id="expected-pose"><a href="#expected-pose" class="headerlink" title="expected pose"></a>expected pose</h3><p>Calculate expected pose from particles: $x$ and $y$ can be computed directly by the weighted average. However, the weighted average of $\theta$ is not accurate. Thus we use cosine and sine averaging. (<a href="https://en.wikipedia.org/wiki/Mean_of_circular_quantities" target="_blank" rel="noopener">Ref</a>)</p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><p><code>MotionModel.py</code>:</p>
+<ol>
+<li>Subscribe to motor topic, get control info (speed and steering angle), also save last frame info for calculation.</li>
+<li>Add variance to speed and steering angle. Apply motion model on particles. Add variance to states.</li>
+</ol>
+<p><code>SensorModle.py</code>:</p>
+<ol>
+<li>Precompute the sensor model table and use <a href="https://github.com/kctess5/range_libc" target="_blank" rel="noopener">range_libc</a> package to achieve 2D raycasting for 2D occupancy grid.</li>
+<li>Subscribe to scan topic, filter out invalid and extreme scan values, downsample, and pass processed data to update weights.</li>
+</ol>
+<p><code>ParticleFilter.py</code>:</p>
+<ol>
+<li>Transfer map to occupancy grid.</li>
+<li>Globally initialize particles and weights. Initialize motion model and sensor model.</li>
+<li>Subscribe to <code>/intialpose</code> topic, initialize particles and weights around initial pos.</li>
+<li>When receiving scan infos, update weights, resample and calculate the expected pose for visualization.</li>
+</ol>
+<h1 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h1><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Uses Model</th>
+<th align="center">Stability Guarantee</th>
+<th align="center">Minimize Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">PID</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td align="center">Pure Pursuit</td>
+<td align="center">Circular arcs</td>
+<td align="center">Yes - with assumptions</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td align="center">Lyapunov</td>
+<td align="center">Non-linear</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td align="center">LQR</td>
+<td align="center">Linear</td>
+<td align="center">Yes</td>
+<td align="center">Quadratic</td>
+</tr>
+<tr>
+<td align="center">iLQR</td>
+<td align="center">Non-linear</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+</tbody></table>
+<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><p><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_026ce76324175dab1af828975d49d3bf.png" alt=""></p>
+<p>Position error in frame A:<br>$$<br>{}^{A}e = \begin{bmatrix}<br>x \ y<br>\end{bmatrix} - \begin{bmatrix}<br>x_{ref} \ y_{ref}<br>\end{bmatrix}<br>$$</p>
+<p>We want position error in frame B so that $x$ and $y$ error correspond to along-track and cross-track error respectively:<br>$$<br>\begin{align<em>}<br>{}^{B}e &amp;= {}<em>A^{B} R {}^{A}e \<br>&amp;=R(-\theta</em>{ref}) \left( \begin{bmatrix}<br>x \ y<br>\end{bmatrix} - \begin{bmatrix}<br>x_{ref} \ y_{ref}<br>\end{bmatrix} \right) \<br>&amp;= \begin{bmatrix}<br>\cos \left(\theta_{r e f}\right)\left(x-x_{r e f}\right)+\sin \left(\theta_{r e f}\right)\left(y-y_{r e f}\right) \<br>-\sin \left(\theta_{r e f}\right)\left(x-x_{r e f}\right)+\cos \left(\theta_{r e f}\right)\left(y-y_{r e f}\right)<br>\end{bmatrix} \<br>&amp;= \begin{bmatrix}<br>e_{at} &amp; e_{ct}<br>\end{bmatrix}^T<br>\end{align</em>}<br>$$</p>
+<p>Only consider cross-track error $e_{ct}$ and control steering angle for now.</p>
+<h2 id="PID"><a href="#PID" class="headerlink" title="PID"></a>PID</h2><p>$$<br>u=-\left(K_{p} e_{c t}+K_{i} \int e_{c t}(t) d t+K_{d} \dot{e}_{c t}\right)<br>$$</p>
+<p>where</p>
+<ul>
+<li>$K_p$: Proportional coefficient</li>
+<li>$K_i$: Integral coefficient</li>
+<li>$K_d$: Derivative coefficient</li>
+</ul>
+<p>Analytically compute the derivative term:<br>$$<br>\begin{align<em>}<br>\dot{e}<em>{c t} &amp;=-\sin \left(\theta</em>{ref}\right) \dot{x}+\cos \left(\theta_{ref}\right) \dot{y} \<br>&amp;=-\sin \left(\theta_{ref}\right) V \cos (\theta)+\cos \left(\theta_{ref}\right) V \sin (\theta) \<br>&amp;=V \sin \left(\theta-\theta_{ref}\right) \<br>&amp;=V \sin \left(\theta_{e}\right)<br>\end{align</em>}<br>$$</p>
+<aside class="notice">
+- what if numerically compute the derivative term?
+- find example where Integral term is used. 通常用在有外力的情况? 比如要track的path是N极, 小车是S极(且$K_p$项和外力抵消, 则无法消除$e_{ct}$)
+- 如果我们这个情况用$K_I$会发生什么?一开始会收敛很快?通常会给积分项$K_I$一个上限如果离reference path很远 是不是会在远处转圈圈?
+</aside>
+
+<h2 id="Pure-pursuit"><a href="#Pure-pursuit" class="headerlink" title="Pure-pursuit"></a>Pure-pursuit</h2><p><strong>Key idea</strong>: The car is always moving in a circular arc.</p>
+<ol>
+<li>Find a lookahead and compute arc</li>
+<li>Move along the arc</li>
+<li>Go to step 1</li>
+</ol>
+<p>Solve for arc:<br>$$<br>\alpha=\tan ^{-1}\left(\frac{y_{ref}-y}{x_{ref}-x}\right)-\theta \<br>R = \frac{L}{2 \sin\alpha} \<br>\dot{\theta} = \frac{V}{R} = \frac{2V\sin\alpha}{L} \<br>\dot{\theta} = \frac{V\tan u}{B}<br>$$</p>
+<p>where $B$ is the car length. Solve for $u$ we can get<br>$$<br>u = \tan^{-1}\left( \frac{2B \sin \alpha}{L} \right)<br>$$</p>
+<p><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_9844cc32418a123e41c17e93270542ad.png" alt=""></p>
+<h2 id="Lyapunov-control"><a href="#Lyapunov-control" class="headerlink" title="Lyapunov control"></a>Lyapunov control</h2><p>Define Lyapunov function:<br>$$<br>V\left(e_{ct}, \theta_{e}\right)=\frac{1}{2} k_{1} e_{ct}^{2}+\frac{1}{2} \theta_{e}^{2}<br>$$</p>
+<p>Compute the derivative:<br>$$<br>\begin{align<em>}<br>\dot{V}\left(e_{c t}, \theta_{e}\right)&amp;=k_{1} e_{c t} \dot{e}<em>{c t}+\theta</em>{e} \dot{\theta}<em>{e}\<br>&amp;=k</em>{1} e_{c t} V \sin \theta_{e}+\theta_{e} \frac{V}{B} \tan u<br>\end{align</em>}<br>$$</p>
+<p>Set $u$ to get $\dot{V} &lt; 0$:<br>$$<br>\theta_{e} \frac{V}{B} \tan u=-k_{1} e_{c t} V \sin \theta_{e}-k_{2} \theta_{e}^{2} \<br>\tan u=-\frac{k_{1} e_{c t} B}{\theta_{e}} \sin \theta_{e}-\frac{B}{V} k_{2} \theta_{e} \<br>u=\tan ^{-1}\left(-\frac{k_{1} e_{c t} B}{\theta_{e}} \sin \theta_{e}-\frac{B}{V} k_{2} \theta_{e}\right)<br>$$</p>
+<h2 id="LQR"><a href="#LQR" class="headerlink" title="LQR"></a>LQR</h2><p>Turn the problem into an optimization to trade-off both driving error and keeping control action small:<br>$$<br>\min <em>{u(t)} \int</em>{0}^{\infty}\left(w_{1} e(t)^{2}+w_{2} u(t)^{2} \right) dt<br>$$</p>
+<p>Given</p>
+<ol>
+<li><strong>Linear</strong> dynamic system<br>$$<br>x_{t+1} = Ax_t + Bu_t<br>$$</li>
+<li><strong>Quadratic</strong> cost<br>$$<br>J=\sum_{t=0}^{T-1} x_{t}^{T} Q x_{t}+u_{t}^{T} R u_{t}<br>$$</li>
+</ol>
+<p>The optimal control sequence minimizing the cost is<br>$$<br>u_t = K_t x_t \<br>K_{t}=-\left(R+B^{T} V_{t+1} B\right)^{-1} B^{T} V_{t+1} A \<br>V_{t}=Q+K_{t}^{T} R K_{t}+\left(A+B K_{t}\right)^{T} V_{t+1}\left(A+B K_{t}\right)<br>$$</p>
+<h2 id="MPC"><a href="#MPC" class="headerlink" title="MPC"></a>MPC</h2><ol>
+<li>Plan a sequence of control actions</li>
+<li>Predict the set of next states to a horizon H</li>
+<li>Evaluate the cost/constraint of the states and controls</li>
+<li>Optimize the cost</li>
+</ol>
+<aside class="notice">
+- 主要就是error_cost + collision cost
+- 如果error_cost 不用(x, y) Euclidian Distance, 儿用CrossTrack Error会发生什么？会倒着走么？PID和PurePursuit呢?Lypunov呢?
+- 能不能把reference path里面每个waypoints的顺序用起来解决这个问题呢. 比如删掉之前用过的reference pose?
+</aside>
+
+<h2 id="Code-1"><a href="#Code-1" class="headerlink" title="Code"></a>Code</h2><p><code>controlnode.py</code>: main script</p>
+<ol>
+<li>Define Subscribers to pose and path infos; Publishers for visualization and Services for reset</li>
+<li>Enter main program when initial pose is set and controller is ready. Get pose and reference pose, get next control and publish to <code>/vesc/high_level/ackermann_cmd_mux/input/nav_0</code> topic.</li>
+<li>Stop when path is completed</li>
+</ol>
+<p><code>runner_script.py</code>:</p>
+<ol>
+<li>Loading different paths and speed</li>
+<li>Start the controller</li>
+</ol>
+<p><code>controller.py</code>: base controller class</p>
+<ol>
+<li>Store path info</li>
+<li>Define utility functions: get reference pose by index, get pose and pose_ref error</li>
+</ol>
+<p><mark>Find reference pose function is the same for all controllers: Find the nearest point on the path and lookahead some distance.</mark></p>
+<p><code>pid.py</code>:</p>
+<ol>
+<li>Use PD equation to get next control (steering angle)</li>
+</ol>
+<p><code>purepursuit.py</code>:</p>
+<ol>
+<li>Use Purepursuit equation to get next control</li>
+</ol>
+<p><code>mpc.py</code>:</p>
+<ol>
+<li>Dividing steering angle $[-\pi, \pi]$ equally to $K$ rollouts</li>
+<li>Execute each steering angel through $T$ timesteps to collect $K * T$ poses</li>
+<li>Evaluate the cost of each rollout by collision cost and error cost<ol>
+<li>Collision cost: if any pose in a trajectory is in collision with the map, add a large cost</li>
+<li>Error cost: norm of the distance between last pose and the reference pose, weighted by a constant</li>
+</ol>
+</li>
+<li>Choose the rollout with the minimal cost and execute the first step</li>
+<li>Return to step 1</li>
+</ol>
+<p><code>mpc2.py</code>: Similar to mpc but use scan info rather than map. The only thing change is the obstacles cost.</p>
+<ol>
+<li>Calculate $N$ obstacles pose in the map by scan info</li>
+<li>For $K * T$ poses, calculate the distance with every obstacles to get $K * T * N$ array</li>
+<li>Find the minimal distance for every pose to get $K * T$ array</li>
+<li>Average through timesteps to get $K$ array, then weighted by a constant to get the obstacles cost.</li>
+</ol>
+<p><code>nonlinear.py</code>:</p>
+<ol>
+<li>Use Lyapunov control equation to get the control</li>
+</ol>
+<h1 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a>Lab3</h1><p>Steps for planing the path from one point to another:</p>
+<ol>
+<li>Random sample points on the map and construct the graph</li>
+<li>Use planning algorithm (A*) to search the graph for optimal path</li>
+</ol>
+<h2 id="Graph-construction"><a href="#Graph-construction" class="headerlink" title="Graph construction"></a>Graph construction</h2><p>The graph we are constructing is called <a href="https://en.wikipedia.org/wiki/Random_geometric_graph" target="_blank" rel="noopener">Random geometric graph</a> (RGG)</p>
+<ol>
+<li>Sample a set of collision free vertices $V$</li>
+<li>Connect neighboring vertices to get edges $E$</li>
+</ol>
+<h3 id="sampling"><a href="#sampling" class="headerlink" title="sampling"></a>sampling</h3><p>Uniform random sampling tends to clump. We want points to be spread out evenly, which can be achieved by <a href="https://observablehq.com/@jrus/halton" target="_blank" rel="noopener">Halton sequence</a></p>
+<h3 id="optimal-radius"><a href="#optimal-radius" class="headerlink" title="optimal radius"></a>optimal radius</h3><p>We want to choose the radius smaller enough for efficiency while ensuring connectivity. The optimal value can be chosen as<br>$$<br>r = \left(\frac{\ln|V|}{\alpha_{p,d} |V|}\right)^{1/n}<br>$$<br>where $\alpha_{p,d}$ is a constant. For special case of a two-dimensional space and the euclidean norm ($d=2$, $p=2$), $\alpha_{p,d} = \pi$</p>
+<h3 id="Dubins-path"><a href="#Dubins-path" class="headerlink" title="Dubins path"></a>Dubins path</h3><p>Since we are considering 2-D car dynamics, we need to connect two points with feasible path instead of straight lines. Mathematically, we need to solve the BVP:<br>$$<br>\dot{q}(t) = f(q(t), u(t)) \<br>q(0) = q_1,\quad q(t) = q_2<br>$$<br>where $q=(x,y,\theta)$ in our case.</p>
+<p>Dubins path shows that the solution always exists and has to be one of 6 classes:<br>$$<br>{LRL, RLR, LSL, LSR, RSL, RSR}<br>$$<br>where $L,R,S$ represent turn left, right, straight, respectively.</p>
+<h2 id="Planning-algorithm"><a href="#Planning-algorithm" class="headerlink" title="Planning algorithm"></a>Planning algorithm</h2><p>Given start node $s_0$, goal $s_1$ and cost $c(s, s’)$, create objects:</p>
+<ol>
+<li>OPEN: <strong>priority queue</strong> of nodes to be processed</li>
+<li>CLOSED: list of nodes already processed</li>
+<li>$g(s)$: estimate of the least cost from start to a given node</li>
+</ol>
+<p>The pseudocode for <strong>best first search</strong> can be expressed as</p>
+<ol>
+<li><p>Push $s_0$ into OPEN</p>
+</li>
+<li><p>While $s_1$ not expanded</p>
+<ol start="3">
+<li><p>Pop <em>best</em> from OPEN</p>
+</li>
+<li><p>Add <em>best</em> to CLOSED</p>
+</li>
+<li><p>For every successor <em>s’</em></p>
+<ol start="6">
+<li>If $g(s’) &gt; g(s) + c(s, s’)$<ol start="7">
+<li>$g(s’) = g(s) + c(s, s’)$</li>
+<li>Add (update) $s’$ to OPEN</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>The main problem is how to choose the heuristic function $f(s)$ for step 3.</p>
+<h3 id="Djikstra’s-algorithm"><a href="#Djikstra’s-algorithm" class="headerlink" title="Djikstra’s algorithm"></a>Djikstra’s algorithm</h3><p>Choose $f(s) = g(s)$. Always pop the node with the smallest cost from the origin first.</p>
+<h3 id="A"><a href="#A" class="headerlink" title="A*"></a>A*</h3><p>:::warning<br>看看这个<a href="http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html" target="_blank" rel="noopener">astar</a><br>:::</p>
+<p>If we can pre-evaluate the cost from the node to the goal $h(s)$, then we can choose a better $f(s) = g(s) + h(s)$.</p>
+<ul>
+<li>If $h(s)$ is admissible $h(s) \le h^<em>(s)$, $h(goal) = 0$, then the path return by A</em> is optimal.</li>
+<li>If $h(s)$ is consistent $h(s) \le c(s, s’) + h(s’)$, $h(goal) = 0$, then A* is optimal and efficient (will not re-expand a node).</li>
+</ul>
+<p>All consistent heuristics are admissible, not vice versa.</p>
+<h3 id="weighted-A"><a href="#weighted-A" class="headerlink" title="weighted A*"></a>weighted A*</h3><p>Choose $f(s) = g(s) + \epsilon h(s)$, where $\epsilon &gt; 1$. It is more efficient and the solution is $\epsilon$-optimal $c \le \epsilon c^*$</p>
+<h3 id="lazy-A"><a href="#lazy-A" class="headerlink" title="lazy A*"></a>lazy A*</h3><p>Instead of checking edge collision for all neighbors, only check the edge to parent when expanding. <mark>OPEN list will have multiple copies of a node since we haven’t collision check.</mark></p>
+<h3 id="shortcut"><a href="#shortcut" class="headerlink" title="shortcut"></a>shortcut</h3><p>After a path is found, we can randomly pick two nodes and connect them directly if the edge is collision-free.</p>
+<h2 id="Code-2"><a href="#Code-2" class="headerlink" title="Code"></a>Code</h2><p><code>run.py</code>: main program</p>
+<ol>
+<li>Load map info</li>
+<li>Construct graph given environment, sampler, number of vertices, connection radius.</li>
+<li>Add start and end node</li>
+<li>Use A* or lazy A* algorithm to search the optimal path and visualize</li>
+</ol>
+<p><code>MapEnvironment.py</code>: define utility functions associated with planning</p>
+<ol>
+<li>Check edge collision</li>
+<li>Compute heuristic and distance function</li>
+<li>Generate path on the map</li>
+<li>Visualization of the graph and path</li>
+</ol>
+<p><code>Sampler.py</code>: create random samples for graph construction</p>
+<ol>
+<li>Use <a href="https://gist.github.com/tupui/cea0a91cc127ea3890ac0f002f887bae" target="_blank" rel="noopener">halton sequence</a> to generate 2-D random vertices in $(0,1)$</li>
+<li>Scale by map info</li>
+</ol>
+<p><code>graph_maker.py</code>: construct graph</p>
+<ol>
+<li>Use python package <a href="https://networkx.github.io/" target="_blank" rel="noopener">NetworkX</a> to easily construct a graph</li>
+<li>Add sampled valid vertices</li>
+<li>Connect edges within radius and without collision (do not check collision if using lazy A*)</li>
+</ol>
+<p><code>astar.py</code>: A* algorithm</p>
+<ol>
+<li>Use <code>heapq</code> package to create priority queue to store <code>[f(s), count, node, g(s), parent]</code> info. <code>count</code> is used to prevent comparing node when $f(s)$ are the same.</li>
+<li>Use dict <code>enqueued</code> to store $g(s)$ and $h(s)$ for a node, and another dict <code>explored</code> to store the explored node and its parent node.</li>
+<li>Add start node to the queue.</li>
+<li>While queue is not empty, pop one node and add it to <code>explored</code> if it is not already there.</li>
+<li>For all the neighbor node $s’$, compute $g(s’) = g(s) + c(s,s’)$ if $s’$ is not already in <code>explored</code>.</li>
+<li>If $s’$ is in <code>enqueued</code>, get its previous $g’(s’)$ and $h’(s’)$. Continue to next neighbor if $g’(s) \le g(s’)$, since it is better. If not in <code>enqueued</code>, compute $h(s’)$ by the heuristic function.</li>
+<li>Update $g(s’)$ and $h(s’)$ in <code>enqueued</code> and push it to the queue.</li>
+<li>If reach target node, continually find parent node by <code>explored</code> and return the path.</li>
+</ol>
+<p><code>lazy_astar.py</code>: lazy A* algorithm</p>
+<ol>
+<li>When expanding node, check its edge collision with parent.</li>
+<li>When checking neighbors, do not need to compare $g’(s’)$ and $g(s’)$</li>
+<li>Multiple nodes with different parents can be added to the queue.</li>
+</ol>
+<p><code>runDubins.py</code>:  similar to <code>run.py</code> but use Dubins environment</p>
+<p><code>DubinsMapEnvironment.py</code>: inherited from <code>MapEnvironment</code></p>
+<ol>
+<li>Compute distances with Dubins path</li>
+<li>Compute heuristic with Dubins path</li>
+<li>Generate path by Dubins path planning</li>
+</ol>
+<p><code>DubinsSampler.py</code>:</p>
+<ol>
+<li>Sample $N$ vertices same as in <code>Sampler.py</code></li>
+<li>Divide angles to $M$ parts, add angles to each vertices to create $M\times N$ samples</li>
+</ol>
+<p><code>Dubins.py</code>: utility function for Dubins path</p>
+<p><code>ROSPlanner.py</code>: take goal from rviz and do planning. <mark>Be careful of the frame change between map and world</mark></p>
+<ol>
+<li>Load map info</li>
+<li>Construct graph and save for later use</li>
+<li>Subscribe to pose topic, save current pose</li>
+<li>Subscribe to goal topic, plan from the current pose to the goal, publish the path using service defined in lab2</li>
+<li>If there are multiple goals, sequentially planning through them and combine the path</li>
+</ol>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://ais.informatik.uni-freiburg.de/teaching/ss13/robotics/" target="_blank" rel="noopener">Introduction to Mobile Robotics</a></li>
+<li><a href="https://courses.cs.washington.edu/courses/cse490r/19sp/" target="_blank" rel="noopener">Mobile Robots</a></li>
+<li><a href="http://www.probabilistic-robotics.org/" target="_blank" rel="noopener">Probabilistic Robotics</a></li>
+</ol>
+<p></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/18/Color-Recognition-of-Rubiks-Cube-CRRC-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/18/Color-Recognition-of-Rubiks-Cube-CRRC-Review/" class="post-title-link" itemprop="url">Color Recognition of Rubiks Cube - CRRC Review</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-18 14:34:20" itemprop="dateCreated datePublished" datetime="2020-03-18T14:34:20-07:00">2020-03-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-20 00:09:52" itemprop="dateModified" datetime="2020-03-20T00:09:52-07:00">2020-03-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/talk-to-myself/" itemprop="url" rel="index"><span itemprop="name">talk to myself</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="COLOR-RECOGNITION-FOR-RUBIK’S-CUBE-ROBOT"><a href="#COLOR-RECOGNITION-FOR-RUBIK’S-CUBE-ROBOT" class="headerlink" title="COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT"></a><a href="https://arxiv.org/pdf/1901.03470.pdf" target="_blank" rel="noopener">COLOR RECOGNITION FOR RUBIK’S CUBE ROBOT</a></h2><h3 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h3><ul>
+<li>Color Drifting(offline methods are always ineffectiveness and can not work well in continuous change circumstance.)<ul>
+<li>When the brightness of the light changes, most of features of orange and red in the color space will shift, which result in the overlap distribution of orange and red colors. </li>
+</ul>
+</li>
+</ul>
+<h3 id="Approaches"><a href="#Approaches" class="headerlink" title="Approaches:"></a>Approaches:</h3><p>啥也不是 忍不住喷一下. 什么👻玩意儿, 就把KNN的distance metric加了个weight, 然后美其名曰Dynamicweightlabelpropagation, 菜. 就这也好意思放arxiv?</p>
+<ul>
+<li>Offline<ul>
+<li>SB-ELM: Scatter balance &amp; extreme learning machine 看不懂这个、啥玩意儿啊！</li>
+</ul>
+</li>
+<li>Online<ul>
+<li>WLHP: 啥也不是. </li>
+<li>WLHP*: Optimized WLHP. 啥也不是.</li>
+<li>DWLP: 啥也不是.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Rubiks-Cube-Localization-Face-Detection-and-Interactive-Solving"><a href="#Rubiks-Cube-Localization-Face-Detection-and-Interactive-Solving" class="headerlink" title="Rubiks Cube Localization, Face Detection, and Interactive Solving"></a><a href="http://cs231n.stanford.edu/reports/2015/pdfs/jaykevin_final.pdf" target="_blank" rel="noopener">Rubiks Cube Localization, Face Detection, and Interactive Solving</a></h2><h3 id="Approaches-1"><a href="#Approaches-1" class="headerlink" title="Approaches:"></a>Approaches:</h3><ul>
+<li><p>Cube Localization via Convolutional Neural Networks</p>
+</li>
+<li><p>Finding Cube Pieces via SLIC Superpixel Classification</p>
+<ul>
+<li>Given an image, run MiniBatch Kmeans on pixel values and assign each pixel to its corresponding centroid to encourage clustering of similar pixels. (This helps with superpixel segmentation)</li>
+<li>Run SLIC superpixel segmentation on the resulting Kmeans image, producing a set of candidate superpixels for cube pieces</li>
+<li>For each candidate superpixel, we collect a histogram of HSV pixel values within and calculate up to the third moment of the covered area, appending all into a feature vector</li>
+<li>Based on a random forest classifier trained on handlabelled ground-truth data, we then classify all resulting superpixels as cube piece or otherwise.<br><img src="https://i.imgur.com/g0nVVCD.png" alt="image-20200313001353864"></li>
+</ul>
+</li>
+<li><p>Pinpointing Centers of Cube Faces?</p>
+</li>
+<li><p>Bootstrap Learning for Data Acquisition</p>
+</li>
+<li><p>Extracting Cube Face Information</p>
+<ul>
+<li><p>Given our predictions for the centers of the cube faces (and specifically, the corners of the center cube), we were able to calculate a projective transform to orient the cube and extract the color information from the faces. We were then able to classify the colors of each square by using a manually-tuned SVM????</p>
+<p>  <img src="https://i.imgur.com/5PdAHJg.png" alt="image-20200318144148342"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>🌲莽莽问问题:</p>
+<ul>
+<li>rubix cube 的8个corner pieces总共有多少种orientation state? $3^8 / 3 = 3^7$ ?</li>
+<li>rubix cube 的12个edge pieces总共有多少种orientation state?</li>
+<li>So finally, what’s the the total number of state space?</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
     <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/12/RubixCube-Progress/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -345,7 +900,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-13 14:23:02" itemprop="dateModified" datetime="2020-03-13T14:23:02-07:00">2020-03-13</time>
+                <time title="Modified: 2020-03-13 14:42:36" itemprop="dateModified" datetime="2020-03-13T14:42:36-07:00">2020-03-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -520,10 +1075,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-03-08 22:21:41 / Modified: 22:30:46" itemprop="dateCreated datePublished" datetime="2020-03-08T22:21:41-07:00">2020-03-08</time>
+              <time title="Created: 2020-03-08 22:21:41" itemprop="dateCreated datePublished" datetime="2020-03-08T22:21:41-07:00">2020-03-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-11 22:08:13" itemprop="dateModified" datetime="2020-03-11T22:08:13-07:00">2020-03-11</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -599,7 +1160,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-05 11:59:40" itemprop="dateModified" datetime="2020-03-05T11:59:40-08:00">2020-03-05</time>
+                <time title="Modified: 2020-03-11 22:13:47" itemprop="dateModified" datetime="2020-03-11T22:13:47-07:00">2020-03-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -737,7 +1298,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-04 15:12:54" itemprop="dateModified" datetime="2020-03-04T15:12:54-08:00">2020-03-04</time>
+                <time title="Modified: 2020-03-11 22:02:45" itemprop="dateModified" datetime="2020-03-11T22:02:45-07:00">2020-03-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -895,7 +1456,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-12 23:23:30" itemprop="dateModified" datetime="2020-03-12T23:23:30-07:00">2020-03-12</time>
+                <time title="Modified: 2020-03-13 16:04:59" itemprop="dateModified" datetime="2020-03-13T16:04:59-07:00">2020-03-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -936,6 +1497,9 @@
 <li><a href="https://arxiv.org/pdf/1611.10010.pdf" target="_blank" rel="noopener">Deep Cuboid Detection: Beyond 2D Bounding Boxes</a></li>
 </ul>
 </li>
+</ul>
+<h3 id="Photography-Basic"><a href="#Photography-Basic" class="headerlink" title="Photography Basic"></a>Photography Basic</h3><ul>
+<li><a href="https://improvephotography.com/photography-basics/aperture-shutter-speed-and-iso/" target="_blank" rel="noopener">Photography Basics 101: Aperture, Shutter speed, and ISO</a></li>
 </ul>
 <hr>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
@@ -996,7 +1560,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-12 11:50:11" itemprop="dateModified" datetime="2020-03-12T11:50:11-07:00">2020-03-12</time>
+                <time title="Modified: 2020-03-20 00:14:40" itemprop="dateModified" datetime="2020-03-20T00:14:40-07:00">2020-03-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1029,292 +1593,8 @@ $\sum_i^n f_i(x)$</li>
 <li>联立解方程</li>
 <li></li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/02/27/git-q-a-thread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/baby.png">
-      <meta itemprop="name" content="Nansong Yi">
-      <meta itemprop="description" content="TheSong is named after IG.TheShy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="TheSong">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/27/git-q-a-thread/" class="post-title-link" itemprop="url">Git Q&A Thread</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-02-27 12:37:54" itemprop="dateCreated datePublished" datetime="2020-02-27T12:37:54-08:00">2020-02-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-12 01:47:19" itemprop="dateModified" datetime="2020-03-12T01:47:19-07:00">2020-03-12</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/talk-to-myself/" itemprop="url" rel="index"><span itemprop="name">talk to myself</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Case-git-push-不给其他args"><a href="#Case-git-push-不给其他args" class="headerlink" title="Case: git push 不给其他args"></a>Case: git push 不给其他args</h2><p>Discription: clone下来一个repo, 我新建一个branch叫做<code>my_branch</code>然后push到remote/origin, 使用的命令是<code>git push</code>, 然后我在别的地儿再重新clone这个repo, <code>git checkout my_branch</code>的时候是到<code>origin/my_branch</code>, 而没有一个local的不带<code>origin/</code>开头的<code>my_branch</code> , 这是咋回事儿啊</p>
-<ul>
-<li>我猜测可能是因为, 没有用<code>git push -u origin my_branch</code>, 或者 <code>git push my_branch:my_branch</code>, &lt;此处前面表示local, 后面表示remote&gt;, 总之这俩条都表示要local的<code>my_branch</code> 去追踪<code>remote/origin</code>的<code>my_branch</code>)</li>
-<li>test了一下 果然和我的猜测一样 整明白了.</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 小贴士:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## switch remote URLs back and forth between HTTPS and SSH</span></span><br><span class="line">$ git remote <span class="built_in">set</span>-url origin https://github.com/USERNAME/REPOSITORY.git</span><br><span class="line">$ git remote <span class="built_in">set</span>-url origin git@github.com:USERNAME/REPOSITORY.git</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 查看remote</span></span><br><span class="line">$ git remote -v</span><br><span class="line">&gt; origin  https://github.com/USERNAME/REPOSITORY.git (fetch)</span><br><span class="line">&gt; origin  https://github.com/USERNAME/REPOSITORY.git (push)</span><br><span class="line"></span><br><span class="line"><span class="comment">## 查看git config</span></span><br><span class="line">git config --list</span><br><span class="line">git config --list --show-origin</span><br><span class="line"><span class="comment">## or look at your ~/.gitconfig file. The local configuration will be in your repository's .git/config file.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. System level (applied to every user on the system and all their repositories)</span></span><br><span class="line">$ git config --list --system (may need sudo)</span><br><span class="line">$ git config --system color.ui <span class="literal">true</span></span><br><span class="line">$ git config --edit --system</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. Global level (values specific personally to you, the user).</span></span><br><span class="line">$ git config --list --global</span><br><span class="line">$ git config --global user.name xyz</span><br><span class="line">$ git config --edit --global</span><br><span class="line"></span><br><span class="line"><span class="comment">#3. Repository level (specific to that single repository)</span></span><br><span class="line">$ git config --list --<span class="built_in">local</span></span><br><span class="line">$ git config --<span class="built_in">local</span> core.ignorecase <span class="literal">true</span> (--<span class="built_in">local</span> optional)</span><br><span class="line">$ git config --edit --<span class="built_in">local</span> (--<span class="built_in">local</span> optional)</span><br><span class="line"></span><br><span class="line"><span class="comment"># How do I read one particular configuration?</span></span><br><span class="line">$ git config user.name </span><br><span class="line"><span class="comment"># You may also specify options --system, --global, --local to read that value at a particular level.</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="Case-How-to-manage-multiple-GitHub-accounts-on-a-single-machine-with-SSH-keys"><a href="#Case-How-to-manage-multiple-GitHub-accounts-on-a-single-machine-with-SSH-keys" class="headerlink" title="Case:   How to manage multiple GitHub accounts on a single machine with SSH keys"></a>Case:   How to manage multiple GitHub accounts on a single machine with SSH keys</h2><p>为啥要搞这个?</p>
-<ul>
-<li>马上毕业了uw邮箱可能用不了了</li>
-<li>以后肯定会遇到work account和personal account的conflicts(现在uw.edu就是work account)</li>
-</ul>
-<blockquote>
-<p>The case solution is almost forwarded from this blog: <a href="https://www.freecodecamp.org/news/manage-multiple-github-accounts-the-ssh-way-2dadc30ccaca/" target="_blank" rel="noopener">step by step</a> </p>
-</blockquote>
-<p>Discription: 有多个github/gitlab账号 并且每个账号都在本地有不同的repo要develop，希望push的时候能认清自己是谁.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"nathan"</span></span><br><span class="line">$ git config --global user.email <span class="string">"example@gmail.com</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="1-Generating-the-SSH-keys"><a href="#1-Generating-the-SSH-keys" class="headerlink" title="1. Generating the SSH keys"></a>1. Generating the SSH keys</h3><p>Before generating an SSH key, we can check to see if we have any existing SSH keys: <code>ls -al ~/.ssh</code> This will list out all existing public and private key pairs, if any.</p>
-<p>If <code>~/.ssh/id_rsa</code> is available, we can reuse it, or else we can first generate a key to the default <code>~/.ssh/id_rsa</code> by running:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
-
-<p>When asked for the location to save the keys, accept the default location by pressing enter. A private key and public key <code>~/.ssh/id_rsa.pub</code> will be created at the default ssh location <code>~/.ssh/</code>.</p>
-<p>Let’s use this default key pair for our personal account.</p>
-<p>For the work accounts, we will create different SSH keys. The below code will generate the SSH keys, and saves the public key with the tag <em>“email@work_mail.com”</em> to <code>~/.ssh/id_rsa_work_user1.pub</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">"email@work_mail.com"</span> -f <span class="string">"id_rsa_work_user1"</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-Adding-the-new-SSH-key-to-the-corresponding-GitHub-account"><a href="#2-Adding-the-new-SSH-key-to-the-corresponding-GitHub-account" class="headerlink" title="2. Adding the new SSH key to the corresponding GitHub account"></a>2. Adding the new SSH key to the corresponding GitHub account</h3><p>We already have the SSH public keys ready, and we will ask our GitHub accounts to trust the keys we have created. This is to get rid of the need for typing in the username and password every time you make a Git push.</p>
-<p>Copy the public key <code>pbcopy &lt; ~/.ssh/id_rsa.</code>pub and then log in to your personal GitHub account:</p>
-<ol>
-<li>Go to <code>Settings</code></li>
-<li>Select <code>SSH and GPG keys</code> from the menu to the left.</li>
-<li>Click on <code>New SSH key</code>, provide a suitable title, and paste the key in the box below</li>
-<li>Click <code>Add key</code> — and you’re done!</li>
-</ol>
-<blockquote>
-<p>For the work accounts, use the corresponding public keys (<code>pbcopy &lt; ~/.ssh/id_rsa_work_user1.</code>pub) and repeat the above steps in your GitHub work accounts.</p>
-</blockquote>
-<h3 id="3-Registering-the-new-SSH-Keys-with-the-ssh-agent"><a href="#3-Registering-the-new-SSH-Keys-with-the-ssh-agent" class="headerlink" title="3 . Registering the new SSH Keys with the ssh-agent"></a>3 . Registering the new SSH Keys with the ssh-agent</h3><p>To use the keys, we have to register them with the <strong>ssh-agent</strong> on our machine. Ensure ssh-agent is running using the command <code>eval &quot;$(ssh-agent -s)&quot;</code>.<br>Add the keys to the ssh-agent like so:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
-
-<p>Make the ssh-agent use the respective SSH keys for the different SSH Hosts.</p>
-<p>This is the crucial part, and we have two different approaches:</p>
-<p>Using the SSH configuration file (Step 4), and having only one active SSH key in the ssh-agent at a time (Step 5).</p>
-<h3 id="4-Creating-the-SSH-config-File"><a href="#4-Creating-the-SSH-config-File" class="headerlink" title="4. Creating the SSH config File"></a><strong>4. Creating the SSH config File</strong></h3><p>Here we are actually adding the SSH configuration rules for different hosts, stating which identity file to use for which domain.</p>
-<p>The SSH config file will be available at <strong>~/.ssh/config</strong>. Edit it if it exists, or else we can just create it.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh/</span><br><span class="line">$ touch config           // Creates the file <span class="keyword">if</span> not exists</span><br><span class="line">$ code config            // Opens the file <span class="keyword">in</span> VS code, use any editor</span><br></pre></td></tr></table></figure>
-
-<p>Make configuration entries for the relevant GitHub accounts similar to the one below in your <code>~/.ssh/config</code> file:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Personal account, - the default config</span></span><br><span class="line">Host github.com</span><br><span class="line">   HostName github.com</span><br><span class="line">   User git</span><br><span class="line">   IdentityFile ~/.ssh/id_rsa</span><br><span class="line">   </span><br><span class="line"><span class="comment"># Work account-1</span></span><br><span class="line">Host github.com-work_user1    </span><br><span class="line">   HostName github.com</span><br><span class="line">   User git</span><br><span class="line">   IdentityFile ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
-
-<p>“<strong>work_user1</strong>” is the GitHub user id for the work account.</p>
-<p>“<strong>g*ithub.com-*work_user1</strong>” is a notation used to differentiate the multiple Git accounts. You can also use “<strong>work_user1.g*ithub.com”*</strong> notation as well. Make sure you’re consistent with what hostname notation you use. This is relevant when you clone a repository or when you set the remote origin for a local repository</p>
-<p>The above configuration asks ssh-agent to:</p>
-<ul>
-<li>Use <strong>id_rsa</strong> as the key for any Git URL that uses <strong>@github.com</strong></li>
-<li>Use the <strong>id_rsa_work_user1</strong> key for any Git URL that uses <strong>@github.com-work_user1</strong></li>
-</ul>
-<h3 id="5-One-active-SSH-key-in-the-ssh-agent-at-a-time"><a href="#5-One-active-SSH-key-in-the-ssh-agent-at-a-time" class="headerlink" title="5. One active SSH key in the ssh-agent at a time"></a>5. One active SSH key in the ssh-agent at a time</h3><p>This approach doesn’t require the SSH config rules. Rather we manually ensure that the ssh-agent has only the relevant key attached at the time of any Git operation.</p>
-<p><code>ssh-add -l</code> will list all the SSH keys attached to the ssh-agent. Remove all of them and add the one key you are about to use.</p>
-<p>If it’s to a personal Git account that you are about to push:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add -D            //removes all ssh entries from the ssh-agent</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa                 // Adds the relevant ssh key</span><br></pre></td></tr></table></figure>
-
-<p>The ssh-agent now has the key mapped with the personal GitHub account, and we can do a Git push to the personal repository.</p>
-<p>To push to your work GitHub account-1, change the SSH key mapped with the ssh-agent by removing the existing key and adding the SSH key mapped with the GitHub work account.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add -D</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
-
-<p>The ssh-agent at present has the key mapped with the work Github account, and you can do a Git push to the work repository. This requires a bit of manual effort, though.</p>
-<h3 id="Setting-the-git-remote-Url-for-the-local-repositories"><a href="#Setting-the-git-remote-Url-for-the-local-repositories" class="headerlink" title="Setting the git remote Url for the local repositories"></a>Setting the git remote Url for the local repositories</h3><p>Once we have local Git repositories cloned /created, ensure the Git config user name and email is exactly what you want. GitHub identifies the author of any commit from the email id attached with the commit description.</p>
-<p>To list the config name and email in the local Git directory, do <code>*git config user.name*</code>and <code>*git config user.email*</code>. If it’s not found, update accordingly.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.name <span class="string">"User 1"</span>   // Updates git config user name</span><br><span class="line">$ git config user.email <span class="string">"user1@workMail.com"</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="6-While-Cloning-Repositories"><a href="#6-While-Cloning-Repositories" class="headerlink" title="6. While Cloning Repositories"></a>6. While Cloning Repositories</h3><p>Note: step 7 will help, if we have the repository already available on local.</p>
-<p>Now that the configurations are in place, we can go ahead and clone the corresponding repositories. On cloning, make a note that we use the host names that we used in the SSH config.</p>
-<p>Repositories can be cloned using the clone command Git provides:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@github.com:personal_account_name/repo_name.git</span><br></pre></td></tr></table></figure>
-
-<p>The work repository will require a change to be made with this command:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@github.com-work_user1:work_user1/repo_name.git</span><br></pre></td></tr></table></figure>
-
-<p>This change is made depending on the host name defined in the SSH config. The string between @ and : should match what we have given in the SSH config file.</p>
-<h3 id="7-For-Locally-Existing-Repositories"><a href="#7-For-Locally-Existing-Repositories" class="headerlink" title="7. For Locally Existing Repositories"></a>7. For Locally Existing Repositories</h3><p><strong>If we have the repository already cloned:</strong></p>
-<p>List the Git remote of the repository, <code>git remote -v</code></p>
-<p>Check whether the URL matches our GitHub host to be used, or else update the remote origin URL.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote <span class="built_in">set</span>-url origin git@github.com-worker_user1:worker_user1/repo_name.git</span><br></pre></td></tr></table></figure>
-
-<p>Ensure the string between @ and : matches the Host we have given in the SSH config.</p>
-<p><strong>If you are creating a new repository on local:</strong></p>
-<p>Initialize Git in the project folder <code>git init</code>.</p>
-<h3 id="Create-the-new-repository-in-the-GitHub-account-and-then-add-it-as-the-Git-remote-to-the-local-repository"><a href="#Create-the-new-repository-in-the-GitHub-account-and-then-add-it-as-the-Git-remote-to-the-local-repository" class="headerlink" title="Create the new repository in the GitHub account and then add it as the Git remote to the local repository."></a>Create the new repository in the GitHub account and then add it as the Git remote to the local repository.</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin git@github.com-work_user1:work_user1/repo_name.git</span><br></pre></td></tr></table></figure>
-
-<p>Ensure the string between @ and : matches the Host we have given in the SSH config.</p>
-<p>Push the initial commit to the GitHub repository:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">"Initial commit"</span></span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure>
-
-<p>We are done!</p>
-<p>Adding or updating the Git remote of the local Git directory with the proper host will take care of selecting the correct SSH key to verify our identity with GitHub. With all the above in place, our <code>git operations</code> should work seamlessly.</p>
-<ul>
-<li>Reference<ul>
-<li><a href="https://gist.github.com/yeungeek/596984fd9e53d6c36c0d" target="_blank" rel="noopener">multi git account</a></li>
-<li><a href="https://www.freecodecamp.org/news/manage-multiple-github-accounts-the-ssh-way-2dadc30ccaca/" target="_blank" rel="noopener">step by step</a> this one works, how to set things in ~/.ssh/config</li>
-</ul>
-</li>
-</ul>
-<h3 id="Tips"><a href="#Tips" class="headerlink" title="Tips:"></a>Tips:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d <span class="string">"branch name"</span> 删除branch</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/02/26/tmux-review/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/baby.png">
-      <meta itemprop="name" content="Nansong Yi">
-      <meta itemprop="description" content="TheSong is named after IG.TheShy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="TheSong">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/26/tmux-review/" class="post-title-link" itemprop="url">tmux review</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-02-26 17:56:37" itemprop="dateCreated datePublished" datetime="2020-02-26T17:56:37-08:00">2020-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-11 23:42:51" itemprop="dateModified" datetime="2020-03-11T23:42:51-07:00">2020-03-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="简易脚本"><a href="#简易脚本" class="headerlink" title="简易脚本"></a>简易脚本</h3><p>你是我的眼</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## uncomment the follow 2 lines to get into your desired dir</span></span><br><span class="line"><span class="comment"># path=`rospack find pytorch_retinanet`</span></span><br><span class="line"><span class="comment"># cd $path</span></span><br><span class="line"><span class="comment"># pwd</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tmux new -s retina -d <span class="comment"># 后台创建一个名称为init的会话</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## --------- 重命名init会话的第一个窗口名称为code --------- ##</span></span><br><span class="line">tmux rename-window -t <span class="string">"retina:0"</span> code</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认上下分屏</span></span><br><span class="line">tmux split-window -t <span class="string">"retina:code"</span></span><br><span class="line">tmux split-window -h -t <span class="string">"retina:code"</span></span><br><span class="line">tmux select-pane -U</span><br><span class="line">tmux split-window -h -t <span class="string">"retina:code"</span></span><br><span class="line"><span class="comment"># 切换到指定目录并运行python服务</span></span><br><span class="line">tmux send -t <span class="string">"retina:code"</span> <span class="string">"cd ~; echo Me is a genius"</span> Enter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## ------------ 新建一个名称为data的窗口------------------- ##</span></span><br><span class="line">tmux neww -a -n data -t retina <span class="comment"># neww等同于new window</span></span><br><span class="line"><span class="comment"># 默认上下分屏</span></span><br><span class="line">tmux split-window -h -t <span class="string">"retina:data"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## ------------ 新建一个名称为tool的窗口------------------- ##</span></span><br><span class="line">tmux neww -a -n tool -t retina <span class="comment"># neww等同于new window</span></span><br><span class="line"><span class="comment"># 运行htop工具</span></span><br><span class="line">tmux send -t <span class="string">"retina:tool"</span> <span class="string">"htop"</span> Enter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## ------------ 进入tmux ------------------- ##</span></span><br><span class="line">tmux attach -t retina</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="tmux-conf-我的配置文件"><a href="#tmux-conf-我的配置文件" class="headerlink" title=".tmux.conf 我的配置文件"></a>.tmux.conf 我的配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>-option -g mouse on</span><br><span class="line"><span class="built_in">set</span>-window-option -g mode-keys vi</span><br><span class="line"><span class="comment">#set -g default-terminal "screen-256color"</span></span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"S-Left"</span> select-window -t :-</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"S-Right"</span> select-window -t :+</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Left"</span> select-pane -L</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Right"</span> select-pane -R</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Up"</span> select-pane -U</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Down"</span> select-pane -D</span><br><span class="line"></span><br><span class="line">tmux_conf_copy_to_os_clipboard=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="new-session"><a href="#new-session" class="headerlink" title="new session"></a>new session</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux new -s init -d <span class="comment"># 后台创建一个名称为init的会话</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="接入-分离会话"><a href="#接入-分离会话" class="headerlink" title="接入,分离会话"></a>接入,分离会话</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用tmux的控制模式</span></span><br><span class="line"><span class="comment"># Ctrl + b ; d</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在tmux任意一个窗口里面</span></span><br><span class="line">$ tmux detach</span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复tmux会话</span></span><br><span class="line">$ tmux attachs</span><br><span class="line">$ tmux attach -t 0 <span class="comment">#使用session number</span></span><br><span class="line">$ tmux attach -t init <span class="comment">#回复init会话</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看tmux会话</span></span><br><span class="line">$ tmux ls = tmux list-session</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ctrl+b d：分离当前会话</span></span><br><span class="line"><span class="comment"># Ctrl+b s：列出所有会话</span></span><br><span class="line"><span class="comment"># Ctrl+b $：重命名当前会话</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="杀死会话"><a href="#杀死会话" class="headerlink" title="杀死会话"></a>杀死会话</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用会话编号</span></span><br><span class="line">$ tmux <span class="built_in">kill</span>-session -t 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用会话名称</span></span><br><span class="line">$ tmux <span class="built_in">kill</span>-session -t &lt;session-name&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="重命名会话"><a href="#重命名会话" class="headerlink" title="重命名会话"></a>重命名会话</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tmux rename-session -t 0 &lt;new-name&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="划分窗格"><a href="#划分窗格" class="headerlink" title="划分窗格"></a>划分窗格</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 划分上下两个窗格</span></span><br><span class="line">$ tmux split-window</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分左右两个窗格</span></span><br><span class="line">$ tmux split-window -h</span><br></pre></td></tr></table></figure>
-
-<h3 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 光标切换到上方窗格</span></span><br><span class="line">$ tmux select-pane -U</span><br><span class="line"></span><br><span class="line"><span class="comment"># 光标切换到下方窗格</span></span><br><span class="line">$ tmux select-pane -D</span><br><span class="line"></span><br><span class="line"><span class="comment"># 光标切换到左边窗格</span></span><br><span class="line">$ tmux select-pane -L</span><br><span class="line"></span><br><span class="line"><span class="comment"># 光标切换到右边窗格</span></span><br><span class="line">$ tmux select-pane -R</span><br></pre></td></tr></table></figure>
-
-<h3 id="交换窗格位置"><a href="#交换窗格位置" class="headerlink" title="交换窗格位置"></a>交换窗格位置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当前窗格上移</span></span><br><span class="line">$ tmux swap-pane -U</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当前窗格下移</span></span><br><span class="line">$ tmux swap-pane -D</span><br></pre></td></tr></table></figure>
-
-<h3 id="窗格快捷键"><a href="#窗格快捷键" class="headerlink" title="窗格快捷键"></a>窗格快捷键</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+b %：划分左右两个窗格。</span><br><span class="line">Ctrl+b &quot;：划分上下两个窗格。</span><br><span class="line">Ctrl+b &lt;arrow key&gt;：光标切换到其他窗格。&lt;arrow key&gt;是指向要切换到的窗格的方向键，比如切换到下方窗格，就按方向键↓。</span><br><span class="line">Ctrl+b ;：光标切换到上一个窗格。</span><br><span class="line">Ctrl+b o：光标切换到下一个窗格。</span><br><span class="line">Ctrl+b &#123;：当前窗格左移。</span><br><span class="line">Ctrl+b &#125;：当前窗格右移。</span><br><span class="line">Ctrl+b Ctrl+o：当前窗格上移。</span><br><span class="line">Ctrl+b Alt+o：当前窗格下移。</span><br><span class="line">Ctrl+b x：关闭当前窗格。</span><br><span class="line">Ctrl+b !：将当前窗格拆分为一个独立窗口。</span><br><span class="line">Ctrl+b z：当前窗格全屏显示，再使用一次会变回原来大小。</span><br><span class="line">Ctrl+b Ctrl+&lt;arrow key&gt;：按箭头方向调整窗格大小。</span><br><span class="line">Ctrl+b q：显示窗格编号。</span><br></pre></td></tr></table></figure>
-
-<h3 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 列出所有快捷键，及其对应的 Tmux 命令</span></span><br><span class="line">$ tmux list-keys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有 Tmux 命令及其参数</span></span><br><span class="line">$ tmux list-commands</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出当前所有 Tmux 会话的信息</span></span><br><span class="line">$ tmux info</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新加载当前的 Tmux 配置</span></span><br><span class="line">$ tmux <span class="built_in">source</span>-file ~/.tmux.conf</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
-<li><p><a href="https://www.ruanyifeng.com/blog/2019/10/tmux.html" target="_blank" rel="noopener">Tmux使用教程</a></p>
-</li>
-<li><p><a href="[http://louiszhai.github.io/2017/09/30/tmux/#%E8%84%9A%E6%9C%AC%E5%8C%96%E7%9A%84Tmux](http://louiszhai.github.io/2017/09/30/tmux/#脚本化的Tmux)">脚本化的Tmux</a></p>
-</li>
-</ul>
+<p>$f’(x) = \frac{1-\ln(x)}{x^2}$</p>
+<p>$M g \sin \theta-\mu m g \cos \theta=(M+m) a$<br>$M g \sin \theta-\mu m g \cos \theta=(M+m) a$<br>Mysino- $\mu$ mgcoso $=(M+m) a$</p>
 
       
     </div>
@@ -1402,7 +1682,7 @@ $\sum_i^n f_i(x)$</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1415,7 +1695,7 @@ $\sum_i^n f_i(x)$</li>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

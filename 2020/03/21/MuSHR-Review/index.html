@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/baby.png">
+  <link rel="mask-icon" href="/images/baby.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Palatino:300,300italic,400,400italic,700,700italic|Monaco:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Acknowledgement: Xiangyu Xie. This review is mainly done by Xiangyu Xie. 我只是做了一点微小的工作. Lab0 Localization: Determine the pose of a robot relative to a given map of the environment. Mapping: Construct a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MuSHR Review">
+<meta property="og:url" content="https://thesong96.github.io/2020/03/21/MuSHR-Review/index.html">
+<meta property="og:site_name" content="TheSong">
+<meta property="og:description" content="Acknowledgement: Xiangyu Xie. This review is mainly done by Xiangyu Xie. 我只是做了一点微小的工作. Lab0 Localization: Determine the pose of a robot relative to a given map of the environment. Mapping: Construct a">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://codimd.s3.shivering-isles.com/demo/uploads/upload_cdea034260cfff09d98139707f3140b0.png">
+<meta property="og:image" content="https://codimd.s3.shivering-isles.com/demo/uploads/upload_4843cc831aa0cfd6384fbe8c8d4a1135.png">
+<meta property="og:image" content="https://codimd.s3.shivering-isles.com/demo/uploads/upload_026ce76324175dab1af828975d49d3bf.png">
+<meta property="og:image" content="https://codimd.s3.shivering-isles.com/demo/uploads/upload_9844cc32418a123e41c17e93270542ad.png">
+<meta property="article:published_time" content="2020-03-21T21:56:23.000Z">
+<meta property="article:modified_time" content="2020-03-23T06:16:16.115Z">
+<meta property="article:author" content="Nansong Yi">
+<meta property="article:tag" content="Particle Filter">
+<meta property="article:tag" content="Lypunov Non-Linear Control">
+<meta property="article:tag" content="PID">
+<meta property="article:tag" content="MPC">
+<meta property="article:tag" content="Lazy Astar">
+<meta property="article:tag" content="Incremental Planning">
+<meta property="article:tag" content="Dubins Path">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://codimd.s3.shivering-isles.com/demo/uploads/upload_cdea034260cfff09d98139707f3140b0.png">
+
+<link rel="canonical" href="https://thesong96.github.io/2020/03/21/MuSHR-Review/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>MuSHR Review | TheSong</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/rss.xml" title="TheSong" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">TheSong</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/21/MuSHR-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MuSHR Review
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-21 14:56:23" itemprop="dateCreated datePublished" datetime="2020-03-21T14:56:23-07:00">2020-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-22 23:16:16" itemprop="dateModified" datetime="2020-03-22T23:16:16-07:00">2020-03-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PRL/" itemprop="url" rel="index"><span itemprop="name">PRL</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Acknowledgement: Xiangyu Xie.</p>
+<p>This review is mainly done by Xiangyu Xie. 我只是做了一点微小的工作.</p>
+<h1 id="Lab0"><a href="#Lab0" class="headerlink" title="Lab0"></a>Lab0</h1><ul>
+<li><strong>Localization</strong>: Determine the pose of a robot relative to a given map of the environment.</li>
+<li><strong>Mapping</strong>: Construct a map.</li>
+<li><strong>Planning</strong>: </li>
+</ul>
+<h2 id="Bayes-filter-bayesian-update-rule"><a href="#Bayes-filter-bayesian-update-rule" class="headerlink" title="Bayes filter(bayesian update rule)"></a>Bayes filter(bayesian update rule)</h2><p>The <strong>Bayes filter algorithm</strong> includes two steps, the first step is prediction (push belief through dynamics given action), the second step is correction (apply Bayes rule given measurement).</p>
+<p>$$<br>\begin{equation}<br>\begin{aligned}<br>\overline{bel}\left(x_{t}\right) &amp;= \int p\left(x_{t} \mid u_{t}, x_{t-1}\right) bel\left(x_{t-1}\right) d x_{t-1} \<br>bel\left(x_{t}\right) &amp;= \eta p\left(z_{t} \mid x_{t}\right) \overline{bel}\left(x_{t}\right)<br>\end{aligned}<br>\end{equation}<br>$$</p>
+<h2 id="Kalman-filter"><a href="#Kalman-filter" class="headerlink" title="Kalman filter"></a>Kalman filter</h2><p><strong>Assumptions</strong>:</p>
+<ol>
+<li>Linear dynamics $p(x_t | u_t, x_{t-1}) = A_{t} x_{t-1}+B_{t} u_{t}+\varepsilon_{t}$, where $\varepsilon_t \sim \mathcal{N}(0, R_t)$</li>
+<li>Linear measurement model $p(z_t | x_t) = C_{t} x_{t}+\delta_{t}$, where $\delta_t \sim \mathcal{N}(0, Q_t)$</li>
+<li>Initial belief $bel(x_0)$ is a gaussian distribution<br>$$<br>bel\left(x_{0}\right)=p\left(x_{0}\right)=\operatorname{det}\left(2 \pi \Sigma_{0}\right)^{-\frac{1}{2}} \exp \left{-\frac{1}{2}\left(x_{0}-\mu_{0}\right)^{T} \Sigma_{0}^{-1}\left(x_{0}-\mu_{0}\right)\right}<br>$$</li>
+</ol>
+<p><strong>Algorithm</strong>:</p>
+<p>$$<br>\mathbf{\text{Algorithm Kalman_filter(}}\mu_{t-1}, \Sigma_{t-1}, u_t, z_t \mathbf{):} \<br>\begin{align<em>}<br>\bar{\mu}<em>{t} &amp;=A</em>{t} \mu_{t-1}+B_{t} u_{t} \<br>\bar{\Sigma}<em>{t} &amp;=A</em>{t} \Sigma_{t-1} A_{t}^{T}+R_{t} \<br>K_{t} &amp;=\bar{\Sigma}<em>{t} C</em>{t-1}^{T}\left(C_{t} \bar{\Sigma}<em>{t} C</em>{t}^{T}+Q_{t}\right)^{-1} \<br>\mu_{t} &amp;=\bar{\mu}<em>{t}+K</em>{t}\left(z_{t}-C_{t} \bar{\mu}<em>{t}\right) \<br>\Sigma</em>{t} &amp;=\left(I-K_{t} C_{t}\right) \bar{\Sigma}<em>{t} \<br>&amp;\text{return } \mu</em>{t}, \Sigma_{t}<br>\end{align</em>}<br>$$</p>
+<aside class="notice">
+TODO(Nansong): 
+- derive the bayes update rule for Kalman filter and EKF(which represent the present the state (also obeservation?) as probability distribution, i.e gussian distribution, arbitrary distribution)
+- derive the bayes update rule by hand for particle filter(which represent the state as particles)
+- analyze the pros and cons, i.e computational and storage expenses, which one is faster. or differences between Kalman Filter and Particle Filter, and specify cases where which algorithms fits better.
+</aside>
+
+
+
+
+<h1 id="Lab1"><a href="#Lab1" class="headerlink" title="Lab1"></a>Lab1</h1><h2 id="Motion-model"><a href="#Motion-model" class="headerlink" title="Motion model"></a>Motion model</h2><ul>
+<li><strong>Kinematic model</strong>: map wheel speeds to robot velocities.</li>
+<li><strong>Dynamic model</strong>: map wheel torques to robot accelerations.</li>
+</ul>
+<p>Consider only kinematic model $p(x_t | u_t, x_{t-1})$ for now (assume we can set the speed directly), then $x = [x, y, \theta]^T$, $u = [V, \delta]^T$, where $\theta$ is the heading and $\delta$ is the steering angle.</p>
+<p>Now we will derive the motion model for rear axel. Note that a rigid body undergoing rotation and translation can be viewed as pure rotation about a instant center of rotation:</p>
+<blockquote>
+<p>Notes:</p>
+<ul>
+<li>How to find CoR? find two points(in our case, front wheels and rear wheels) in a rigid body and find their velocity vectors, the crosspoint of perpendicular lines of two velocity vectors is the CoR.<br><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_cdea034260cfff09d98139707f3140b0.png" alt=""></li>
+</ul>
+</blockquote>
+<p><mark>TODO: come up with or find other motion model examples apart from race car.</mark></p>
+<p>$$<br>\begin{align<em>}<br>&amp;\dot{x}=V \cos (\theta)\<br>&amp;\dot{y}=V \sin (\theta)\<br>&amp;\dot{\theta}=\omega=\frac{V \tan \delta}{L}<br>\end{align</em>}<br>$$</p>
+<p>With numerical integration we can get<br>$$<br>x_{t+1}=x_{t}+\frac{L}{\tan (\delta)}\left(\sin \left(\theta_{t+1}\right)-\sin \left(\theta_{t}\right)\right) \<br>y_{t+1}=y_{t}+\frac{L}{\tan (\delta)}\left(-\cos \left(\theta_{t+1}\right)+\cos \left(\theta_{t}\right)\right) \<br>\theta_{t+1}=\theta_{t}+\frac{v}{L} \tan (\delta) \Delta t \quad<br>$$</p>
+<h3 id="noise"><a href="#noise" class="headerlink" title="noise"></a>noise</h3><ol>
+<li>Control signal error: $\hat{V} \sim \mathcal{N}(V, \sigma_v^2)$, $\hat{\delta} \sim \mathcal{N}(\delta, \sigma_\delta^2)$</li>
+<li>Incorrect physics (the Kinematic Model is inaccurate): $\hat{x} \sim \mathcal{N}\left(x, \sigma_{x}^{2}\right)$, $\hat{y} \sim \mathcal{N}\left(y, \sigma_{y}^{2}\right)$, $\hat{\theta} \sim \mathcal{N}\left(\theta, \sigma_{\theta}^{2}\right)$</li>
+</ol>
+<h2 id="Sensor-model"><a href="#Sensor-model" class="headerlink" title="Sensor model"></a>Sensor model</h2><p>$p(z_t | x_t, m)$ is the probability of sensor reading $z_t$ given state $x_t$ and map $m$. Calculate simulated sensor reading $z^*$ form $x$ and $m$ and then compare with $z$. </p>
+<p>Assume individual beams are conditionally independent given map <mark>(may result in overconfidence problem)</mark>:<br>$$<br>p\left(z_{t} | x_{t}, m\right)=\prod_{i=1}^{K} p\left(z_{t}^{k} | x_{t}, m\right)<br>$$</p>
+<h3 id="noise-1"><a href="#noise-1" class="headerlink" title="noise"></a>noise</h3><ol>
+<li><p>Simple measurement noise in distance value<br> $$<br> p_{\text {hit }}\left(z_{t}^{k} | x_{t}, m\right)=\begin{cases}<br> \eta \mathcal{N}\left(z_{t}^{k} ; z_{t}^{k *}, \sigma_{\text {hit }}^{2}\right) &amp; \text { if } 0 \leq z_{t}^{k} \leq z_{\max } \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+<li><p>Presence of unexpected objects<br> $$<br> p_{\text {short }}\left(z_{t}^{k} | x_{t}, m\right)=\begin{cases}<br> \eta \lambda_{\text {short }} e^{-\lambda_{\text {short }} z_{t}^{k}} &amp; \text { if } 0 \leq z_{t}^{k} \leq z_{t}^{k *} \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+<li><p>Laser returns max range when no objects<br> $$<br> p_{\max }\left(z_{t}^{k} | x_{t}, m\right)=I\left(z=z_{\max }\right)=\begin{cases}<br> 1 &amp; \text { if } z=z_{\max } \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+<li><p>Failures in sensing<br> $$<br> p_{\text {rand }}\left(z_{t}^{k} | x_{t}, m\right)=\begin{cases}<br> \frac{1}{z_{\max }} &amp; \text { if } 0 \leq z_{t}^{k}&lt;z_{\max } \<br> 0 &amp; \text { otherwise }<br> \end{cases}<br> $$</p>
+</li>
+</ol>
+<p>Combine these 4 model to get<br>$$<br>p\left(z_{t}^{k} | x_{t}, m\right)=\begin{pmatrix}<br>z_{\mathrm{hit}} \<br>z_{\text {short }} \<br>z_{\text {max }} \<br>z_{\text {rand }}<br>\end{pmatrix}^{T} \begin{pmatrix}<br>p_{\text {hit }}(z_{t}^{k} | x_{t}, m) \<br>p_{\text {short }}(z_{t}^{k} | x_{t}, m) \<br>p_{\text {max }}(z_{t}^{k} | x_{t}, m) \<br>p_{\text {rand }}(z_{t}^{k} | x_{t}, m)<br>\end{pmatrix}<br>$$</p>
+<h2 id="Particle-filter"><a href="#Particle-filter" class="headerlink" title="Particle filter"></a>Particle filter</h2><p>The particle filter is an alternative <strong>nonparametric</strong> implementation of the Bayes filter. The key idea is to represent the posterior $bel(x_t)$ by a set of random state samples (particles) drawn from this posterior.<br>$$<br>\mathbf{\text{Algorithm Particle_filter(}} \mathcal{X}<em>{t-1}, u_t, z_t \mathbf{):} \<br>\begin{align*}<br>&amp;\bar{\mathcal{X}}</em>{t}=\mathcal{X}<em>{t}=\emptyset \<br>&amp;\text{for } m=1 \text{ to } M \text{ do} \<br>&amp;\qquad \text{sample } x</em>{t}^{[m]} \sim p\left(x_{t} \mid u_{t}, x_{t-1}^{[m]}\right) \<br>&amp;\qquad {w_{t}^{[m]}=p\left(z_{t} \mid x_{t}^{[m]}\right)} \<br>&amp;\qquad {\bar{\mathcal{X}}<em>{t}=\bar{\mathcal{X}}</em>{t}+\left\langle x_{t}^{[m]}, w_{t}^{[m]}\right\rangle} \<br>&amp;\text{endfor } \<br>&amp;\text{for } m = 1 \text{ to } M \text{ do} \<br>&amp;\qquad \text{draw } i \text{ with probability } \propto w_{t}^{[i]} \<br>&amp;\qquad \text{add } x_t^{[i]} \text{ to } \mathcal{X}_t \<br>&amp;\text{endfor} \<br>&amp;\text{return } \mathcal{X}_t<br>\end{align*}<br>$$</p>
+<p>We first sample $x_t$ from the state transition distribution, then calculate the <strong>importance factor</strong>, $w_t$. In the next loop, we do the <strong>resampling</strong>/<strong>importance sampling</strong>, to change the distribution of particles from $\overline{bel}(x_t)$ to $bel(x_t)$.</p>
+<h3 id="resample"><a href="#resample" class="headerlink" title="resample"></a>resample</h3><p>Resampling can cause high-variance (low-entropy) problem, where particles are depleted. Possible fixes:</p>
+<ol>
+<li>If the variance of weights low, don’t resample.</li>
+<li>Use low-variance sampling.</li>
+</ol>
+<aside class="notice">
+TODO(Nansong)
+- explain normal importance sampling?
+- differece between importance sampling and low-varience sampling? or is low-varience sampling is one method of importance sampling ?
+</aside>
+
+<p>$$<br>\mathbf{\text{Algorithm Low_variance_sampler(}} \mathcal{X}<em>{t}, \mathcal{W}</em>{t} \mathbf{):} \<br>\begin{align<em>}<br>&amp;\bar{X}<em>{t}=\emptyset \<br>&amp;r=\operatorname{rand}\left(0 ; M^{-1}\right) \<br>&amp;c=w</em>{t}^{[1]} \<br>&amp;i=1 \<br>&amp;\text{for } m=1 \text{ to } M \text{ do} \<br>&amp;\qquad U=r+(m-1) \cdot M^{-1} \<br>&amp;\qquad \text{while } U &gt; c \<br>&amp;\qquad\quad i=i+1 \<br>&amp;\qquad\quad c=c+w_{t}^{[i]} \<br>&amp;\qquad \text{endwhile} \<br>&amp;\qquad \text{add } x_{t}^{[i]} \text{ to } \bar{X}_{t} \<br>&amp;\text{endfor } \<br>&amp;\text{return } \bar{\mathcal{X}}_t<br>\end{align</em>}<br>$$</p>
+<p><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_4843cc831aa0cfd6384fbe8c8d4a1135.png" alt=""></p>
+<aside class="notice">
+TODO(Nansong):
+- give a python implementation of this low varience resample algorithm
+- give a python implementation of importance sampling of arbitrary probability distribution
+</aside>
+
+
+
+<h3 id="expected-pose"><a href="#expected-pose" class="headerlink" title="expected pose"></a>expected pose</h3><p>Calculate expected pose from particles: $x$ and $y$ can be computed directly by the weighted average. However, the weighted average of $\theta$ is not accurate. Thus we use cosine and sine averaging. (<a href="https://en.wikipedia.org/wiki/Mean_of_circular_quantities" target="_blank" rel="noopener">Ref</a>)</p>
+<h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><p><code>MotionModel.py</code>:</p>
+<ol>
+<li>Subscribe to motor topic, get control info (speed and steering angle), also save last frame info for calculation.</li>
+<li>Add variance to speed and steering angle. Apply motion model on particles. Add variance to states.</li>
+</ol>
+<p><code>SensorModle.py</code>:</p>
+<ol>
+<li>Precompute the sensor model table and use <a href="https://github.com/kctess5/range_libc" target="_blank" rel="noopener">range_libc</a> package to achieve 2D raycasting for 2D occupancy grid.</li>
+<li>Subscribe to scan topic, filter out invalid and extreme scan values, downsample, and pass processed data to update weights.</li>
+</ol>
+<p><code>ParticleFilter.py</code>:</p>
+<ol>
+<li>Transfer map to occupancy grid.</li>
+<li>Globally initialize particles and weights. Initialize motion model and sensor model.</li>
+<li>Subscribe to <code>/intialpose</code> topic, initialize particles and weights around initial pos.</li>
+<li>When receiving scan infos, update weights, resample and calculate the expected pose for visualization.</li>
+</ol>
+<h1 id="Lab2"><a href="#Lab2" class="headerlink" title="Lab2"></a>Lab2</h1><table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">Uses Model</th>
+<th align="center">Stability Guarantee</th>
+<th align="center">Minimize Cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">PID</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td align="center">Pure Pursuit</td>
+<td align="center">Circular arcs</td>
+<td align="center">Yes - with assumptions</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td align="center">Lyapunov</td>
+<td align="center">Non-linear</td>
+<td align="center">Yes</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td align="center">LQR</td>
+<td align="center">Linear</td>
+<td align="center">Yes</td>
+<td align="center">Quadratic</td>
+</tr>
+<tr>
+<td align="center">iLQR</td>
+<td align="center">Non-linear</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+</tbody></table>
+<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><p><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_026ce76324175dab1af828975d49d3bf.png" alt=""></p>
+<p>Position error in frame A:<br>$$<br>{}^{A}e = \begin{bmatrix}<br>x \ y<br>\end{bmatrix} - \begin{bmatrix}<br>x_{ref} \ y_{ref}<br>\end{bmatrix}<br>$$</p>
+<p>We want position error in frame B so that $x$ and $y$ error correspond to along-track and cross-track error respectively:<br>$$<br>\begin{align<em>}<br>{}^{B}e &amp;= {}<em>A^{B} R {}^{A}e \<br>&amp;=R(-\theta</em>{ref}) \left( \begin{bmatrix}<br>x \ y<br>\end{bmatrix} - \begin{bmatrix}<br>x_{ref} \ y_{ref}<br>\end{bmatrix} \right) \<br>&amp;= \begin{bmatrix}<br>\cos \left(\theta_{r e f}\right)\left(x-x_{r e f}\right)+\sin \left(\theta_{r e f}\right)\left(y-y_{r e f}\right) \<br>-\sin \left(\theta_{r e f}\right)\left(x-x_{r e f}\right)+\cos \left(\theta_{r e f}\right)\left(y-y_{r e f}\right)<br>\end{bmatrix} \<br>&amp;= \begin{bmatrix}<br>e_{at} &amp; e_{ct}<br>\end{bmatrix}^T<br>\end{align</em>}<br>$$</p>
+<p>Only consider cross-track error $e_{ct}$ and control steering angle for now.</p>
+<h2 id="PID"><a href="#PID" class="headerlink" title="PID"></a>PID</h2><p>$$<br>u=-\left(K_{p} e_{c t}+K_{i} \int e_{c t}(t) d t+K_{d} \dot{e}_{c t}\right)<br>$$</p>
+<p>where</p>
+<ul>
+<li>$K_p$: Proportional coefficient</li>
+<li>$K_i$: Integral coefficient</li>
+<li>$K_d$: Derivative coefficient</li>
+</ul>
+<p>Analytically compute the derivative term:<br>$$<br>\begin{align<em>}<br>\dot{e}<em>{c t} &amp;=-\sin \left(\theta</em>{ref}\right) \dot{x}+\cos \left(\theta_{ref}\right) \dot{y} \<br>&amp;=-\sin \left(\theta_{ref}\right) V \cos (\theta)+\cos \left(\theta_{ref}\right) V \sin (\theta) \<br>&amp;=V \sin \left(\theta-\theta_{ref}\right) \<br>&amp;=V \sin \left(\theta_{e}\right)<br>\end{align</em>}<br>$$</p>
+<aside class="notice">
+- what if numerically compute the derivative term?
+- find example where Integral term is used. 通常用在有外力的情况? 比如要track的path是N极, 小车是S极(且$K_p$项和外力抵消, 则无法消除$e_{ct}$)
+- 如果我们这个情况用$K_I$会发生什么?一开始会收敛很快?通常会给积分项$K_I$一个上限如果离reference path很远 是不是会在远处转圈圈?
+</aside>
+
+<h2 id="Pure-pursuit"><a href="#Pure-pursuit" class="headerlink" title="Pure-pursuit"></a>Pure-pursuit</h2><p><strong>Key idea</strong>: The car is always moving in a circular arc.</p>
+<ol>
+<li>Find a lookahead and compute arc</li>
+<li>Move along the arc</li>
+<li>Go to step 1</li>
+</ol>
+<p>Solve for arc:<br>$$<br>\alpha=\tan ^{-1}\left(\frac{y_{ref}-y}{x_{ref}-x}\right)-\theta \<br>R = \frac{L}{2 \sin\alpha} \<br>\dot{\theta} = \frac{V}{R} = \frac{2V\sin\alpha}{L} \<br>\dot{\theta} = \frac{V\tan u}{B}<br>$$</p>
+<p>where $B$ is the car length. Solve for $u$ we can get<br>$$<br>u = \tan^{-1}\left( \frac{2B \sin \alpha}{L} \right)<br>$$</p>
+<p><img src="https://codimd.s3.shivering-isles.com/demo/uploads/upload_9844cc32418a123e41c17e93270542ad.png" alt=""></p>
+<h2 id="Lyapunov-control"><a href="#Lyapunov-control" class="headerlink" title="Lyapunov control"></a>Lyapunov control</h2><p>Define Lyapunov function:<br>$$<br>V\left(e_{ct}, \theta_{e}\right)=\frac{1}{2} k_{1} e_{ct}^{2}+\frac{1}{2} \theta_{e}^{2}<br>$$</p>
+<p>Compute the derivative:<br>$$<br>\begin{align<em>}<br>\dot{V}\left(e_{c t}, \theta_{e}\right)&amp;=k_{1} e_{c t} \dot{e}<em>{c t}+\theta</em>{e} \dot{\theta}<em>{e}\<br>&amp;=k</em>{1} e_{c t} V \sin \theta_{e}+\theta_{e} \frac{V}{B} \tan u<br>\end{align</em>}<br>$$</p>
+<p>Set $u$ to get $\dot{V} &lt; 0$:<br>$$<br>\theta_{e} \frac{V}{B} \tan u=-k_{1} e_{c t} V \sin \theta_{e}-k_{2} \theta_{e}^{2} \<br>\tan u=-\frac{k_{1} e_{c t} B}{\theta_{e}} \sin \theta_{e}-\frac{B}{V} k_{2} \theta_{e} \<br>u=\tan ^{-1}\left(-\frac{k_{1} e_{c t} B}{\theta_{e}} \sin \theta_{e}-\frac{B}{V} k_{2} \theta_{e}\right)<br>$$</p>
+<h2 id="LQR"><a href="#LQR" class="headerlink" title="LQR"></a>LQR</h2><p>Turn the problem into an optimization to trade-off both driving error and keeping control action small:<br>$$<br>\min <em>{u(t)} \int</em>{0}^{\infty}\left(w_{1} e(t)^{2}+w_{2} u(t)^{2} \right) dt<br>$$</p>
+<p>Given</p>
+<ol>
+<li><strong>Linear</strong> dynamic system<br>$$<br>x_{t+1} = Ax_t + Bu_t<br>$$</li>
+<li><strong>Quadratic</strong> cost<br>$$<br>J=\sum_{t=0}^{T-1} x_{t}^{T} Q x_{t}+u_{t}^{T} R u_{t}<br>$$</li>
+</ol>
+<p>The optimal control sequence minimizing the cost is<br>$$<br>u_t = K_t x_t \<br>K_{t}=-\left(R+B^{T} V_{t+1} B\right)^{-1} B^{T} V_{t+1} A \<br>V_{t}=Q+K_{t}^{T} R K_{t}+\left(A+B K_{t}\right)^{T} V_{t+1}\left(A+B K_{t}\right)<br>$$</p>
+<h2 id="MPC"><a href="#MPC" class="headerlink" title="MPC"></a>MPC</h2><ol>
+<li>Plan a sequence of control actions</li>
+<li>Predict the set of next states to a horizon H</li>
+<li>Evaluate the cost/constraint of the states and controls</li>
+<li>Optimize the cost</li>
+</ol>
+<aside class="notice">
+- 主要就是error_cost + collision cost
+- 如果error_cost 不用(x, y) Euclidian Distance, 儿用CrossTrack Error会发生什么？会倒着走么？PID和PurePursuit呢?Lypunov呢?
+- 能不能把reference path里面每个waypoints的顺序用起来解决这个问题呢. 比如删掉之前用过的reference pose?
+</aside>
+
+<h2 id="Code-1"><a href="#Code-1" class="headerlink" title="Code"></a>Code</h2><p><code>controlnode.py</code>: main script</p>
+<ol>
+<li>Define Subscribers to pose and path infos; Publishers for visualization and Services for reset</li>
+<li>Enter main program when initial pose is set and controller is ready. Get pose and reference pose, get next control and publish to <code>/vesc/high_level/ackermann_cmd_mux/input/nav_0</code> topic.</li>
+<li>Stop when path is completed</li>
+</ol>
+<p><code>runner_script.py</code>:</p>
+<ol>
+<li>Loading different paths and speed</li>
+<li>Start the controller</li>
+</ol>
+<p><code>controller.py</code>: base controller class</p>
+<ol>
+<li>Store path info</li>
+<li>Define utility functions: get reference pose by index, get pose and pose_ref error</li>
+</ol>
+<p><mark>Find reference pose function is the same for all controllers: Find the nearest point on the path and lookahead some distance.</mark></p>
+<p><code>pid.py</code>:</p>
+<ol>
+<li>Use PD equation to get next control (steering angle)</li>
+</ol>
+<p><code>purepursuit.py</code>:</p>
+<ol>
+<li>Use Purepursuit equation to get next control</li>
+</ol>
+<p><code>mpc.py</code>:</p>
+<ol>
+<li>Dividing steering angle $[-\pi, \pi]$ equally to $K$ rollouts</li>
+<li>Execute each steering angel through $T$ timesteps to collect $K * T$ poses</li>
+<li>Evaluate the cost of each rollout by collision cost and error cost<ol>
+<li>Collision cost: if any pose in a trajectory is in collision with the map, add a large cost</li>
+<li>Error cost: norm of the distance between last pose and the reference pose, weighted by a constant</li>
+</ol>
+</li>
+<li>Choose the rollout with the minimal cost and execute the first step</li>
+<li>Return to step 1</li>
+</ol>
+<p><code>mpc2.py</code>: Similar to mpc but use scan info rather than map. The only thing change is the obstacles cost.</p>
+<ol>
+<li>Calculate $N$ obstacles pose in the map by scan info</li>
+<li>For $K * T$ poses, calculate the distance with every obstacles to get $K * T * N$ array</li>
+<li>Find the minimal distance for every pose to get $K * T$ array</li>
+<li>Average through timesteps to get $K$ array, then weighted by a constant to get the obstacles cost.</li>
+</ol>
+<p><code>nonlinear.py</code>:</p>
+<ol>
+<li>Use Lyapunov control equation to get the control</li>
+</ol>
+<h1 id="Lab3"><a href="#Lab3" class="headerlink" title="Lab3"></a>Lab3</h1><p>Steps for planing the path from one point to another:</p>
+<ol>
+<li>Random sample points on the map and construct the graph</li>
+<li>Use planning algorithm (A*) to search the graph for optimal path</li>
+</ol>
+<h2 id="Graph-construction"><a href="#Graph-construction" class="headerlink" title="Graph construction"></a>Graph construction</h2><p>The graph we are constructing is called <a href="https://en.wikipedia.org/wiki/Random_geometric_graph" target="_blank" rel="noopener">Random geometric graph</a> (RGG)</p>
+<ol>
+<li>Sample a set of collision free vertices $V$</li>
+<li>Connect neighboring vertices to get edges $E$</li>
+</ol>
+<h3 id="sampling"><a href="#sampling" class="headerlink" title="sampling"></a>sampling</h3><p>Uniform random sampling tends to clump. We want points to be spread out evenly, which can be achieved by <a href="https://observablehq.com/@jrus/halton" target="_blank" rel="noopener">Halton sequence</a></p>
+<h3 id="optimal-radius"><a href="#optimal-radius" class="headerlink" title="optimal radius"></a>optimal radius</h3><p>We want to choose the radius smaller enough for efficiency while ensuring connectivity. The optimal value can be chosen as<br>$$<br>r = \left(\frac{\ln|V|}{\alpha_{p,d} |V|}\right)^{1/n}<br>$$<br>where $\alpha_{p,d}$ is a constant. For special case of a two-dimensional space and the euclidean norm ($d=2$, $p=2$), $\alpha_{p,d} = \pi$</p>
+<h3 id="Dubins-path"><a href="#Dubins-path" class="headerlink" title="Dubins path"></a>Dubins path</h3><p>Since we are considering 2-D car dynamics, we need to connect two points with feasible path instead of straight lines. Mathematically, we need to solve the BVP:<br>$$<br>\dot{q}(t) = f(q(t), u(t)) \<br>q(0) = q_1,\quad q(t) = q_2<br>$$<br>where $q=(x,y,\theta)$ in our case.</p>
+<p>Dubins path shows that the solution always exists and has to be one of 6 classes:<br>$$<br>{LRL, RLR, LSL, LSR, RSL, RSR}<br>$$<br>where $L,R,S$ represent turn left, right, straight, respectively.</p>
+<h2 id="Planning-algorithm"><a href="#Planning-algorithm" class="headerlink" title="Planning algorithm"></a>Planning algorithm</h2><p>Given start node $s_0$, goal $s_1$ and cost $c(s, s’)$, create objects:</p>
+<ol>
+<li>OPEN: <strong>priority queue</strong> of nodes to be processed</li>
+<li>CLOSED: list of nodes already processed</li>
+<li>$g(s)$: estimate of the least cost from start to a given node</li>
+</ol>
+<p>The pseudocode for <strong>best first search</strong> can be expressed as</p>
+<ol>
+<li><p>Push $s_0$ into OPEN</p>
+</li>
+<li><p>While $s_1$ not expanded</p>
+<ol start="3">
+<li><p>Pop <em>best</em> from OPEN</p>
+</li>
+<li><p>Add <em>best</em> to CLOSED</p>
+</li>
+<li><p>For every successor <em>s’</em></p>
+<ol start="6">
+<li>If $g(s’) &gt; g(s) + c(s, s’)$<ol start="7">
+<li>$g(s’) = g(s) + c(s, s’)$</li>
+<li>Add (update) $s’$ to OPEN</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>The main problem is how to choose the heuristic function $f(s)$ for step 3.</p>
+<h3 id="Djikstra’s-algorithm"><a href="#Djikstra’s-algorithm" class="headerlink" title="Djikstra’s algorithm"></a>Djikstra’s algorithm</h3><p>Choose $f(s) = g(s)$. Always pop the node with the smallest cost from the origin first.</p>
+<h3 id="A"><a href="#A" class="headerlink" title="A*"></a>A*</h3><p>:::warning<br>看看这个<a href="http://theory.stanford.edu/~amitp/GameProgramming/AStarComparison.html" target="_blank" rel="noopener">astar</a><br>:::</p>
+<p>If we can pre-evaluate the cost from the node to the goal $h(s)$, then we can choose a better $f(s) = g(s) + h(s)$.</p>
+<ul>
+<li>If $h(s)$ is admissible $h(s) \le h^<em>(s)$, $h(goal) = 0$, then the path return by A</em> is optimal.</li>
+<li>If $h(s)$ is consistent $h(s) \le c(s, s’) + h(s’)$, $h(goal) = 0$, then A* is optimal and efficient (will not re-expand a node).</li>
+</ul>
+<p>All consistent heuristics are admissible, not vice versa.</p>
+<h3 id="weighted-A"><a href="#weighted-A" class="headerlink" title="weighted A*"></a>weighted A*</h3><p>Choose $f(s) = g(s) + \epsilon h(s)$, where $\epsilon &gt; 1$. It is more efficient and the solution is $\epsilon$-optimal $c \le \epsilon c^*$</p>
+<h3 id="lazy-A"><a href="#lazy-A" class="headerlink" title="lazy A*"></a>lazy A*</h3><p>Instead of checking edge collision for all neighbors, only check the edge to parent when expanding. <mark>OPEN list will have multiple copies of a node since we haven’t collision check.</mark></p>
+<h3 id="shortcut"><a href="#shortcut" class="headerlink" title="shortcut"></a>shortcut</h3><p>After a path is found, we can randomly pick two nodes and connect them directly if the edge is collision-free.</p>
+<h2 id="Code-2"><a href="#Code-2" class="headerlink" title="Code"></a>Code</h2><p><code>run.py</code>: main program</p>
+<ol>
+<li>Load map info</li>
+<li>Construct graph given environment, sampler, number of vertices, connection radius.</li>
+<li>Add start and end node</li>
+<li>Use A* or lazy A* algorithm to search the optimal path and visualize</li>
+</ol>
+<p><code>MapEnvironment.py</code>: define utility functions associated with planning</p>
+<ol>
+<li>Check edge collision</li>
+<li>Compute heuristic and distance function</li>
+<li>Generate path on the map</li>
+<li>Visualization of the graph and path</li>
+</ol>
+<p><code>Sampler.py</code>: create random samples for graph construction</p>
+<ol>
+<li>Use <a href="https://gist.github.com/tupui/cea0a91cc127ea3890ac0f002f887bae" target="_blank" rel="noopener">halton sequence</a> to generate 2-D random vertices in $(0,1)$</li>
+<li>Scale by map info</li>
+</ol>
+<p><code>graph_maker.py</code>: construct graph</p>
+<ol>
+<li>Use python package <a href="https://networkx.github.io/" target="_blank" rel="noopener">NetworkX</a> to easily construct a graph</li>
+<li>Add sampled valid vertices</li>
+<li>Connect edges within radius and without collision (do not check collision if using lazy A*)</li>
+</ol>
+<p><code>astar.py</code>: A* algorithm</p>
+<ol>
+<li>Use <code>heapq</code> package to create priority queue to store <code>[f(s), count, node, g(s), parent]</code> info. <code>count</code> is used to prevent comparing node when $f(s)$ are the same.</li>
+<li>Use dict <code>enqueued</code> to store $g(s)$ and $h(s)$ for a node, and another dict <code>explored</code> to store the explored node and its parent node.</li>
+<li>Add start node to the queue.</li>
+<li>While queue is not empty, pop one node and add it to <code>explored</code> if it is not already there.</li>
+<li>For all the neighbor node $s’$, compute $g(s’) = g(s) + c(s,s’)$ if $s’$ is not already in <code>explored</code>.</li>
+<li>If $s’$ is in <code>enqueued</code>, get its previous $g’(s’)$ and $h’(s’)$. Continue to next neighbor if $g’(s) \le g(s’)$, since it is better. If not in <code>enqueued</code>, compute $h(s’)$ by the heuristic function.</li>
+<li>Update $g(s’)$ and $h(s’)$ in <code>enqueued</code> and push it to the queue.</li>
+<li>If reach target node, continually find parent node by <code>explored</code> and return the path.</li>
+</ol>
+<p><code>lazy_astar.py</code>: lazy A* algorithm</p>
+<ol>
+<li>When expanding node, check its edge collision with parent.</li>
+<li>When checking neighbors, do not need to compare $g’(s’)$ and $g(s’)$</li>
+<li>Multiple nodes with different parents can be added to the queue.</li>
+</ol>
+<p><code>runDubins.py</code>:  similar to <code>run.py</code> but use Dubins environment</p>
+<p><code>DubinsMapEnvironment.py</code>: inherited from <code>MapEnvironment</code></p>
+<ol>
+<li>Compute distances with Dubins path</li>
+<li>Compute heuristic with Dubins path</li>
+<li>Generate path by Dubins path planning</li>
+</ol>
+<p><code>DubinsSampler.py</code>:</p>
+<ol>
+<li>Sample $N$ vertices same as in <code>Sampler.py</code></li>
+<li>Divide angles to $M$ parts, add angles to each vertices to create $M\times N$ samples</li>
+</ol>
+<p><code>Dubins.py</code>: utility function for Dubins path</p>
+<p><code>ROSPlanner.py</code>: take goal from rviz and do planning. <mark>Be careful of the frame change between map and world</mark></p>
+<ol>
+<li>Load map info</li>
+<li>Construct graph and save for later use</li>
+<li>Subscribe to pose topic, save current pose</li>
+<li>Subscribe to goal topic, plan from the current pose to the goal, publish the path using service defined in lab2</li>
+<li>If there are multiple goals, sequentially planning through them and combine the path</li>
+</ol>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://ais.informatik.uni-freiburg.de/teaching/ss13/robotics/" target="_blank" rel="noopener">Introduction to Mobile Robotics</a></li>
+<li><a href="https://courses.cs.washington.edu/courses/cse490r/19sp/" target="_blank" rel="noopener">Mobile Robots</a></li>
+<li><a href="http://www.probabilistic-robotics.org/" target="_blank" rel="noopener">Probabilistic Robotics</a></li>
+</ol>
+<p></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>谢谢老板🐱~.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/reward.png" alt="Nansong Yi WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Nansong Yi Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+            <div class="social-item">
+              <a target="_blank" class="social-link" href="/rss.xml">
+                <span class="icon">
+                  <i class="fa fa-rss"></i>
+                </span>
+
+                <span class="label">RSS</span>
+              </a>
+            </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Particle-Filter/" rel="tag"><i class="fa fa-tag"></i> Particle Filter</a>
+              <a href="/tags/Lypunov-Non-Linear-Control/" rel="tag"><i class="fa fa-tag"></i> Lypunov Non-Linear Control</a>
+              <a href="/tags/PID/" rel="tag"><i class="fa fa-tag"></i> PID</a>
+              <a href="/tags/MPC/" rel="tag"><i class="fa fa-tag"></i> MPC</a>
+              <a href="/tags/Lazy-Astar/" rel="tag"><i class="fa fa-tag"></i> Lazy Astar</a>
+              <a href="/tags/Incremental-Planning/" rel="tag"><i class="fa fa-tag"></i> Incremental Planning</a>
+              <a href="/tags/Dubins-Path/" rel="tag"><i class="fa fa-tag"></i> Dubins Path</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/18/Color-Recognition-of-Rubiks-Cube-CRRC-Review/" rel="prev" title="Color Recognition of Rubiks Cube - CRRC Review">
+      <i class="fa fa-chevron-left"></i> Color Recognition of Rubiks Cube - CRRC Review
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/10/20/TODO-POST/" rel="next" title="TODO POST">
+      TODO POST <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab0"><span class="nav-number">1.</span> <span class="nav-text">Lab0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bayes-filter-bayesian-update-rule"><span class="nav-number">1.1.</span> <span class="nav-text">Bayes filter(bayesian update rule)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kalman-filter"><span class="nav-number">1.2.</span> <span class="nav-text">Kalman filter</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab1"><span class="nav-number">2.</span> <span class="nav-text">Lab1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Motion-model"><span class="nav-number">2.1.</span> <span class="nav-text">Motion model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#noise"><span class="nav-number">2.1.1.</span> <span class="nav-text">noise</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sensor-model"><span class="nav-number">2.2.</span> <span class="nav-text">Sensor model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#noise-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">noise</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Particle-filter"><span class="nav-number">2.3.</span> <span class="nav-text">Particle filter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#resample"><span class="nav-number">2.3.1.</span> <span class="nav-text">resample</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expected-pose"><span class="nav-number">2.3.2.</span> <span class="nav-text">expected pose</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code"><span class="nav-number">2.4.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab2"><span class="nav-number">3.</span> <span class="nav-text">Lab2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Control"><span class="nav-number">3.1.</span> <span class="nav-text">Control</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PID"><span class="nav-number">3.2.</span> <span class="nav-text">PID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pure-pursuit"><span class="nav-number">3.3.</span> <span class="nav-text">Pure-pursuit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lyapunov-control"><span class="nav-number">3.4.</span> <span class="nav-text">Lyapunov control</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LQR"><span class="nav-number">3.5.</span> <span class="nav-text">LQR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MPC"><span class="nav-number">3.6.</span> <span class="nav-text">MPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-1"><span class="nav-number">3.7.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab3"><span class="nav-number">4.</span> <span class="nav-text">Lab3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph-construction"><span class="nav-number">4.1.</span> <span class="nav-text">Graph construction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sampling"><span class="nav-number">4.1.1.</span> <span class="nav-text">sampling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#optimal-radius"><span class="nav-number">4.1.2.</span> <span class="nav-text">optimal radius</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dubins-path"><span class="nav-number">4.1.3.</span> <span class="nav-text">Dubins path</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Planning-algorithm"><span class="nav-number">4.2.</span> <span class="nav-text">Planning algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Djikstra’s-algorithm"><span class="nav-number">4.2.1.</span> <span class="nav-text">Djikstra’s algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A"><span class="nav-number">4.2.2.</span> <span class="nav-text">A*</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#weighted-A"><span class="nav-number">4.2.3.</span> <span class="nav-text">weighted A*</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lazy-A"><span class="nav-number">4.2.4.</span> <span class="nav-text">lazy A*</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shortcut"><span class="nav-number">4.2.5.</span> <span class="nav-text">shortcut</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Code-2"><span class="nav-number">4.3.</span> <span class="nav-text">Code</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Nansong Yi"
+      src="/images/baby.png">
+  <p class="site-author-name" itemprop="name">Nansong Yi</p>
+  <div class="site-description" itemprop="description">TheSong is named after IG.TheShy</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nansongyi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nansongyi" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nansong@uw.edu" title="E-Mail → mailto:nansong@uw.edu" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://nansongyi.me/" title="http:&#x2F;&#x2F;nansongyi.me" rel="noopener" target="_blank">my web</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://silencial.github.io/" title="https:&#x2F;&#x2F;silencial.github.io&#x2F;" rel="noopener" target="_blank">silencial</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://3monks.org/en/" title="https:&#x2F;&#x2F;3monks.org&#x2F;en&#x2F;" rel="noopener" target="_blank">sky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.twistedwg.com/pages/class.html" title="http:&#x2F;&#x2F;www.twistedwg.com&#x2F;pages&#x2F;class.html" rel="noopener" target="_blank">twistedwg</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Nansong Yi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      script.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+
+    </div>
+</body>
+</html>
