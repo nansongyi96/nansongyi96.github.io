@@ -9,8 +9,29 @@
     <atom:link href="/rss.xml" rel="self" type="application/rss+xml"/>
     
     <description>TheSong is named after IG.TheShy</description>
-    <pubDate>Mon, 12 Oct 2020 05:15:50 GMT</pubDate>
+    <pubDate>Fri, 30 Oct 2020 08:22:39 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>VSCode Tricks</title>
+      <link>https://thesong96.github.io/2020/10/30/VSCode-Tricks/</link>
+      <guid>https://thesong96.github.io/2020/10/30/VSCode-Tricks/</guid>
+      <pubDate>Fri, 30 Oct 2020 07:54:23 GMT</pubDate>
+      <description>
+      
+        
+        
+          &lt;h1 id=&quot;jump-server&quot;&gt;Jump Server&lt;/h1&gt;
+&lt;h2 id=&quot;copy-your-ssh-key-to-jump-server-and-target-server&quot;&gt;copy your ssh key to jump-server and targe
+        
+      
+      </description>
+      
+      
+      <content:encoded><![CDATA[<h1 id="jump-server">Jump Server</h1><h2 id="copy-your-ssh-key-to-jump-server-and-target-server">copy your ssh key to jump-server and target-server</h2><ul><li>This is your key:</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure><ul><li>ssh-copy-id</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-copy-id usrname@server</span><br></pre></td></tr></table></figure><ul><li>Directly copy to <code>server/~.ssh/authorized_keys</code>, if it doesn’t exist in your server, just create it.</li></ul><h2 id="setup-your-jump-server">Setup your jump server</h2><p>Sometimes you may need to connect from your desktop or laptop to a remote machine over your company's Intranet or behind a firewall. In this case, you may be using an intermediate server or <a href="https://en.wikipedia.org/wiki/Jump_server" target="_blank" rel="noopener">jump box</a>. This kind of setup is useful if you are working within a secure system that is configured to only accept SSH connections from a fixed set of hosts.</p><p>To use a jump-box setup with the Remote - SSH extension, you can use the <code>ProxyCommand</code> config option. This configuration will open a background SSH connection to the jump box, and then connect via a private IP address to the target.</p><p>You can set the <code>ProxyCommand</code> config option in the SSH config file like this:</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Jump box with public IP address</span></span><br><span class="line"><span class="string">Host</span> <span class="string">jump-box</span></span><br><span class="line">    <span class="string">HostName</span> <span class="number">52.179</span><span class="number">.157</span><span class="number">.97</span></span><br><span class="line">    <span class="string">User</span> <span class="string">sana</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/jumpbox</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Target machine with private IP address</span></span><br><span class="line"><span class="string">Host</span> <span class="string">target-box</span></span><br><span class="line">    <span class="string">HostName</span> <span class="string">&lt;IP</span> <span class="string">address</span> <span class="string">of</span> <span class="string">target&gt;</span></span><br><span class="line">    <span class="string">User</span> <span class="string">sana</span></span><br><span class="line">    <span class="string">IdentityFile</span> <span class="string">~/.ssh/target</span></span><br><span class="line">    <span class="string">ProxyCommand</span> <span class="string">ssh</span> <span class="string">-q</span> <span class="string">-W</span> <span class="string">%h:%p</span> <span class="string">jump-box</span></span><br></pre></td></tr></table></figure><p><em>NOTE</em>: sometimes, the IdentityFile doesn’t work, just comment it out.</p><p>In VSCode, press <code>cmd+shift+p</code> and search connect to ssh host.</p>]]></content:encoded>
+      
+      <comments>https://thesong96.github.io/2020/10/30/VSCode-Tricks/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>ECE PMP 545 - Mobile Car</title>
