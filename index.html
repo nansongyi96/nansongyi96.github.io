@@ -221,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-11-04 09:04:36" itemprop="dateModified" datetime="2020-11-04T09:04:36-08:00">2020-11-04</time>
+                <time title="Modified: 2020-11-04 09:07:28" itemprop="dateModified" datetime="2020-11-04T09:07:28-08:00">2020-11-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -251,7 +251,7 @@
 <li>[<code>startImg</code>, <code>actImg</code>] -&gt; <code>pix2food</code> -&gt; <code>fakeImg</code>(or pushed image)</li>
 <li>startImg<code>: orginal image from camera</code></li>
 <li><code>actImg</code>: generated based on food bbox detected from <code>startImg</code>, set some defaults in case no food bbox deteced</li>
-<li>fakeImg<code>: generated from</code>pix2food</li>
+<li>fakeImg: <code>generated from</code> pix2food</li>
 <li><code>Real Pushed Image</code> = next <code>startImg</code>, it's the ground truth for <code>fakeImg</code></li>
 </ol>
 <h4 id="high-level-thoughts">high level thoughts:</h4>
@@ -287,7 +287,7 @@
 </ol>
 <h3 id="debugging-ros-network-setup-between-weebo-and-squirrelmy-own-desktop">Debugging ROS Network Setup between <code>weebo</code> and <code>squirrel</code>(my own desktop)</h3>
 <ol type="1">
-<li>when running only <code>pix2food</code> model on `<code>squirrel</code> and everything else on <code>weebo</code>, there will be some bugs as mentioned below</li>
+<li>when running only <code>pix2food</code> model on <code>squirrel</code> and everything else on <code>weebo</code>, there will be some bugs as mentioned below</li>
 <li>this only happen after I add visualizaiton of [<code>startImg</code>, <code>actImg</code>, <code>fakeImg</code>]</li>
 <li>ROS Master cannot revceive msg from <code>reconfig_manager</code>, <code>original</code>, <code>pushed</code> topic and <code>/food/marker_array</code> topic</li>
 </ol>
