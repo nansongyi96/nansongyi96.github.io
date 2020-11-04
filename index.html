@@ -416,6 +416,118 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/06/25/DAYLY-PlAN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/25/DAYLY-PlAN/" class="post-title-link" itemprop="url">DAYLY Summary and Plan</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-25 03:19:42" itemprop="dateCreated datePublished" datetime="2020-06-25T03:19:42-07:00">2020-06-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-11-03 19:28:40" itemprop="dateModified" datetime="2020-11-03T19:28:40-08:00">2020-11-03</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="nov.03.2020">Nov.03.2020</h2>
+<ul>
+<li><p>[ ] Change the structure of code, do RetinaNet and SPANet Detection in Real-Time</p></li>
+<li>Notation
+<ul>
+<li>[<code>startImg</code>, <code>actImg</code>] -&gt; <code>pix2food</code> -&gt; <code>fakeImg</code>(or pushed image)</li>
+<li><code>startImg</code>: orginal image from camera</li>
+<li><code>actImg</code>: generated based on food bbox detected from <code>startImg</code>, set some defaults in case no food bbox deteced</li>
+<li><code>fakeImg</code>: generated from <code>pix2food</code></li>
+<li><code>Real Pushed Image</code> = next <code>startImg</code>, it's the ground truth for <code>fakeImg</code></li>
+</ul></li>
+<li><p>high level thoughts:</p>
+<ol type="1">
+<li>generate 4 actImg and 4 fakeImg(pushed images) in real-time. - no matter whether there's food or not (empty plate). - no matter whether the food in the plate is detected or not - when no food, default 4 actImg will be (center of plate -&gt; top, bot, left, right)</li>
+<li>use RetinaNet and SPANet to detect and predict bbox and acquisition for 5 images(1 <code>startImg</code> + 4 <code>fakeImg</code>). - what will happen if no food or empty plate in <code>startImg</code>? the <code>fakeImg</code> should be the same as <code>startImg</code> - However, some artifacts mpotato will show up in fakeImg, due to badly trained <code>pix2food</code>(enhance dataset to cover this case)</li>
+<li>visualize 5 images(1 <code>startImg</code> + 4 <code>fakeImg</code>) with corresponding actImg.</li>
+<li>choose the one with best Aquisition Action to pub to <code>Aikido</code> - if it's a <code>fakeImg</code> then send the <code>actImg</code> to <code>Ada</code> - if it's the <code>startImg</code>, then send <code>scoop</code> to <code>Ada</code></li>
+<li>based on <code>fakeImg</code>, pre plan trajectory for scooping? - what if <code>fakeImg</code> doesn't match well with <code>Real Pushed Image</code>?</li>
+<li>redo RetinaNet, SPANet on <code>Real Pushed Image</code> then repeat steps above.</li>
+</ol>
+<ul>
+<li>details:
+<ul>
+<li>set a callback for camera image topic</li>
+<li>in the callback, img -&gt; RetinaNet -&gt; bbox -&gt; SPANet -&gt; 4 MarkerArray</li>
+<li>genrate 4 actImg based on bbox(which bbox TBD) with default actImg(from img center to 4 directions)</li>
+<li>Pix2Food -&gt; 4 fakeImg -&gt; RetinaNet -&gt; 4 bboxes -&gt; SPANet -&gt; 4 MarkerArray</li>
+<li>Publish all 4 fakeImg with actImg associated with them</li>
+<li>it's ok when no food show up or no food detected for pix2food for now, deal with it latter</li>
+<li>figure out the logic of which marker to pub</li>
+</ul></li>
+</ul></li>
+<li>[ ] Debugging ROS Network Setup between <code>weebo</code> and <code>squirrel</code>(my own desktop)
+<ul>
+<li>when running only <code>pix2food</code> model on `<code>squirrel</code> and everything else on <code>weebo</code>, there will be some bugs as mentioned below</li>
+<li>this only happen after I add visualizaiton of [<code>startImg</code>, <code>actImg</code>, <code>fakeImg</code>]</li>
+<li>ROS Master cannot revceive msg from <code>reconfig_manager</code>, <code>original</code>, <code>pushed</code> topic and <code>/food/marker_array</code> topic</li>
+</ul></li>
+<li>[ ] Data Collection Improvement
+<ul>
+<li>Empty case: when no mpotato, whatever action given, the image won't change</li>
+<li>Reasonable random actImg generator(to generate &quot;whatever action&quot; above).</li>
+</ul></li>
+</ul>
+<h2 id="nov.05.2020">Nov.05.2020</h2>
+<ul>
+<li>[ ]</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/30/Region-Proposal/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1661,108 +1773,6 @@ q(0) = q_1,\quad q(t) = q_2
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/02/26/tmux-cheatsheet/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/baby.png">
-      <meta itemprop="name" content="Nansong Yi">
-      <meta itemprop="description" content="TheSong is named after IG.TheShy">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="TheSong">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/26/tmux-cheatsheet/" class="post-title-link" itemprop="url">tmux review</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-02-26 17:56:37" itemprop="dateCreated datePublished" datetime="2020-02-26T17:56:37-08:00">2020-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-24 16:17:13" itemprop="dateModified" datetime="2020-03-24T16:17:13-07:00">2020-03-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="简易脚本">简易脚本</h3>
-<p>你是我的眼</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## uncomment the follow 2 lines to get into your desired dir</span></span><br><span class="line"><span class="comment"># path=`rospack find pytorch_retinanet`</span></span><br><span class="line"><span class="comment"># cd $path</span></span><br><span class="line"><span class="comment"># pwd</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">tmux new -s retina -d <span class="comment"># 后台创建一个名称为init的会话</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## --------- 重命名init会话的第一个窗口名称为code --------- ##</span></span><br><span class="line">tmux rename-window -t <span class="string">"retina:0"</span> code</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认上下分屏</span></span><br><span class="line">tmux split-window -t <span class="string">"retina:code"</span></span><br><span class="line">tmux split-window -h -t <span class="string">"retina:code"</span></span><br><span class="line">tmux select-pane -U</span><br><span class="line">tmux split-window -h -t <span class="string">"retina:code"</span></span><br><span class="line"><span class="comment"># 切换到指定目录并运行python服务</span></span><br><span class="line">tmux send -t <span class="string">"retina:code"</span> <span class="string">"cd ~; echo Me is a genius"</span> Enter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## ------------ 新建一个名称为data的窗口------------------- ##</span></span><br><span class="line">tmux neww -a -n data -t retina <span class="comment"># neww等同于new window</span></span><br><span class="line"><span class="comment"># 默认上下分屏</span></span><br><span class="line">tmux split-window -h -t <span class="string">"retina:data"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## ------------ 新建一个名称为tool的窗口------------------- ##</span></span><br><span class="line">tmux neww -a -n tool -t retina <span class="comment"># neww等同于new window</span></span><br><span class="line"><span class="comment"># 运行htop工具</span></span><br><span class="line">tmux send -t <span class="string">"retina:tool"</span> <span class="string">"htop"</span> Enter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## ------------ 进入tmux ------------------- ##</span></span><br><span class="line">tmux attach -t retina</span><br></pre></td></tr></table></figure>
-<h3 id="tmux.conf-我的配置文件">.tmux.conf 我的配置文件</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>-option -g mouse on</span><br><span class="line"><span class="built_in">set</span>-window-option -g mode-keys vi</span><br><span class="line"><span class="comment">#set -g default-terminal "screen-256color"</span></span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"S-Left"</span> select-window -t :-</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"S-Right"</span> select-window -t :+</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Left"</span> select-pane -L</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Right"</span> select-pane -R</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Up"</span> select-pane -U</span><br><span class="line"><span class="built_in">bind</span>-key -n <span class="string">"C-Down"</span> select-pane -D</span><br><span class="line"></span><br><span class="line">tmux_conf_copy_to_os_clipboard=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h3 id="new-session">new session</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmux new -s init -d <span class="comment"># 后台创建一个名称为init的会话</span></span><br></pre></td></tr></table></figure>
-<h3 id="接入分离会话">接入,分离会话</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 用tmux的控制模式</span></span><br><span class="line"><span class="comment"># Ctrl + b ; d</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在tmux任意一个窗口里面</span></span><br><span class="line">$ tmux detach</span><br><span class="line"></span><br><span class="line"><span class="comment"># 恢复tmux会话</span></span><br><span class="line">$ tmux attachs</span><br><span class="line">$ tmux attach -t 0 <span class="comment">#使用session number</span></span><br><span class="line">$ tmux attach -t init <span class="comment">#回复init会话</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看tmux会话</span></span><br><span class="line">$ tmux ls = tmux list-session</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ctrl+b d：分离当前会话</span></span><br><span class="line"><span class="comment"># Ctrl+b s：列出所有会话</span></span><br><span class="line"><span class="comment"># Ctrl+b $：重命名当前会话</span></span><br></pre></td></tr></table></figure>
-<h3 id="杀死会话">杀死会话</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用会话编号</span></span><br><span class="line">$ tmux <span class="built_in">kill</span>-session -t 0</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用会话名称</span></span><br><span class="line">$ tmux <span class="built_in">kill</span>-session -t &lt;session-name&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="重命名会话">重命名会话</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tmux rename-session -t 0 &lt;new-name&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="划分窗格">划分窗格</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 划分上下两个窗格</span></span><br><span class="line">$ tmux split-window</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分左右两个窗格</span></span><br><span class="line">$ tmux split-window -h</span><br></pre></td></tr></table></figure>
-<h3 id="移动光标">移动光标</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 光标切换到上方窗格</span></span><br><span class="line">$ tmux select-pane -U</span><br><span class="line"></span><br><span class="line"><span class="comment"># 光标切换到下方窗格</span></span><br><span class="line">$ tmux select-pane -D</span><br><span class="line"></span><br><span class="line"><span class="comment"># 光标切换到左边窗格</span></span><br><span class="line">$ tmux select-pane -L</span><br><span class="line"></span><br><span class="line"><span class="comment"># 光标切换到右边窗格</span></span><br><span class="line">$ tmux select-pane -R</span><br></pre></td></tr></table></figure>
-<h3 id="交换窗格位置">交换窗格位置</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当前窗格上移</span></span><br><span class="line">$ tmux swap-pane -U</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当前窗格下移</span></span><br><span class="line">$ tmux swap-pane -D</span><br></pre></td></tr></table></figure>
-<h3 id="窗格快捷键">窗格快捷键</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Ctrl+b %：划分左右两个窗格。</span><br><span class="line">Ctrl+b &quot;：划分上下两个窗格。</span><br><span class="line">Ctrl+b &lt;arrow key&gt;：光标切换到其他窗格。&lt;arrow key&gt;是指向要切换到的窗格的方向键，比如切换到下方窗格，就按方向键↓。</span><br><span class="line">Ctrl+b ;：光标切换到上一个窗格。</span><br><span class="line">Ctrl+b o：光标切换到下一个窗格。</span><br><span class="line">Ctrl+b &#123;：当前窗格左移。</span><br><span class="line">Ctrl+b &#125;：当前窗格右移。</span><br><span class="line">Ctrl+b Ctrl+o：当前窗格上移。</span><br><span class="line">Ctrl+b Alt+o：当前窗格下移。</span><br><span class="line">Ctrl+b x：关闭当前窗格。</span><br><span class="line">Ctrl+b !：将当前窗格拆分为一个独立窗口。</span><br><span class="line">Ctrl+b z：当前窗格全屏显示，再使用一次会变回原来大小。</span><br><span class="line">Ctrl+b Ctrl+&lt;arrow key&gt;：按箭头方向调整窗格大小。</span><br><span class="line">Ctrl+b q：显示窗格编号。</span><br></pre></td></tr></table></figure>
-<h3 id="其他命令">其他命令</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 列出所有快捷键，及其对应的 Tmux 命令</span></span><br><span class="line">$ tmux list-keys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有 Tmux 命令及其参数</span></span><br><span class="line">$ tmux list-commands</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出当前所有 Tmux 会话的信息</span></span><br><span class="line">$ tmux info</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新加载当前的 Tmux 配置</span></span><br><span class="line">$ tmux <span class="built_in">source</span>-file ~/.tmux.conf</span><br></pre></td></tr></table></figure>
-<hr />
-<h3 id="reference">Reference</h3>
-<ul>
-<li><p><a href="https://www.ruanyifeng.com/blog/2019/10/tmux.html" target="_blank" rel="noopener">Tmux使用教程</a></p></li>
-<li><p><a href="%5Bhttp://louiszhai.github.io/2017/09/30/tmux/#%E8%84%9A%E6%9C%AC%E5%8C%96%E7%9A%84Tmux%5D(http://louiszhai.github.io/2017/09/30/tmux/#脚本化的Tmux)">脚本化的Tmux</a></p></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1834,7 +1844,7 @@ q(0) = q_1,\quad q(t) = q_2
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

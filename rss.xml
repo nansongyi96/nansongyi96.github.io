@@ -76,6 +76,29 @@
     </item>
     
     <item>
+      <title>DAYLY Summary and Plan</title>
+      <link>https://thesong96.github.io/2020/06/25/DAYLY-PlAN/</link>
+      <guid>https://thesong96.github.io/2020/06/25/DAYLY-PlAN/</guid>
+      <pubDate>Thu, 25 Jun 2020 10:19:42 GMT</pubDate>
+      <description>
+      
+        
+        
+          &lt;h2 id=&quot;nov.03.2020&quot;&gt;Nov.03.2020&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;[ ] Change the structure of code, do RetinaNet and SPANet Detection in Real-Time&lt;/p&gt;&lt;/li&gt;
+
+        
+      
+      </description>
+      
+      
+      <content:encoded><![CDATA[<h2 id="nov.03.2020">Nov.03.2020</h2><ul><li><p>[ ] Change the structure of code, do RetinaNet and SPANet Detection in Real-Time</p></li><li>Notation<ul><li>[<code>startImg</code>, <code>actImg</code>] -&gt; <code>pix2food</code> -&gt; <code>fakeImg</code>(or pushed image)</li><li><code>startImg</code>: orginal image from camera</li><li><code>actImg</code>: generated based on food bbox detected from <code>startImg</code>, set some defaults in case no food bbox deteced</li><li><code>fakeImg</code>: generated from <code>pix2food</code></li><li><code>Real Pushed Image</code> = next <code>startImg</code>, it's the ground truth for <code>fakeImg</code></li></ul></li><li><p>high level thoughts:</p><ol type="1"><li>generate 4 actImg and 4 fakeImg(pushed images) in real-time. - no matter whether there's food or not (empty plate). - no matter whether the food in the plate is detected or not - when no food, default 4 actImg will be (center of plate -&gt; top, bot, left, right)</li><li>use RetinaNet and SPANet to detect and predict bbox and acquisition for 5 images(1 <code>startImg</code> + 4 <code>fakeImg</code>). - what will happen if no food or empty plate in <code>startImg</code>? the <code>fakeImg</code> should be the same as <code>startImg</code> - However, some artifacts mpotato will show up in fakeImg, due to badly trained <code>pix2food</code>(enhance dataset to cover this case)</li><li>visualize 5 images(1 <code>startImg</code> + 4 <code>fakeImg</code>) with corresponding actImg.</li><li>choose the one with best Aquisition Action to pub to <code>Aikido</code> - if it's a <code>fakeImg</code> then send the <code>actImg</code> to <code>Ada</code> - if it's the <code>startImg</code>, then send <code>scoop</code> to <code>Ada</code></li><li>based on <code>fakeImg</code>, pre plan trajectory for scooping? - what if <code>fakeImg</code> doesn't match well with <code>Real Pushed Image</code>?</li><li>redo RetinaNet, SPANet on <code>Real Pushed Image</code> then repeat steps above.</li></ol><ul><li>details:<ul><li>set a callback for camera image topic</li><li>in the callback, img -&gt; RetinaNet -&gt; bbox -&gt; SPANet -&gt; 4 MarkerArray</li><li>genrate 4 actImg based on bbox(which bbox TBD) with default actImg(from img center to 4 directions)</li><li>Pix2Food -&gt; 4 fakeImg -&gt; RetinaNet -&gt; 4 bboxes -&gt; SPANet -&gt; 4 MarkerArray</li><li>Publish all 4 fakeImg with actImg associated with them</li><li>it's ok when no food show up or no food detected for pix2food for now, deal with it latter</li><li>figure out the logic of which marker to pub</li></ul></li></ul></li><li>[ ] Debugging ROS Network Setup between <code>weebo</code> and <code>squirrel</code>(my own desktop)<ul><li>when running only <code>pix2food</code> model on `<code>squirrel</code> and everything else on <code>weebo</code>, there will be some bugs as mentioned below</li><li>this only happen after I add visualizaiton of [<code>startImg</code>, <code>actImg</code>, <code>fakeImg</code>]</li><li>ROS Master cannot revceive msg from <code>reconfig_manager</code>, <code>original</code>, <code>pushed</code> topic and <code>/food/marker_array</code> topic</li></ul></li><li>[ ] Data Collection Improvement<ul><li>Empty case: when no mpotato, whatever action given, the image won't change</li><li>Reasonable random actImg generator(to generate &quot;whatever action&quot; above).</li></ul></li></ul><h2 id="nov.05.2020">Nov.05.2020</h2><ul><li>[ ]</li></ul>]]></content:encoded>
+      
+      <comments>https://thesong96.github.io/2020/06/25/DAYLY-PlAN/#disqus_thread</comments>
+    </item>
+    
+    <item>
       <title>Region Proposal</title>
       <link>https://thesong96.github.io/2020/03/30/Region-Proposal/</link>
       <guid>https://thesong96.github.io/2020/03/30/Region-Proposal/</guid>
