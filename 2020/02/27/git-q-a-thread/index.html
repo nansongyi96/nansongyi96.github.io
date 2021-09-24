@@ -28,7 +28,7 @@
 <meta property="og:description" content="Case: git push 不给其他args Discription: clone下来一个repo, 我新建一个branch叫做my_branch然后push到remote&#x2F;origin, 使用的命令是git push, 然后我在别的地儿再重新clone这个repo, git checkout my_branch的时候是到origin&#x2F;my_branch, 而没有一个local的不带origin">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-02-27T20:37:54.000Z">
-<meta property="article:modified_time" content="2020-03-13T05:35:06.039Z">
+<meta property="article:modified_time" content="2020-03-12T08:47:19.000Z">
 <meta property="article:author" content="Nansong Yi">
 <meta property="article:tag" content="Git">
 <meta name="twitter:card" content="summary">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-03-12 22:35:06" itemprop="dateModified" datetime="2020-03-12T22:35:06-07:00">2020-03-12</time>
+                <time title="Modified: 2020-03-12 01:47:19" itemprop="dateModified" datetime="2020-03-12T01:47:19-07:00">2020-03-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -286,7 +286,7 @@
 <p>For the work accounts, use the corresponding public keys (<code>pbcopy &lt; ~/.ssh/id_rsa_work_user1.</code>pub) and repeat the above steps in your GitHub work accounts.</p>
 </blockquote>
 <h3 id="registering-the-new-ssh-keys-with-the-ssh-agent">3 . Registering the new SSH Keys with the ssh-agent</h3>
-<p>To use the keys, we have to register them with the <strong>ssh-agent</strong> on our machine. Ensure ssh-agent is running using the command <code>eval &quot;$(ssh-agent -s)&quot;</code>. Add the keys to the ssh-agent like so:</p>
+<p>To use the keys, we have to register them with the <strong>ssh-agent</strong> on our machine. Ensure ssh-agent is running using the command <code>eval "$(ssh-agent -s)"</code>. Add the keys to the ssh-agent like so:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
 <p>Make the ssh-agent use the respective SSH keys for the different SSH Hosts.</p>
 <p>This is the crucial part, and we have two different approaches:</p>
