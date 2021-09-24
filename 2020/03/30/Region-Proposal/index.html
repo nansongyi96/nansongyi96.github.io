@@ -20,13 +20,15 @@
     var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="An important property of a region proposal method is to have a very high recall. This is just a fancy way of saying that the regions that contain the objects we are looking have to be in our list of r">
+  <meta name="description" content="##Camera 成像原理  Optical Flow Intrisic and Extrinsic Matrix Terminology Review  Object Detections  paper review + blog + algorithm reproduction SPPNet Selective Search R-CNN Fast-RCNN Faster-RCNN Yolo 1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Region Proposal">
+<meta property="og:title" content="Object Detection Algorithms Review">
 <meta property="og:url" content="https://thesong96.github.io/2020/03/30/Region-Proposal/index.html">
 <meta property="og:site_name" content="TheSong">
-<meta property="og:description" content="An important property of a region proposal method is to have a very high recall. This is just a fancy way of saying that the regions that contain the objects we are looking have to be in our list of r">
+<meta property="og:description" content="##Camera 成像原理  Optical Flow Intrisic and Extrinsic Matrix Terminology Review  Object Detections  paper review + blog + algorithm reproduction SPPNet Selective Search R-CNN Fast-RCNN Faster-RCNN Yolo 1">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/8DMfFLF.jpg">
+<meta property="og:image" content="https://i.imgur.com/0HeprSV.png">
 <meta property="og:image" content="https://i.imgur.com/8cBUHow.png">
 <meta property="og:image" content="https://www.learnopencv.com/wp-content/uploads/2017/09/breakfast_oversegment-300x200.jpg">
 <meta property="og:image" content="https://www.learnopencv.com/wp-content/uploads/2017/09/hierarchical-segmentation-1.jpg">
@@ -52,11 +54,12 @@
 <meta property="og:image" content="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-f58c2a1aace1c9f1cf8597ddef03ab60_l3.png">
 <meta property="og:image" content="https://i.imgur.com/Ija12KT.png">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Precisionrecall.svg/350px-Precisionrecall.svg.png">
+<meta property="og:image" content="https://i.imgur.com/IlBW3bP.png">
 <meta property="article:published_time" content="2020-03-30T07:41:28.000Z">
-<meta property="article:modified_time" content="2020-03-30T19:58:00.550Z">
+<meta property="article:modified_time" content="2021-08-07T05:00:42.826Z">
 <meta property="article:author" content="Nansong Yi">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.imgur.com/8cBUHow.png">
+<meta name="twitter:image" content="https://i.imgur.com/8DMfFLF.jpg">
 
 <link rel="canonical" href="https://thesong96.github.io/2020/03/30/Region-Proposal/">
 
@@ -71,7 +74,7 @@
   };
 </script>
 
-  <title>Region Proposal | TheSong</title>
+  <title>Object Detection Algorithms Review | TheSong</title>
   
 
 
@@ -232,7 +235,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Region Proposal
+          Object Detection Algorithms Review
         </h1>
 
         <div class="post-meta">
@@ -241,9 +244,24 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2020-03-30 00:41:28 / Modified: 12:58:00" itemprop="dateCreated datePublished" datetime="2020-03-30T00:41:28-07:00">2020-03-30</time>
+              <time title="Created: 2020-03-30 00:41:28" itemprop="dateCreated datePublished" datetime="2020-03-30T00:41:28-07:00">2020-03-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-08-06 22:00:42" itemprop="dateModified" datetime="2021-08-06T22:00:42-07:00">2021-08-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
+                </span>
             </span>
 
           
@@ -257,12 +275,65 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>An important property of a region proposal method is to have a very <strong>high recall</strong>. This is just a fancy way of saying that the regions that contain the objects we are looking have to be in our list of region proposals. To accomplish this our list of region proposals may end up having a lot of regions that do not contain any object. In other words, it is ok for the region proposal algorithm to produce a lot of false positives so long as it catches all the true positives. Most of these false positives will be rejected by object recognition algorithm. The time it takes to do the detection goes up when we have more false positives and the accuracy is affected slightly. But having a high recall is still a good idea because the alternative of missing the regions containing the actual objects severely impacts the detection rate.</p>
+        <p>##Camera 成像原理</p>
+<ul>
+<li><p>Optical Flow</p></li>
+<li><p><a href="https://thesong96.github.io/2020/02/27/Camera-Matrix/">Intrisic and Extrinsic Matrix</a></p></li>
+<li><p>Terminology Review</p></li>
+</ul>
+<h2 id="object-detections">Object Detections</h2>
+<ul>
+<li>paper review + blog + algorithm reproduction</li>
+<li>SPPNet</li>
+<li>Selective Search</li>
+<li>R-CNN</li>
+<li>Fast-RCNN</li>
+<li>Faster-RCNN</li>
+<li>Yolo 1,2,3</li>
+</ul>
+<h2 id="image-segementationsemantic-segmentation">Image Segementation/Semantic Segmentation</h2>
+<ul>
+<li><p>Vanilla FCN</p></li>
+<li><p>U-Net</p></li>
+<li><p>SegNet</p></li>
+<li><p>DenseNet</p></li>
+<li><p>BlitzNet</p></li>
+<li><p>Mask-RCNN</p></li>
+<li><p>Mask RCNN with the Fully Convolutional Network (FCN) branch achieved the highest performance.</p></li>
+</ul>
+<h2 id="metrics">Metrics:</h2>
+<h3 id="accuracy">Accuracy</h3>
+<ul>
+<li>accuracy is a bad metric, especially when dataset is imbalenced.
+<ul>
+<li>class imbalance, e.g. 广告点击率,很多广告<span class="math inline">\((x_i, y_i) i = 0, 1, 2 … n\)</span>, <span class="math inline">\(x_i\)</span>表示第i个广告, <span class="math inline">\(y_i\)</span>表示第i个广告是否被click. 就会出现有大量的<span class="math inline">\(y = 0\)</span>, 这样就是positive data很少很少. 如果用accuracy这个metric去optimize model, 就会得到一个model <span class="math inline">\(F \rightarrow F(x_i) = 0\)</span>, 我们的accuracy会很高, 但是这个model就没什么用, 并不能起到预测广告是否会被点击的作用</li>
+<li></li>
+</ul></li>
+</ul>
+<h3 id="precision-recall"><strong>Precision &amp; recall</strong></h3>
+<ul>
+<li><p>Precision: how good is your prediction</p>
+<p>那为啥不用 <span class="math inline">\(\frac{TN}{(TN + FN)}\)</span></p></li>
+<li><p>Recall: how good to find out all positive</p></li>
+</ul>
+<figure>
+<img src="https://i.imgur.com/8DMfFLF.jpg" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h3 id="precision---recall-curve">Precision - Recall Curve</h3>
+<h3 id="roc-curve-tpr---fpr">ROC curve: TPR - FPR</h3>
+<h3 id="iou-intersection-over-union"><strong>IoU (Intersection over union)</strong></h3>
+<figure>
+<img src="https://i.imgur.com/0HeprSV.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h2 id="yolov1">YOLOv1</h2>
+<p><a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="noopener">paper</a></p>
+<p>​</p>
+<p>An important property of a region proposal method is to have a very <strong>high recall</strong>. This is just a fancy way of saying that the regions that contain the objects we are looking have to be in our list of region proposals. To accomplish this our list of region proposals may end up having a lot of regions that do not contain any object. In other words, it is ok for the region proposal algorithm to produce a lot of false positives so long as it catches all the true positives. Most of these false positives will be rejected by object recognition algorithm. The time it takes to do the detection goes up when we have more false positives and the accuracy is affected slightly. But having a high recall is still a good idea because the alternative of missing the regions containing the actual objects severely impacts the detection rate.</p>
 <h2 id="what-is-selective-search">What is Selective Search?</h2>
 <p>Selective Search is a region proposal algorithm used in object detection. It is designed to be fast with a very high recall. It is based on computing hierarchical grouping of similar regions based on color, texture, size and shape compatibility.</p>
 <p>Selective Search starts by over-segmenting the image based on intensity of the pixels using a graph-based <a href="http://cs.brown.edu/~pff/segment/" target="_blank" rel="noopener">segmentation method</a> by Felzenszwalb and Huttenlocher. The output of the algorithm is shown below. The image on the right contains segmented regions represented using solid colors.</p>
 <figure>
-<img src="https://i.imgur.com/8cBUHow.png" alt="image-20200330115743624" /><figcaption>image-20200330115743624</figcaption>
+<img src="https://i.imgur.com/8cBUHow.png" alt="image-20200330115743624" /><figcaption aria-hidden="true">image-20200330115743624</figcaption>
 </figure>
 <p>Can we use segmented parts in this image as region proposals? The answer is no and there are two reasons why we cannot do that:</p>
 <ol type="1">
@@ -280,7 +351,7 @@
 </ol>
 <p>At each iteration, larger segments are formed and added to the list of region proposals. Hence we create region proposals from smaller segments to larger segments in a bottom-up approach. This is what we mean by computing “hierarchical” segmentations using Felzenszwalb and Huttenlocher’s oversegments.</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/uploads/2017/09/hierarchical-segmentation-1.jpg" alt="Hierarchical Segmentation for region proposal generation at multiple scales" /><figcaption>Hierarchical Segmentation for region proposal generation at multiple scales</figcaption>
+<img src="https://www.learnopencv.com/wp-content/uploads/2017/09/hierarchical-segmentation-1.jpg" alt="Hierarchical Segmentation for region proposal generation at multiple scales" /><figcaption aria-hidden="true">Hierarchical Segmentation for region proposal generation at multiple scales</figcaption>
 </figure>
 <p>This image shows the initial, middle and last step of the hierarchical segmentation process.</p>
 <h1 id="similarity">Similarity</h1>
@@ -290,39 +361,39 @@
 <p>A color histogram of 25 bins is calculated for each channel of the image and histograms for all channels are concatenated to obtain a color descriptor resulting into a 25×3 = 75-dimensional color descriptor.</p>
 <p>Color similarity of two regions is based on histogram intersection and can be calculated as:</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3a99604c3b9fc1664b0ebd9b16aa190c_l3.png" alt="{color}(r_i, r_j) = {k=1}^n min(c^k_i, c^k_j)" /><figcaption><em>{color}(r_i, r_j) = </em>{k=1}^n min(c^k_i, c^k_j)</figcaption>
+<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3a99604c3b9fc1664b0ebd9b16aa190c_l3.png" alt="{color}(r_i, r_j) = {k=1}^n min(c^k_i, c^k_j)" /><figcaption aria-hidden="true"><em>{color}(r_i, r_j) = </em>{k=1}^n min(c^k_i, c^k_j)</figcaption>
 </figure>
 <p><img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-34d855e06476464bdb18051a043565ab_l3.png" alt="c^k_i" /> is the histogram value for <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-19a1201960f1c720275a7fd8ab39ea27_l3.png" alt="k^{th}" /> bin in color descriptor</p>
 <h2 id="texture-similarity">Texture Similarity</h2>
 <p>Texture features are calculated by extracting Gaussian derivatives at 8 orientations for each channel. For each orientation and for each color channel, a 10-bin histogram is computed resulting into a 10x8x3 = 240-dimensional feature descriptor.</p>
 <p>Texture similarity of two regions is also calculated using histogram intersections.</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-169d419080f56b69f9645cd13ee5b0ac_l3.png" alt="s_{texture}(r_i, r_j) = _{k=1}^n min(t^k_i, t^k_j)" /><figcaption>s_{texture}(r_i, r_j) = _{k=1}^n min(t^k_i, t^k_j)</figcaption>
+<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-169d419080f56b69f9645cd13ee5b0ac_l3.png" alt="s_{texture}(r_i, r_j) = _{k=1}^n min(t^k_i, t^k_j)" /><figcaption aria-hidden="true">s_{texture}(r_i, r_j) = _{k=1}^n min(t^k_i, t^k_j)</figcaption>
 </figure>
 <p><img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-a9283008bc26743f78b7ac5644fa42d7_l3.png" alt="t^k_i" /> is the histogram value for <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-19a1201960f1c720275a7fd8ab39ea27_l3.png" alt="k^{th}" /> bin in texture descriptor</p>
 <h2 id="size-similarity">Size Similarity</h2>
 <p>Size similarity encourages smaller regions to merge early. It ensures that region proposals at all scales are formed at all parts of the image. If this similarity measure is not taken into consideration a single region will keep gobbling up all the smaller adjacent regions one by one and hence region proposals at multiple scales will be generated at this location only. Size similarity is defined as:</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-ed6bd32a9661aa84228d1ca1c75f5d29_l3.png" alt="s_{size}(r_i, r_j) = 1 - " /><figcaption>s_{size}(r_i, r_j) = 1 - </figcaption>
+<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-ed6bd32a9661aa84228d1ca1c75f5d29_l3.png" alt="s_{size}(r_i, r_j) = 1 - " /><figcaption aria-hidden="true">s_{size}(r_i, r_j) = 1 - </figcaption>
 </figure>
 <p>where <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-301d49b3076ccce5448547f0910f2bc0_l3.png" alt="size(im)" /> is size of image in pixels.</p>
 <h2 id="shape-compatibility">Shape Compatibility</h2>
 <p>Shape compatibility measures how well two regions (<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" />) fit into each other. If <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> fits into <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" /> we would like to merge them in order to fill gaps and if they are not even touching each other they should not be merged.</p>
 <p>Shape compatibility is defined as:</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-9a3fdf638488b3c77915b9b83bf2f3e1_l3.png" alt="s_{fill}(r_i, r_j) = 1 - " /><figcaption>s_{fill}(r_i, r_j) = 1 - </figcaption>
+<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-9a3fdf638488b3c77915b9b83bf2f3e1_l3.png" alt="s_{fill}(r_i, r_j) = 1 - " /><figcaption aria-hidden="true">s_{fill}(r_i, r_j) = 1 - </figcaption>
 </figure>
 <p>where <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-2a6ada491e170016c4a765f114cfd18b_l3.png" alt="size(BB{ij})" /> is a bounding box around <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" />.</p>
 <h2 id="final-similarity">Final Similarity</h2>
 <p>The final similarity between two regions is defined as a linear combination of aforementioned 4 similarities.</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-67a3c5c3f45a9407ee513056c759f095_l3.png" alt="s(r_i, r_j) = a_1s_{color}(r_i, r_j) + a_2s_{texture}(r_i, r_j) + a_3s_{size}(r_i, r_j)+ a_4s_{fill}(r_i, r_j)" /><figcaption>s(r_i, r_j) = a_1s_{color}(r_i, r_j) + a_2s_{texture}(r_i, r_j) + a_3s_{size}(r_i, r_j)+ a_4s_{fill}(r_i, r_j)</figcaption>
+<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-67a3c5c3f45a9407ee513056c759f095_l3.png" alt="s(r_i, r_j) = a_1s_{color}(r_i, r_j) + a_2s_{texture}(r_i, r_j) + a_3s_{size}(r_i, r_j)+ a_4s_{fill}(r_i, r_j)" /><figcaption aria-hidden="true">s(r_i, r_j) = a_1s_{color}(r_i, r_j) + a_2s_{texture}(r_i, r_j) + a_3s_{size}(r_i, r_j)+ a_4s_{fill}(r_i, r_j)</figcaption>
 </figure>
 <p>where <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" /> are two regions or segments in the image and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-f58c2a1aace1c9f1cf8597ddef03ab60_l3.png" alt="a_i " /> denotes if the similarity measure is used or not.</p>
 <h1 id="results">Results</h1>
 <p>Selective Search implementation in OpenCV gives thousands of region proposals arranged in decreasing order of objectness. For clarity, we are sharing results with top 200-250 boxes drawn over the image. In general 1000-1200 proposals are good enough to get all the correct region proposals.</p>
 <figure>
-<img src="https://i.imgur.com/Ija12KT.png" alt="image-20200330120116871" /><figcaption>image-20200330120116871</figcaption>
+<img src="https://i.imgur.com/Ija12KT.png" alt="image-20200330120116871" /><figcaption aria-hidden="true">image-20200330120116871</figcaption>
 </figure>
 <h2 id="selective-search-python">Selective Search: Python</h2>
 <p>Let’s take a look on how can we use Selective Search based segmentation implemented in OpenCV.</p>
@@ -339,7 +410,10 @@
 <p>Imbalanced Acurray = <span class="math inline">\(\frac{tp + tn}{tp + tn + fp + fn}\)</span> = <span class="math inline">\(\frac{0 + 95}{100}\)</span> = 0.95</p>
 <p>Balanced Acurray = <span class="math inline">\(\frac{TPR + TNR}{2}\)</span> = <span class="math inline">\(\frac{0/5+95/95}{2}\)</span> = 0.5</p>
 <figure>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Precisionrecall.svg/350px-Precisionrecall.svg.png" alt="img" /><figcaption>img</figcaption>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Precisionrecall.svg/350px-Precisionrecall.svg.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="https://i.imgur.com/IlBW3bP.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 
     </div>
@@ -460,7 +534,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-selective-search"><span class="nav-number">1.</span> <span class="nav-text">What is Selective Search?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#similarity"><span class="nav-number"></span> <span class="nav-text">Similarity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#color-similarity"><span class="nav-number">1.</span> <span class="nav-text">Color Similarity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#texture-similarity"><span class="nav-number">2.</span> <span class="nav-text">Texture Similarity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#size-similarity"><span class="nav-number">3.</span> <span class="nav-text">Size Similarity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-compatibility"><span class="nav-number">4.</span> <span class="nav-text">Shape Compatibility</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final-similarity"><span class="nav-number">5.</span> <span class="nav-text">Final Similarity</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#results"><span class="nav-number"></span> <span class="nav-text">Results</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#selective-search-python"><span class="nav-number">1.</span> <span class="nav-text">Selective Search: Python</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#object-detections"><span class="nav-number">1.</span> <span class="nav-text">Object Detections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#image-segementationsemantic-segmentation"><span class="nav-number">2.</span> <span class="nav-text">Image Segementation&#x2F;Semantic Segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metrics"><span class="nav-number">3.</span> <span class="nav-text">Metrics:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#accuracy"><span class="nav-number">3.1.</span> <span class="nav-text">Accuracy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision-recall"><span class="nav-number">3.2.</span> <span class="nav-text">Precision &amp; recall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision---recall-curve"><span class="nav-number">3.3.</span> <span class="nav-text">Precision - Recall Curve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#roc-curve-tpr---fpr"><span class="nav-number">3.4.</span> <span class="nav-text">ROC curve: TPR - FPR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iou-intersection-over-union"><span class="nav-number">3.5.</span> <span class="nav-text">IoU (Intersection over union)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yolov1"><span class="nav-number">4.</span> <span class="nav-text">YOLOv1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-selective-search"><span class="nav-number">5.</span> <span class="nav-text">What is Selective Search?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#similarity"><span class="nav-number"></span> <span class="nav-text">Similarity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#color-similarity"><span class="nav-number">1.</span> <span class="nav-text">Color Similarity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#texture-similarity"><span class="nav-number">2.</span> <span class="nav-text">Texture Similarity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#size-similarity"><span class="nav-number">3.</span> <span class="nav-text">Size Similarity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape-compatibility"><span class="nav-number">4.</span> <span class="nav-text">Shape Compatibility</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final-similarity"><span class="nav-number">5.</span> <span class="nav-text">Final Similarity</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#results"><span class="nav-number"></span> <span class="nav-text">Results</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#selective-search-python"><span class="nav-number">1.</span> <span class="nav-text">Selective Search: Python</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
