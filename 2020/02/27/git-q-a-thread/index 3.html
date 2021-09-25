@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/baby.png">
+  <link rel="mask-icon" href="/images/baby.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Palatino:300,300italic,400,400italic,700,700italic|Monaco:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Case: git push 不给其他args Discription: clone下来一个repo, 我新建一个branch叫做my_branch然后push到remote&#x2F;origin, 使用的命令是git push, 然后我在别的地儿再重新clone这个repo, git checkout my_branch的时候是到origin&#x2F;my_branch, 而没有一个local的不带origin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git Q&amp;A Thread">
+<meta property="og:url" content="https://thesong96.github.io/2020/02/27/git-q-a-thread/index.html">
+<meta property="og:site_name" content="TheSong">
+<meta property="og:description" content="Case: git push 不给其他args Discription: clone下来一个repo, 我新建一个branch叫做my_branch然后push到remote&#x2F;origin, 使用的命令是git push, 然后我在别的地儿再重新clone这个repo, git checkout my_branch的时候是到origin&#x2F;my_branch, 而没有一个local的不带origin">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-02-27T20:37:54.000Z">
+<meta property="article:modified_time" content="2020-03-12T08:47:19.000Z">
+<meta property="article:author" content="Nansong Yi">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://thesong96.github.io/2020/02/27/git-q-a-thread/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Git Q&A Thread | TheSong</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/rss.xml" title="TheSong" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TheSong</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/02/27/git-q-a-thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git Q&A Thread
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-27 12:37:54" itemprop="dateCreated datePublished" datetime="2020-02-27T12:37:54-08:00">2020-02-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-03-12 01:47:19" itemprop="dateModified" datetime="2020-03-12T01:47:19-07:00">2020-03-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/talk-to-myself/" itemprop="url" rel="index"><span itemprop="name">talk to myself</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="case-git-push-不给其他args">Case: git push 不给其他args</h2>
+<p>Discription: clone下来一个repo, 我新建一个branch叫做<code>my_branch</code>然后push到remote/origin, 使用的命令是<code>git push</code>, 然后我在别的地儿再重新clone这个repo, <code>git checkout my_branch</code>的时候是到<code>origin/my_branch</code>, 而没有一个local的不带<code>origin/</code>开头的<code>my_branch</code> , 这是咋回事儿啊</p>
+<ul>
+<li>我猜测可能是因为, 没有用<code>git push -u origin my_branch</code>, 或者 <code>git push my_branch:my_branch</code>, &lt;此处前面表示local, 后面表示remote&gt;, 总之这俩条都表示要local的<code>my_branch</code> 去追踪<code>remote/origin</code>的<code>my_branch</code>)</li>
+<li>test了一下 果然和我的猜测一样 整明白了.</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 小贴士:</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## switch remote URLs back and forth between HTTPS and SSH</span></span><br><span class="line">$ git remote <span class="built_in">set</span>-url origin https://github.com/USERNAME/REPOSITORY.git</span><br><span class="line">$ git remote <span class="built_in">set</span>-url origin git@github.com:USERNAME/REPOSITORY.git</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 查看remote</span></span><br><span class="line">$ git remote -v</span><br><span class="line">&gt; origin  https://github.com/USERNAME/REPOSITORY.git (fetch)</span><br><span class="line">&gt; origin  https://github.com/USERNAME/REPOSITORY.git (push)</span><br><span class="line"></span><br><span class="line"><span class="comment">## 查看git config</span></span><br><span class="line">git config --list</span><br><span class="line">git config --list --show-origin</span><br><span class="line"><span class="comment">## or look at your ~/.gitconfig file. The local configuration will be in your repository's .git/config file.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. System level (applied to every user on the system and all their repositories)</span></span><br><span class="line">$ git config --list --system (may need sudo)</span><br><span class="line">$ git config --system color.ui <span class="literal">true</span></span><br><span class="line">$ git config --edit --system</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. Global level (values specific personally to you, the user).</span></span><br><span class="line">$ git config --list --global</span><br><span class="line">$ git config --global user.name xyz</span><br><span class="line">$ git config --edit --global</span><br><span class="line"></span><br><span class="line"><span class="comment">#3. Repository level (specific to that single repository)</span></span><br><span class="line">$ git config --list --<span class="built_in">local</span></span><br><span class="line">$ git config --<span class="built_in">local</span> core.ignorecase <span class="literal">true</span> (--<span class="built_in">local</span> optional)</span><br><span class="line">$ git config --edit --<span class="built_in">local</span> (--<span class="built_in">local</span> optional)</span><br><span class="line"></span><br><span class="line"><span class="comment"># How do I read one particular configuration?</span></span><br><span class="line">$ git config user.name </span><br><span class="line"><span class="comment"># You may also specify options --system, --global, --local to read that value at a particular level.</span></span><br></pre></td></tr></table></figure>
+<h2 id="case-how-to-manage-multiple-github-accounts-on-a-single-machine-with-ssh-keys">Case: How to manage multiple GitHub accounts on a single machine with SSH keys</h2>
+<p>为啥要搞这个?</p>
+<ul>
+<li>马上毕业了uw邮箱可能用不了了</li>
+<li>以后肯定会遇到work account和personal account的conflicts(现在uw.edu就是work account)</li>
+</ul>
+<blockquote>
+<p>The case solution is almost forwarded from this blog: <a href="https://www.freecodecamp.org/news/manage-multiple-github-accounts-the-ssh-way-2dadc30ccaca/" target="_blank" rel="noopener">step by step</a></p>
+</blockquote>
+<p>Discription: 有多个github/gitlab账号 并且每个账号都在本地有不同的repo要develop，希望push的时候能认清自己是谁.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">"nathan"</span></span><br><span class="line">$ git config --global user.email <span class="string">"example@gmail.com</span></span><br></pre></td></tr></table></figure>
+<h3 id="generating-the-ssh-keys">1. Generating the SSH keys</h3>
+<p>Before generating an SSH key, we can check to see if we have any existing SSH keys: <code>ls -al ~/.ssh</code> This will list out all existing public and private key pairs, if any.</p>
+<p>If <code>~/.ssh/id_rsa</code> is available, we can reuse it, or else we can first generate a key to the default <code>~/.ssh/id_rsa</code> by running:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+<p>When asked for the location to save the keys, accept the default location by pressing enter. A private key and public key <code>~/.ssh/id_rsa.pub</code> will be created at the default ssh location <code>~/.ssh/</code>.</p>
+<p>Let’s use this default key pair for our personal account.</p>
+<p>For the work accounts, we will create different SSH keys. The below code will generate the SSH keys, and saves the public key with the tag <em>“email@work_mail.com”</em> to <code>~/.ssh/id_rsa_work_user1.pub</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">"email@work_mail.com"</span> -f <span class="string">"id_rsa_work_user1"</span></span><br></pre></td></tr></table></figure>
+<h3 id="adding-the-new-ssh-key-to-the-corresponding-github-account">2. Adding the new SSH key to the corresponding GitHub account</h3>
+<p>We already have the SSH public keys ready, and we will ask our GitHub accounts to trust the keys we have created. This is to get rid of the need for typing in the username and password every time you make a Git push.</p>
+<p>Copy the public key <code>pbcopy &lt; ~/.ssh/id_rsa.</code>pub and then log in to your personal GitHub account:</p>
+<ol type="1">
+<li>Go to <code>Settings</code></li>
+<li>Select <code>SSH and GPG keys</code> from the menu to the left.</li>
+<li>Click on <code>New SSH key</code>, provide a suitable title, and paste the key in the box below</li>
+<li>Click <code>Add key</code> — and you’re done!</li>
+</ol>
+<blockquote>
+<p>For the work accounts, use the corresponding public keys (<code>pbcopy &lt; ~/.ssh/id_rsa_work_user1.</code>pub) and repeat the above steps in your GitHub work accounts.</p>
+</blockquote>
+<h3 id="registering-the-new-ssh-keys-with-the-ssh-agent">3 . Registering the new SSH Keys with the ssh-agent</h3>
+<p>To use the keys, we have to register them with the <strong>ssh-agent</strong> on our machine. Ensure ssh-agent is running using the command <code>eval "$(ssh-agent -s)"</code>. Add the keys to the ssh-agent like so:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
+<p>Make the ssh-agent use the respective SSH keys for the different SSH Hosts.</p>
+<p>This is the crucial part, and we have two different approaches:</p>
+<p>Using the SSH configuration file (Step 4), and having only one active SSH key in the ssh-agent at a time (Step 5).</p>
+<h3 id="creating-the-ssh-config-file"><strong>4. Creating the SSH config File</strong></h3>
+<p>Here we are actually adding the SSH configuration rules for different hosts, stating which identity file to use for which domain.</p>
+<p>The SSH config file will be available at <strong>~/.ssh/config</strong>. Edit it if it exists, or else we can just create it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/.ssh/</span><br><span class="line">$ touch config           // Creates the file <span class="keyword">if</span> not exists</span><br><span class="line">$ code config            // Opens the file <span class="keyword">in</span> VS code, use any editor</span><br></pre></td></tr></table></figure>
+<p>Make configuration entries for the relevant GitHub accounts similar to the one below in your <code>~/.ssh/config</code> file:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Personal account, - the default config</span></span><br><span class="line">Host github.com</span><br><span class="line">   HostName github.com</span><br><span class="line">   User git</span><br><span class="line">   IdentityFile ~/.ssh/id_rsa</span><br><span class="line">   </span><br><span class="line"><span class="comment"># Work account-1</span></span><br><span class="line">Host github.com-work_user1    </span><br><span class="line">   HostName github.com</span><br><span class="line">   User git</span><br><span class="line">   IdentityFile ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
+<p>“<strong>work_user1</strong>” is the GitHub user id for the work account.</p>
+<p>“<strong>g*ithub.com-*work_user1</strong>” is a notation used to differentiate the multiple Git accounts. You can also use “<strong>work_user1.g*ithub.com”*</strong> notation as well. Make sure you’re consistent with what hostname notation you use. This is relevant when you clone a repository or when you set the remote origin for a local repository</p>
+<p>The above configuration asks ssh-agent to:</p>
+<ul>
+<li>Use <strong>id_rsa</strong> as the key for any Git URL that uses <strong><span class="citation" data-cites="github.com">@github.com</span></strong></li>
+<li>Use the <strong>id_rsa_work_user1</strong> key for any Git URL that uses <strong><span class="citation" data-cites="github.com-work_user1">@github.com-work_user1</span></strong></li>
+</ul>
+<h3 id="one-active-ssh-key-in-the-ssh-agent-at-a-time">5. One active SSH key in the ssh-agent at a time</h3>
+<p>This approach doesn’t require the SSH config rules. Rather we manually ensure that the ssh-agent has only the relevant key attached at the time of any Git operation.</p>
+<p><code>ssh-add -l</code> will list all the SSH keys attached to the ssh-agent. Remove all of them and add the one key you are about to use.</p>
+<p>If it’s to a personal Git account that you are about to push:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add -D            //removes all ssh entries from the ssh-agent</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa                 // Adds the relevant ssh key</span><br></pre></td></tr></table></figure>
+<p>The ssh-agent now has the key mapped with the personal GitHub account, and we can do a Git push to the personal repository.</p>
+<p>To push to your work GitHub account-1, change the SSH key mapped with the ssh-agent by removing the existing key and adding the SSH key mapped with the GitHub work account.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add -D</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa_work_user1</span><br></pre></td></tr></table></figure>
+<p>The ssh-agent at present has the key mapped with the work Github account, and you can do a Git push to the work repository. This requires a bit of manual effort, though.</p>
+<h3 id="setting-the-git-remote-url-for-the-local-repositories">Setting the git remote Url for the local repositories</h3>
+<p>Once we have local Git repositories cloned /created, ensure the Git config user name and email is exactly what you want. GitHub identifies the author of any commit from the email id attached with the commit description.</p>
+<p>To list the config name and email in the local Git directory, do <code>*git config user.name*</code>and <code>*git config user.email*</code>. If it’s not found, update accordingly.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config user.name <span class="string">"User 1"</span>   // Updates git config user name</span><br><span class="line">$ git config user.email <span class="string">"user1@workMail.com"</span></span><br></pre></td></tr></table></figure>
+<h3 id="while-cloning-repositories">6. While Cloning Repositories</h3>
+<p>Note: step 7 will help, if we have the repository already available on local.</p>
+<p>Now that the configurations are in place, we can go ahead and clone the corresponding repositories. On cloning, make a note that we use the host names that we used in the SSH config.</p>
+<p>Repositories can be cloned using the clone command Git provides:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@github.com:personal_account_name/repo_name.git</span><br></pre></td></tr></table></figure>
+<p>The work repository will require a change to be made with this command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@github.com-work_user1:work_user1/repo_name.git</span><br></pre></td></tr></table></figure>
+<p>This change is made depending on the host name defined in the SSH config. The string between @ and : should match what we have given in the SSH config file.</p>
+<h3 id="for-locally-existing-repositories">7. For Locally Existing Repositories</h3>
+<p><strong>If we have the repository already cloned:</strong></p>
+<p>List the Git remote of the repository, <code>git remote -v</code></p>
+<p>Check whether the URL matches our GitHub host to be used, or else update the remote origin URL.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote <span class="built_in">set</span>-url origin git@github.com-worker_user1:worker_user1/repo_name.git</span><br></pre></td></tr></table></figure>
+<p>Ensure the string between @ and : matches the Host we have given in the SSH config.</p>
+<p><strong>If you are creating a new repository on local:</strong></p>
+<p>Initialize Git in the project folder <code>git init</code>.</p>
+<h3 id="create-the-new-repository-in-the-github-account-and-then-add-it-as-the-git-remote-to-the-local-repository.">Create the new repository in the GitHub account and then add it as the Git remote to the local repository.</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin git@github.com-work_user1:work_user1/repo_name.git</span><br></pre></td></tr></table></figure>
+<p>Ensure the string between @ and : matches the Host we have given in the SSH config.</p>
+<p>Push the initial commit to the GitHub repository:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br><span class="line">$ git commit -m <span class="string">"Initial commit"</span></span><br><span class="line">$ git push -u origin master</span><br></pre></td></tr></table></figure>
+<p>We are done!</p>
+<p>Adding or updating the Git remote of the local Git directory with the proper host will take care of selecting the correct SSH key to verify our identity with GitHub. With all the above in place, our <code>git operations</code> should work seamlessly.</p>
+<ul>
+<li>Reference
+<ul>
+<li><a href="https://gist.github.com/yeungeek/596984fd9e53d6c36c0d" target="_blank" rel="noopener">multi git account</a></li>
+<li><a href="https://www.freecodecamp.org/news/manage-multiple-github-accounts-the-ssh-way-2dadc30ccaca/" target="_blank" rel="noopener">step by step</a> this one works, how to set things in ~/.ssh/config</li>
+</ul></li>
+</ul>
+<h3 id="tips">Tips:</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d <span class="string">"branch name"</span> 删除branch</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>谢谢老板🐱~.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/reward.png" alt="Nansong Yi WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Nansong Yi Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/rss.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i> Git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/26/tmux-cheatsheet/" rel="prev" title="tmux review">
+      <i class="fa fa-chevron-left"></i> tmux review
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/27/Camera-Matrix/" rel="next" title="Camera Matrix">
+      Camera Matrix <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#case-git-push-不给其他args"><span class="nav-number">1.</span> <span class="nav-text">Case: git push 不给其他args</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case-how-to-manage-multiple-github-accounts-on-a-single-machine-with-ssh-keys"><span class="nav-number">2.</span> <span class="nav-text">Case: How to manage multiple GitHub accounts on a single machine with SSH keys</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#generating-the-ssh-keys"><span class="nav-number">2.1.</span> <span class="nav-text">1. Generating the SSH keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adding-the-new-ssh-key-to-the-corresponding-github-account"><span class="nav-number">2.2.</span> <span class="nav-text">2. Adding the new SSH key to the corresponding GitHub account</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#registering-the-new-ssh-keys-with-the-ssh-agent"><span class="nav-number">2.3.</span> <span class="nav-text">3 . Registering the new SSH Keys with the ssh-agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#creating-the-ssh-config-file"><span class="nav-number">2.4.</span> <span class="nav-text">4. Creating the SSH config File</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#one-active-ssh-key-in-the-ssh-agent-at-a-time"><span class="nav-number">2.5.</span> <span class="nav-text">5. One active SSH key in the ssh-agent at a time</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setting-the-git-remote-url-for-the-local-repositories"><span class="nav-number">2.6.</span> <span class="nav-text">Setting the git remote Url for the local repositories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#while-cloning-repositories"><span class="nav-number">2.7.</span> <span class="nav-text">6. While Cloning Repositories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for-locally-existing-repositories"><span class="nav-number">2.8.</span> <span class="nav-text">7. For Locally Existing Repositories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create-the-new-repository-in-the-github-account-and-then-add-it-as-the-git-remote-to-the-local-repository."><span class="nav-number">2.9.</span> <span class="nav-text">Create the new repository in the GitHub account and then add it as the Git remote to the local repository.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">2.10.</span> <span class="nav-text">Tips:</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Nansong Yi"
+      src="/images/baby.png">
+  <p class="site-author-name" itemprop="name">Nansong Yi</p>
+  <div class="site-description" itemprop="description">TheSong is named after IG.TheShy</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nansongyi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nansongyi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nansong@uw.edu" title="E-Mail → mailto:nansong@uw.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://nansongyi.me/" title="http:&#x2F;&#x2F;nansongyi.me" rel="noopener" target="_blank">my web</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://silencial.github.io/" title="https:&#x2F;&#x2F;silencial.github.io&#x2F;" rel="noopener" target="_blank">silencial</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://3monks.org/en/" title="https:&#x2F;&#x2F;3monks.org&#x2F;en&#x2F;" rel="noopener" target="_blank">sky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.twistedwg.com/pages/class.html" title="http:&#x2F;&#x2F;www.twistedwg.com&#x2F;pages&#x2F;class.html" rel="noopener" target="_blank">twistedwg</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      <div style="position:absolute; bottom:120px left:auto; width:85%">
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="//music.163.com/outchain/player?type=0&id=5290225297&auto=1&height=430"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Nansong Yi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>
