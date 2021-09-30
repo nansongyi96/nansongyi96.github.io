@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/baby.png">
+  <link rel="mask-icon" href="/images/baby.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Palatino:300,300italic,400,400italic,700,700italic|Monaco:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="##Camera 成像原理  Intrisic and Extrinsic Matrix  Object Detections  paper review + blog + algorithm reproduction SPPNet Selective Search R-CNN Fast-RCNN Faster-RCNN Yolo 1,2,3  Image Segementation&#x2F;Semant">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Object Detection Algorithms Review">
+<meta property="og:url" content="https://thesong96.github.io/2020/03/30/Object-Detection-Algorithms-Review/index.html">
+<meta property="og:site_name" content="TheSong">
+<meta property="og:description" content="##Camera 成像原理  Intrisic and Extrinsic Matrix  Object Detections  paper review + blog + algorithm reproduction SPPNet Selective Search R-CNN Fast-RCNN Faster-RCNN Yolo 1,2,3  Image Segementation&#x2F;Semant">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/8DMfFLF.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/9ad70be49c408d464c71b8e9a006d141_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://i.imgur.com/f26P0te.png">
+<meta property="og:image" content="https://i.imgur.com/ut434m3.png">
+<meta property="og:image" content="https://i.imgur.com/mNKX4Wy.png">
+<meta property="og:image" content="https://i.imgur.com/Ioj7xS1.png">
+<meta property="og:image" content="https://thesong96.github.io/Users/nansongyi/Library/Application%20Support/typora-user-images/image-20210929081630505.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Precisionrecall.svg/350px-Precisionrecall.svg.png">
+<meta property="og:image" content="https://i.imgur.com/IlBW3bP.png">
+<meta property="article:published_time" content="2020-03-30T07:41:28.000Z">
+<meta property="article:modified_time" content="2021-09-30T16:37:31.247Z">
+<meta property="article:author" content="Nansong Yi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/8DMfFLF.jpg">
+
+<link rel="canonical" href="https://thesong96.github.io/2020/03/30/Object-Detection-Algorithms-Review/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Object Detection Algorithms Review | TheSong</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/rss.xml" title="TheSong" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TheSong</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/30/Object-Detection-Algorithms-Review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Object Detection Algorithms Review
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-30 00:41:28" itemprop="dateCreated datePublished" datetime="2020-03-30T00:41:28-07:00">2020-03-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-09-30 09:37:31" itemprop="dateModified" datetime="2021-09-30T09:37:31-07:00">2021-09-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>##Camera 成像原理</p>
+<ul>
+<li><a href="https://thesong96.github.io/2020/02/27/Camera-Matrix/">Intrisic and Extrinsic Matrix</a></li>
+</ul>
+<h2 id="object-detections">Object Detections</h2>
+<ul>
+<li>paper review + blog + algorithm reproduction</li>
+<li>SPPNet</li>
+<li>Selective Search</li>
+<li>R-CNN</li>
+<li>Fast-RCNN</li>
+<li>Faster-RCNN</li>
+<li>Yolo 1,2,3</li>
+</ul>
+<h2 id="image-segementationsemantic-segmentation">Image Segementation/Semantic Segmentation</h2>
+<ul>
+<li><p>Vanilla FCN</p></li>
+<li><p>U-Net</p></li>
+<li><p>SegNet</p></li>
+<li><p>DenseNet</p></li>
+<li><p>BlitzNet</p></li>
+<li><p>Mask-RCNN</p></li>
+<li><p>Mask RCNN with the Fully Convolutional Network (FCN) branch achieved the highest performance.</p></li>
+</ul>
+<h2 id="metrics">Metrics:</h2>
+<h3 id="accuracy">Accuracy</h3>
+<ul>
+<li>accuracy is a bad metric, especially when dataset is imbalenced.
+<ul>
+<li>class imbalance, e.g. 广告点击率,很多广告<span class="math inline">\((x_i, y_i) i = 0, 1, 2 … n\)</span>, <span class="math inline">\(x_i\)</span>表示第i个广告, <span class="math inline">\(y_i\)</span>表示第i个广告是否被click. 就会出现有大量的<span class="math inline">\(y = 0\)</span>, 这样就是positive data很少很少. 如果用accuracy这个metric去optimize model, 就会得到一个model <span class="math inline">\(F \rightarrow F(x_i) = 0\)</span>, 我们的accuracy会很高, 但是这个model就没什么用, 并不能起到预测广告是否会被点击的作用</li>
+<li></li>
+</ul></li>
+</ul>
+<h3 id="precision-recall"><strong>Precision &amp; recall</strong></h3>
+<ul>
+<li><p>Precision: how good is your prediction</p>
+<p>那为啥不用 <span class="math inline">\(\frac{TN}{(TN + FN)}\)</span></p></li>
+<li><p>Recall: how good to find out all positive</p></li>
+</ul>
+<figure>
+<img src="https://i.imgur.com/8DMfFLF.jpg" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<h3 id="precision---recall-curve">Precision - Recall Curve</h3>
+<p>这个curve和ROC不是一样的吗？？ 又忘记了</p>
+<h3 id="roc-curve-tpr---fpr">ROC curve: TPR - FPR</h3>
+<h3 id="iou">IOU</h3>
+<p>算的时候 记得考虑 两个bbox没有intersection的时候</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w = max(x_max - x_min, <span class="number">0</span>)</span><br><span class="line">h = max(y_max - y_min, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="two-stage-sparse-predition">Two Stage, Sparse Predition</h1>
+<h2 id="rcnn">RCNN</h2>
+<h2 id="fast-rcnn">Fast-RCNN</h2>
+<h2 id="faster-rcnn">Faster-RCNN</h2>
+<h1 id="one-stage-dense-prediciton">One Stage, Dense Prediciton</h1>
+<p>class imbalance problem:</p>
+<ol type="1">
+<li>Training is inefficient as most locations are easy negatives</li>
+<li>The easy negatives can overwhelm training and degenerate the models</li>
+</ol>
+<h2 id="yolo">Yolo</h2>
+<p>v1 <a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="noopener">paper</a></p>
+<p>DarkNet + Multiscale Feature Map + Regression(bbox + label) + YoloLoss</p>
+<p>??? 忘记了 中间那一步是啥 但是应该是和FPN差不多的</p>
+<h2 id="retinanet">RetinaNet</h2>
+<p>ResNet + FPN + Regression(bbox + label) + FocalLoss(solve class imbalance problem)</p>
+<h2 id="fpn">FPN</h2>
+<p>Goal: Feature integration (combining strong-semantics and weak-semantics) FPN is a general purpose architecture: take a single-scale image as input, generating proportionally sized feature maps at multiple-levels in fully convolutional fashion. FPN is independent to the backbone</p>
+<ul>
+<li>Region Proposal Network</li>
+<li>Object detector</li>
+<li>Instance Segmentation</li>
+</ul>
+<p>FPN is constructed with</p>
+<ul>
+<li>Bottom-up pathway</li>
+<li>Top-down pathway</li>
+<li>Lateral connections</li>
+</ul>
+<h1 id="review">Review</h1>
+<h2 id="batchnorm">BatchNorm</h2>
+<figure>
+<img src="https://pic2.zhimg.com/80/9ad70be49c408d464c71b8e9a006d141_720w.jpg?source=1940ef5c" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>Pros: https://zhuanlan.zhihu.com/p/34879333</p>
+<ul>
+<li><strong>BN使得网络中每层输入数据的分布相对稳定，加速模型学习速度</strong></li>
+<li><strong>BN使得模型对网络中的参数不那么敏感，简化调参过程，使得网络学习更加稳定</strong></li>
+<li><strong>BN允许网络使用饱和性激活函数（例如sigmoid，tanh等），缓解梯度消失问题</strong></li>
+<li><strong>BN具有一定的正则化效果, generalization</strong></li>
+</ul>
+<h2 id="resnet">Resnet</h2>
+<figure>
+<img src="https://i.imgur.com/f26P0te.png" alt="image-20210929045534189" /><figcaption aria-hidden="true">image-20210929045534189</figcaption>
+</figure>
+<p>Why bottlenetck?</p>
+<ul>
+<li>less parameter</li>
+</ul>
+<p>Benefits</p>
+<ul>
+<li>Easy to learn residual funciton F</li>
+<li>Go deeper, cuz gradient can flow</li>
+<li>Short cut connect doesn’t introduce additional parameters</li>
+</ul>
+<h2 id="homography">homography</h2>
+<h2 id="optimizer">Optimizer</h2>
+<h3 id="sgd">SGD</h3>
+<p><span class="math display">\[w =w - dw\]</span></p>
+<h3 id="momentum">Momentum</h3>
+<p><span class="math inline">\(\begin{aligned} v_{t} &amp;=\beta v_{t-1}-\eta \frac{\partial L}{\partial w} \\ w &amp;=w+v_{t} \end{aligned}\)</span></p>
+<ul>
+<li>Gradient descent takes a step in the steepest direction (negative gradient)</li>
+<li>Intuitive idea: Imagine a ball rolling down loss surface, and use momentum to pass flat surfaces</li>
+</ul>
+<p>Idea: dynamic learning rate</p>
+<h3 id="adagrad">Adagrad</h3>
+<p>Idea: Use gradient statistics(curvature) to reduce learning rate across iterations Denominator: Sum up gradients over iterations</p>
+<p><span class="math inline">\(G_{i}=G_{i-1}+\left(\frac{\partial L}{\partial w_{i-1}}\right)^{2}\)</span></p>
+<p><span class="math inline">\(w_{i}=w_{i-1}-\frac{\alpha}{\sqrt{G_{i}+\epsilon}} \frac{\partial L}{\partial w_{i-1}}\)</span></p>
+<p>Directions with high curvature will have higher gradients, and learning rate will reduce</p>
+<p>Problem: gradient = 0 after a long time</p>
+<h3 id="rmsprop">RMSProp</h3>
+<p>Idea: keep a moving avg of <span class="math inline">\(G_i\)</span></p>
+<p><span class="math inline">\(G_{i}=\beta G_{i-1}+(1-\beta)\left(\frac{\partial L}{\partial w_{i-1}}\right)^{2}\)</span> <span class="math inline">\(w_{i}=w_{i-1}-\frac{\alpha}{\sqrt{G_{i}+\epsilon}} \frac{\partial L}{\partial w_{i-1}}\)</span></p>
+<p>Lr doesn’t saturate to be 0</p>
+<h3 id="adam">Adam</h3>
+<p>Solution: Time-varying bias correction Typically <span class="math inline">\(\boldsymbol{\beta}_{\mathbf{1}}=\mathbf{0 . 9}, \boldsymbol{\beta}_{\mathbf{2}}=\mathbf{0} . \mathbf{9 9 9}\)</span> So <span class="math inline">\(\widehat{v}_{\boldsymbol{i}}\)</span> will be small number divided by <span class="math inline">\((1-0.9=0.1)\)</span> resulting in more reasonable values (and <span class="math inline">\(\widehat{\boldsymbol{G}}_{i}\)</span> larger)</p>
+<p><span class="math inline">\(v_{i}=\boldsymbol{\beta}_{1} v_{i-1}+\left(1-\beta_{1}\right)\left(\frac{\partial L}{\partial w_{i-1}}\right)\)</span> <span class="math inline">\(G_{i}=\beta_{2} G_{i-1}+\left(1-\beta_{2}\right)\left(\frac{\partial L}{\partial w_{i-1}}\right)^{2}\)</span> <span class="math display">\[
+\begin{array}{c}\widehat{v}_{i}=\frac{v_{i}}{1-\beta_{1}^{t}} \quad \widehat{G_{i}}=\frac{G_{i}}{1-\beta_{2}^{t}} \\ w_{i}=w_{i-1}-\frac{\alpha \widehat{v}_{i}}{\sqrt{\widehat{G_{i}}+\epsilon}}\end{array}
+\]</span></p>
+<h2 id="vanishing-gradient">vanishing gradient</h2>
+<ul>
+<li>activation funciton - Sigmoid,tanh, saturation?</li>
+</ul>
+<h2 id="overfitting">overfitting</h2>
+<ul>
+<li>small data set</li>
+<li>model complexity too much</li>
+<li>Can be solved by regularization</li>
+</ul>
+<h2 id="data-normalization">data normalization</h2>
+<ul>
+<li>BatchNorm?</li>
+<li><span class="math inline">\(\frac{X - \mu}{\sigma^2}\)</span> normalize it to [0, 1], easy to train when doing gradient descent?</li>
+</ul>
+<h2 id="epipolar-constraints">epipolar constraints</h2>
+<h2 id="camera-calibration">camera calibration</h2>
+<p>DLT method: https://www.youtube.com/watch?v=oFZQykvEw14</p>
+<p>zhang method: using chessboard.</p>
+<p>棋盘上有<span class="math inline">\(\{(i, j)| 0 \leq i\leq n, 0 \leq j\leq m\}\)</span>, n x m个已知坐标点,</p>
+<p>就可以构建n x m个这样的方程组 <span class="math inline">\(x_{pix} = K_{3\times3}[R_{w}|t_{w}]_{3\times4}X_{w}\)</span></p>
+<p>where</p>
+<figure>
+<img src="https://i.imgur.com/ut434m3.png" alt="image-20210930093714548" /><figcaption aria-hidden="true">image-20210930093714548</figcaption>
+</figure>
+<p>考虑到camera skewness</p>
+<figure>
+<img src="https://i.imgur.com/mNKX4Wy.png" alt="image-20210930084357024" /><figcaption aria-hidden="true">image-20210930084357024</figcaption>
+</figure>
+<p>Intrinsic <span class="math inline">\(K\)</span>有5个para, Extrinsic <span class="math inline">\([R|t]\)</span> 有6个para, 一共11个para</p>
+<p>最少需要6个data pair来求解, 因为每个data pair相当于两个equation</p>
+<p>如果考虑distortion, 做法还是一样的 不过需要更多的data pair</p>
+<figure>
+<img src="https://i.imgur.com/Ioj7xS1.png" alt="image-20210930091906857" /><figcaption aria-hidden="true">image-20210930091906857</figcaption>
+</figure>
+<p>最后就是一个optimization problem, 优化一下参数</p>
+<p>每张照片有很多个点 就可以解出 K, [R|t]</p>
+<p>不同角度拍出来的照片[R|t]不一样 但是K一样, K可以一起优化</p>
+<h3 id="homogeneous-transformation-review">Homogeneous Transformation review</h3>
+<p>https://www.youtube.com/watch?v=kmceHOsxFDI</p>
+<h3 id="hand-eye-robot-system">Hand-Eye Robot System</h3>
+<p>Core Problem: <span class="math inline">\(AX = XB\)</span></p>
+<p>https://www.youtube.com/watch?v=xQ79ysnrzUk&amp;t=2s</p>
+<figure>
+<img src="/Users/nansongyi/Library/Application%20Support/typora-user-images/image-20210929081630505.png" alt="image-20210929081630505" /><figcaption aria-hidden="true">image-20210929081630505</figcaption>
+</figure>
+<h2 id="pooling-layer的back-propagation">pooling layer的back-propagation</h2>
+<ul>
+<li>similar logic with forward</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self, dout)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Backward pass of max pooling</span></span><br><span class="line"><span class="string">    :param dout: Upstream derivatives</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x, H_out, W_out = self.cache</span><br><span class="line"></span><br><span class="line">    stride, f = self.stride, self.kernel_size</span><br><span class="line">    N, C, H, W = x.shape</span><br><span class="line">    ConvSize = <span class="keyword">lambda</span> x: (x - f) // stride + <span class="number">1</span></span><br><span class="line">    H_out, W_out = ConvSize(H), ConvSize(W)</span><br><span class="line">    self.dx = np.zeros((N, C, H, W))        </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">for</span> h <span class="keyword">in</span> range(H_out):</span><br><span class="line">            h1, h2 = h * stride, h * stride + f</span><br><span class="line">            <span class="keyword">for</span> w <span class="keyword">in</span> range(W_out):</span><br><span class="line">                w1, w2 = w * stride, w * stride + f</span><br><span class="line">                <span class="keyword">for</span> c <span class="keyword">in</span> range(C):</span><br><span class="line">                    self.dx[i, c, h1: h2, w1: w2] += (x[i, c, h1: h2, w1: w2] &gt;= np.max(x[i, c, h1: h2, w1: w2])).astype(float) * dout[i, c, h, w]</span><br></pre></td></tr></table></figure>
+<h2 id="d-representation-mesh-point-cloud-voxel">3d representation （mesh, point cloud, voxel）</h2>
+<h2 id="stereorectificationdisparity">stereo，rectification，disparity</h2>
+<hr />
+<p>🌲<strong>Recap</strong></p>
+<p>Precision = <span class="math inline">\(\frac{tp}{tp + fp}\)</span></p>
+<p>Recal = <span class="math inline">\(\frac{tp}{tp + fn}\)</span></p>
+<p>Imbalanced Acurray = <span class="math inline">\(\frac{tp + tn}{tp + tn + fp + fn}\)</span> = <span class="math inline">\(\frac{\#classified\quad correctly}{\#all}\)</span> (if the dataset is imbalanced, this metric will be misleading cuz it’s gonna be very high, see <a href="https://en.wikipedia.org/wiki/Precision_and_recall" target="_blank" rel="noopener">example</a>)</p>
+<p>Balanced Acurracy = <span class="math inline">\(\frac{TPR + TNR}{2}\)</span></p>
+<p>Eg:</p>
+<p>Consider a sample with 95 negative and 5 positive values.</p>
+<p>Classifying all values as negative in this case.</p>
+<p>Imbalanced Acurray = <span class="math inline">\(\frac{tp + tn}{tp + tn + fp + fn}\)</span> = <span class="math inline">\(\frac{0 + 95}{100}\)</span> = 0.95</p>
+<p>Balanced Acurray = <span class="math inline">\(\frac{TPR + TNR}{2}\)</span> = <span class="math inline">\(\frac{0/5+95/95}{2}\)</span> = 0.5</p>
+<figure>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Precisionrecall.svg/350px-Precisionrecall.svg.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure>
+<img src="https://i.imgur.com/IlBW3bP.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>谢谢老板🐱~.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/reward.png" alt="Nansong Yi WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Nansong Yi Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/rss.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/30/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/11/ECE-PMP-545-Mobile-Car/" rel="next" title="ECE PMP 545 - Mobile Car">
+      ECE PMP 545 - Mobile Car <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#object-detections"><span class="nav-number">1.</span> <span class="nav-text">Object Detections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#image-segementationsemantic-segmentation"><span class="nav-number">2.</span> <span class="nav-text">Image Segementation&#x2F;Semantic Segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metrics"><span class="nav-number">3.</span> <span class="nav-text">Metrics:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#accuracy"><span class="nav-number">3.1.</span> <span class="nav-text">Accuracy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision-recall"><span class="nav-number">3.2.</span> <span class="nav-text">Precision &amp; recall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision---recall-curve"><span class="nav-number">3.3.</span> <span class="nav-text">Precision - Recall Curve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#roc-curve-tpr---fpr"><span class="nav-number">3.4.</span> <span class="nav-text">ROC curve: TPR - FPR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iou"><span class="nav-number">3.5.</span> <span class="nav-text">IOU</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#two-stage-sparse-predition"><span class="nav-number"></span> <span class="nav-text">Two Stage, Sparse Predition</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rcnn"><span class="nav-number">1.</span> <span class="nav-text">RCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fast-rcnn"><span class="nav-number">2.</span> <span class="nav-text">Fast-RCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#faster-rcnn"><span class="nav-number">3.</span> <span class="nav-text">Faster-RCNN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-stage-dense-prediciton"><span class="nav-number"></span> <span class="nav-text">One Stage, Dense Prediciton</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#yolo"><span class="nav-number">1.</span> <span class="nav-text">Yolo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#retinanet"><span class="nav-number">2.</span> <span class="nav-text">RetinaNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fpn"><span class="nav-number">3.</span> <span class="nav-text">FPN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#review"><span class="nav-number"></span> <span class="nav-text">Review</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#batchnorm"><span class="nav-number">1.</span> <span class="nav-text">BatchNorm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#resnet"><span class="nav-number">2.</span> <span class="nav-text">Resnet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#homography"><span class="nav-number">3.</span> <span class="nav-text">homography</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizer"><span class="nav-number">4.</span> <span class="nav-text">Optimizer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sgd"><span class="nav-number">4.1.</span> <span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#momentum"><span class="nav-number">4.2.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adagrad"><span class="nav-number">4.3.</span> <span class="nav-text">Adagrad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rmsprop"><span class="nav-number">4.4.</span> <span class="nav-text">RMSProp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adam"><span class="nav-number">4.5.</span> <span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vanishing-gradient"><span class="nav-number">5.</span> <span class="nav-text">vanishing gradient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#overfitting"><span class="nav-number">6.</span> <span class="nav-text">overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-normalization"><span class="nav-number">7.</span> <span class="nav-text">data normalization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epipolar-constraints"><span class="nav-number">8.</span> <span class="nav-text">epipolar constraints</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#camera-calibration"><span class="nav-number">9.</span> <span class="nav-text">camera calibration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#homogeneous-transformation-review"><span class="nav-number">9.1.</span> <span class="nav-text">Homogeneous Transformation review</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hand-eye-robot-system"><span class="nav-number">9.2.</span> <span class="nav-text">Hand-Eye Robot System</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pooling-layer的back-propagation"><span class="nav-number">10.</span> <span class="nav-text">pooling layer的back-propagation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-representation-mesh-point-cloud-voxel"><span class="nav-number">11.</span> <span class="nav-text">3d representation （mesh, point cloud, voxel）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stereorectificationdisparity"><span class="nav-number">12.</span> <span class="nav-text">stereo，rectification，disparity</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Nansong Yi"
+      src="/images/baby.png">
+  <p class="site-author-name" itemprop="name">Nansong Yi</p>
+  <div class="site-description" itemprop="description">TheSong is named after IG.TheShy</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nansongyi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nansongyi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nansong@uw.edu" title="E-Mail → mailto:nansong@uw.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://nansongyi.me/" title="http:&#x2F;&#x2F;nansongyi.me" rel="noopener" target="_blank">my web</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://silencial.github.io/" title="https:&#x2F;&#x2F;silencial.github.io&#x2F;" rel="noopener" target="_blank">silencial</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://3monks.org/en/" title="https:&#x2F;&#x2F;3monks.org&#x2F;en&#x2F;" rel="noopener" target="_blank">sky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.twistedwg.com/pages/class.html" title="http:&#x2F;&#x2F;www.twistedwg.com&#x2F;pages&#x2F;class.html" rel="noopener" target="_blank">twistedwg</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      <div style="position:absolute; bottom:120px left:auto; width:85%">
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="//music.163.com/outchain/player?type=0&id=5290225297&auto=1&height=430"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Nansong Yi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>

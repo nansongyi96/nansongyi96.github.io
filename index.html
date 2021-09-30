@@ -780,7 +780,7 @@ Episode 2000    Average Score: 259.26</code></pre>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/30/Region-Proposal/">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2020/03/30/Object-Detection-Algorithms-Review/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/baby.png">
@@ -794,7 +794,7 @@ Episode 2000    Average Score: 259.26</code></pre>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/03/30/Region-Proposal/" class="post-title-link" itemprop="url">Object Detection Algorithms Review</a>
+            <a href="/2020/03/30/Object-Detection-Algorithms-Review/" class="post-title-link" itemprop="url">Object Detection Algorithms Review</a>
         </h2>
 
         <div class="post-meta">
@@ -811,7 +811,7 @@ Episode 2000    Average Score: 259.26</code></pre>
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-08-06 22:00:42" itemprop="dateModified" datetime="2021-08-06T22:00:42-07:00">2021-08-06</time>
+                <time title="Modified: 2021-09-30 09:37:31" itemprop="dateModified" datetime="2021-09-30T09:37:31-07:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -836,9 +836,7 @@ Episode 2000    Average Score: 259.26</code></pre>
       
           <p>##Camera 成像原理</p>
 <ul>
-<li><p>Optical Flow</p></li>
-<li><p><a href="https://thesong96.github.io/2020/02/27/Camera-Matrix/">Intrisic and Extrinsic Matrix</a></p></li>
-<li><p>Terminology Review</p></li>
+<li><a href="https://thesong96.github.io/2020/02/27/Camera-Matrix/">Intrisic and Extrinsic Matrix</a></li>
 </ul>
 <h2 id="object-detections">Object Detections</h2>
 <ul>
@@ -879,84 +877,145 @@ Episode 2000    Average Score: 259.26</code></pre>
 <img src="https://i.imgur.com/8DMfFLF.jpg" alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
 <h3 id="precision---recall-curve">Precision - Recall Curve</h3>
+<p>这个curve和ROC不是一样的吗？？ 又忘记了</p>
 <h3 id="roc-curve-tpr---fpr">ROC curve: TPR - FPR</h3>
-<h3 id="iou-intersection-over-union"><strong>IoU (Intersection over union)</strong></h3>
-<figure>
-<img src="https://i.imgur.com/0HeprSV.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
-</figure>
-<h2 id="yolov1">YOLOv1</h2>
-<p><a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="noopener">paper</a></p>
-<p>​</p>
-<p>An important property of a region proposal method is to have a very <strong>high recall</strong>. This is just a fancy way of saying that the regions that contain the objects we are looking have to be in our list of region proposals. To accomplish this our list of region proposals may end up having a lot of regions that do not contain any object. In other words, it is ok for the region proposal algorithm to produce a lot of false positives so long as it catches all the true positives. Most of these false positives will be rejected by object recognition algorithm. The time it takes to do the detection goes up when we have more false positives and the accuracy is affected slightly. But having a high recall is still a good idea because the alternative of missing the regions containing the actual objects severely impacts the detection rate.</p>
-<h2 id="what-is-selective-search">What is Selective Search?</h2>
-<p>Selective Search is a region proposal algorithm used in object detection. It is designed to be fast with a very high recall. It is based on computing hierarchical grouping of similar regions based on color, texture, size and shape compatibility.</p>
-<p>Selective Search starts by over-segmenting the image based on intensity of the pixels using a graph-based <a href="http://cs.brown.edu/~pff/segment/" target="_blank" rel="noopener">segmentation method</a> by Felzenszwalb and Huttenlocher. The output of the algorithm is shown below. The image on the right contains segmented regions represented using solid colors.</p>
-<figure>
-<img src="https://i.imgur.com/8cBUHow.png" alt="image-20200330115743624" /><figcaption aria-hidden="true">image-20200330115743624</figcaption>
-</figure>
-<p>Can we use segmented parts in this image as region proposals? The answer is no and there are two reasons why we cannot do that:</p>
+<h3 id="iou">IOU</h3>
+<p>算的时候 记得考虑 两个bbox没有intersection的时候</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w = max(x_max - x_min, <span class="number">0</span>)</span><br><span class="line">h = max(y_max - y_min, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="two-stage-sparse-predition">Two Stage, Sparse Predition</h1>
+<h2 id="rcnn">RCNN</h2>
+<h2 id="fast-rcnn">Fast-RCNN</h2>
+<h2 id="faster-rcnn">Faster-RCNN</h2>
+<h1 id="one-stage-dense-prediciton">One Stage, Dense Prediciton</h1>
+<p>class imbalance problem:</p>
 <ol type="1">
-<li>Most of the actual objects in the original image contain 2 or more segmented parts</li>
-<li>Region proposals for occluded objects such as the plate covered by the cup or the cup filled with coffee cannot be generated using this method</li>
+<li>Training is inefficient as most locations are easy negatives</li>
+<li>The easy negatives can overwhelm training and degenerate the models</li>
 </ol>
-<p>If we try to address the first problem by further merging the adjacent regions similar to each other we will end up with one segmented region covering two objects.</p>
-<p>Selective search uses oversegments from Felzenszwalb and Huttenlocher’s method as an initial seed. An oversegmented image looks like this.</p>
-<p><a href="https://www.learnopencv.com/wp-content/uploads/2017/09/breakfast_oversegment.jpg" target="_blank" rel="noopener"><img src="https://www.learnopencv.com/wp-content/uploads/2017/09/breakfast_oversegment-300x200.jpg" alt="Oversegmented Image" /></a>Oversegmented Image</p>
-<p>Selective Search algorithm takes these oversegments as initial input and performs the following steps</p>
-<ol type="1">
-<li>Add all bounding boxes corresponding to segmented parts to the list of regional proposals</li>
-<li>Group adjacent segments based on similarity</li>
-<li>Go to step 1</li>
-</ol>
-<p>At each iteration, larger segments are formed and added to the list of region proposals. Hence we create region proposals from smaller segments to larger segments in a bottom-up approach. This is what we mean by computing “hierarchical” segmentations using Felzenszwalb and Huttenlocher’s oversegments.</p>
+<h2 id="yolo">Yolo</h2>
+<p>v1 <a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="noopener">paper</a></p>
+<p>DarkNet + Multiscale Feature Map + Regression(bbox + label) + YoloLoss</p>
+<p>??? 忘记了 中间那一步是啥 但是应该是和FPN差不多的</p>
+<h2 id="retinanet">RetinaNet</h2>
+<p>ResNet + FPN + Regression(bbox + label) + FocalLoss(solve class imbalance problem)</p>
+<h2 id="fpn">FPN</h2>
+<p>Goal: Feature integration (combining strong-semantics and weak-semantics) FPN is a general purpose architecture: take a single-scale image as input, generating proportionally sized feature maps at multiple-levels in fully convolutional fashion. FPN is independent to the backbone</p>
+<ul>
+<li>Region Proposal Network</li>
+<li>Object detector</li>
+<li>Instance Segmentation</li>
+</ul>
+<p>FPN is constructed with</p>
+<ul>
+<li>Bottom-up pathway</li>
+<li>Top-down pathway</li>
+<li>Lateral connections</li>
+</ul>
+<h1 id="review">Review</h1>
+<h2 id="batchnorm">BatchNorm</h2>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/uploads/2017/09/hierarchical-segmentation-1.jpg" alt="Hierarchical Segmentation for region proposal generation at multiple scales" /><figcaption aria-hidden="true">Hierarchical Segmentation for region proposal generation at multiple scales</figcaption>
+<img src="https://pic2.zhimg.com/80/9ad70be49c408d464c71b8e9a006d141_720w.jpg?source=1940ef5c" alt="img" /><figcaption aria-hidden="true">img</figcaption>
 </figure>
-<p>This image shows the initial, middle and last step of the hierarchical segmentation process.</p>
-<h1 id="similarity">Similarity</h1>
-<p>Let’s dive deeper into how do we calculate the similarity between two regions.</p>
-<p>Selective Search uses 4 similarity measures based on color, texture, size and shape compatibility.</p>
-<h2 id="color-similarity">Color Similarity</h2>
-<p>A color histogram of 25 bins is calculated for each channel of the image and histograms for all channels are concatenated to obtain a color descriptor resulting into a 25×3 = 75-dimensional color descriptor.</p>
-<p>Color similarity of two regions is based on histogram intersection and can be calculated as:</p>
+<p>Pros: https://zhuanlan.zhihu.com/p/34879333</p>
+<ul>
+<li><strong>BN使得网络中每层输入数据的分布相对稳定，加速模型学习速度</strong></li>
+<li><strong>BN使得模型对网络中的参数不那么敏感，简化调参过程，使得网络学习更加稳定</strong></li>
+<li><strong>BN允许网络使用饱和性激活函数（例如sigmoid，tanh等），缓解梯度消失问题</strong></li>
+<li><strong>BN具有一定的正则化效果, generalization</strong></li>
+</ul>
+<h2 id="resnet">Resnet</h2>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3a99604c3b9fc1664b0ebd9b16aa190c_l3.png" alt="{color}(r_i, r_j) = {k=1}^n min(c^k_i, c^k_j)" /><figcaption aria-hidden="true"><em>{color}(r_i, r_j) = </em>{k=1}^n min(c^k_i, c^k_j)</figcaption>
+<img src="https://i.imgur.com/f26P0te.png" alt="image-20210929045534189" /><figcaption aria-hidden="true">image-20210929045534189</figcaption>
 </figure>
-<p><img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-34d855e06476464bdb18051a043565ab_l3.png" alt="c^k_i" /> is the histogram value for <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-19a1201960f1c720275a7fd8ab39ea27_l3.png" alt="k^{th}" /> bin in color descriptor</p>
-<h2 id="texture-similarity">Texture Similarity</h2>
-<p>Texture features are calculated by extracting Gaussian derivatives at 8 orientations for each channel. For each orientation and for each color channel, a 10-bin histogram is computed resulting into a 10x8x3 = 240-dimensional feature descriptor.</p>
-<p>Texture similarity of two regions is also calculated using histogram intersections.</p>
+<p>Why bottlenetck?</p>
+<ul>
+<li>less parameter</li>
+</ul>
+<p>Benefits</p>
+<ul>
+<li>Easy to learn residual funciton F</li>
+<li>Go deeper, cuz gradient can flow</li>
+<li>Short cut connect doesn’t introduce additional parameters</li>
+</ul>
+<h2 id="homography">homography</h2>
+<h2 id="optimizer">Optimizer</h2>
+<h3 id="sgd">SGD</h3>
+<p><span class="math display">\[w =w - dw\]</span></p>
+<h3 id="momentum">Momentum</h3>
+<p><span class="math inline">\(\begin{aligned} v_{t} &amp;=\beta v_{t-1}-\eta \frac{\partial L}{\partial w} \\ w &amp;=w+v_{t} \end{aligned}\)</span></p>
+<ul>
+<li>Gradient descent takes a step in the steepest direction (negative gradient)</li>
+<li>Intuitive idea: Imagine a ball rolling down loss surface, and use momentum to pass flat surfaces</li>
+</ul>
+<p>Idea: dynamic learning rate</p>
+<h3 id="adagrad">Adagrad</h3>
+<p>Idea: Use gradient statistics(curvature) to reduce learning rate across iterations Denominator: Sum up gradients over iterations</p>
+<p><span class="math inline">\(G_{i}=G_{i-1}+\left(\frac{\partial L}{\partial w_{i-1}}\right)^{2}\)</span></p>
+<p><span class="math inline">\(w_{i}=w_{i-1}-\frac{\alpha}{\sqrt{G_{i}+\epsilon}} \frac{\partial L}{\partial w_{i-1}}\)</span></p>
+<p>Directions with high curvature will have higher gradients, and learning rate will reduce</p>
+<p>Problem: gradient = 0 after a long time</p>
+<h3 id="rmsprop">RMSProp</h3>
+<p>Idea: keep a moving avg of <span class="math inline">\(G_i\)</span></p>
+<p><span class="math inline">\(G_{i}=\beta G_{i-1}+(1-\beta)\left(\frac{\partial L}{\partial w_{i-1}}\right)^{2}\)</span> <span class="math inline">\(w_{i}=w_{i-1}-\frac{\alpha}{\sqrt{G_{i}+\epsilon}} \frac{\partial L}{\partial w_{i-1}}\)</span></p>
+<p>Lr doesn’t saturate to be 0</p>
+<h3 id="adam">Adam</h3>
+<p>Solution: Time-varying bias correction Typically <span class="math inline">\(\boldsymbol{\beta}_{\mathbf{1}}=\mathbf{0 . 9}, \boldsymbol{\beta}_{\mathbf{2}}=\mathbf{0} . \mathbf{9 9 9}\)</span> So <span class="math inline">\(\widehat{v}_{\boldsymbol{i}}\)</span> will be small number divided by <span class="math inline">\((1-0.9=0.1)\)</span> resulting in more reasonable values (and <span class="math inline">\(\widehat{\boldsymbol{G}}_{i}\)</span> larger)</p>
+<p><span class="math inline">\(v_{i}=\boldsymbol{\beta}_{1} v_{i-1}+\left(1-\beta_{1}\right)\left(\frac{\partial L}{\partial w_{i-1}}\right)\)</span> <span class="math inline">\(G_{i}=\beta_{2} G_{i-1}+\left(1-\beta_{2}\right)\left(\frac{\partial L}{\partial w_{i-1}}\right)^{2}\)</span> <span class="math display">\[
+\begin{array}{c}\widehat{v}_{i}=\frac{v_{i}}{1-\beta_{1}^{t}} \quad \widehat{G_{i}}=\frac{G_{i}}{1-\beta_{2}^{t}} \\ w_{i}=w_{i-1}-\frac{\alpha \widehat{v}_{i}}{\sqrt{\widehat{G_{i}}+\epsilon}}\end{array}
+\]</span></p>
+<h2 id="vanishing-gradient">vanishing gradient</h2>
+<ul>
+<li>activation funciton - Sigmoid,tanh, saturation?</li>
+</ul>
+<h2 id="overfitting">overfitting</h2>
+<ul>
+<li>small data set</li>
+<li>model complexity too much</li>
+<li>Can be solved by regularization</li>
+</ul>
+<h2 id="data-normalization">data normalization</h2>
+<ul>
+<li>BatchNorm?</li>
+<li><span class="math inline">\(\frac{X - \mu}{\sigma^2}\)</span> normalize it to [0, 1], easy to train when doing gradient descent?</li>
+</ul>
+<h2 id="epipolar-constraints">epipolar constraints</h2>
+<h2 id="camera-calibration">camera calibration</h2>
+<p>DLT method: https://www.youtube.com/watch?v=oFZQykvEw14</p>
+<p>zhang method: using chessboard.</p>
+<p>棋盘上有<span class="math inline">\(\{(i, j)| 0 \leq i\leq n, 0 \leq j\leq m\}\)</span>, n x m个已知坐标点,</p>
+<p>就可以构建n x m个这样的方程组 <span class="math inline">\(x_{pix} = K_{3\times3}[R_{w}|t_{w}]_{3\times4}X_{w}\)</span></p>
+<p>where</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-169d419080f56b69f9645cd13ee5b0ac_l3.png" alt="s_{texture}(r_i, r_j) = _{k=1}^n min(t^k_i, t^k_j)" /><figcaption aria-hidden="true">s_{texture}(r_i, r_j) = _{k=1}^n min(t^k_i, t^k_j)</figcaption>
+<img src="https://i.imgur.com/ut434m3.png" alt="image-20210930093714548" /><figcaption aria-hidden="true">image-20210930093714548</figcaption>
 </figure>
-<p><img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-a9283008bc26743f78b7ac5644fa42d7_l3.png" alt="t^k_i" /> is the histogram value for <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-19a1201960f1c720275a7fd8ab39ea27_l3.png" alt="k^{th}" /> bin in texture descriptor</p>
-<h2 id="size-similarity">Size Similarity</h2>
-<p>Size similarity encourages smaller regions to merge early. It ensures that region proposals at all scales are formed at all parts of the image. If this similarity measure is not taken into consideration a single region will keep gobbling up all the smaller adjacent regions one by one and hence region proposals at multiple scales will be generated at this location only. Size similarity is defined as:</p>
+<p>考虑到camera skewness</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-ed6bd32a9661aa84228d1ca1c75f5d29_l3.png" alt="s_{size}(r_i, r_j) = 1 - " /><figcaption aria-hidden="true">s_{size}(r_i, r_j) = 1 - </figcaption>
+<img src="https://i.imgur.com/mNKX4Wy.png" alt="image-20210930084357024" /><figcaption aria-hidden="true">image-20210930084357024</figcaption>
 </figure>
-<p>where <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-301d49b3076ccce5448547f0910f2bc0_l3.png" alt="size(im)" /> is size of image in pixels.</p>
-<h2 id="shape-compatibility">Shape Compatibility</h2>
-<p>Shape compatibility measures how well two regions (<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" />) fit into each other. If <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> fits into <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" /> we would like to merge them in order to fill gaps and if they are not even touching each other they should not be merged.</p>
-<p>Shape compatibility is defined as:</p>
+<p>Intrinsic <span class="math inline">\(K\)</span>有5个para, Extrinsic <span class="math inline">\([R|t]\)</span> 有6个para, 一共11个para</p>
+<p>最少需要6个data pair来求解, 因为每个data pair相当于两个equation</p>
+<p>如果考虑distortion, 做法还是一样的 不过需要更多的data pair</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-9a3fdf638488b3c77915b9b83bf2f3e1_l3.png" alt="s_{fill}(r_i, r_j) = 1 - " /><figcaption aria-hidden="true">s_{fill}(r_i, r_j) = 1 - </figcaption>
+<img src="https://i.imgur.com/Ioj7xS1.png" alt="image-20210930091906857" /><figcaption aria-hidden="true">image-20210930091906857</figcaption>
 </figure>
-<p>where <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-2a6ada491e170016c4a765f114cfd18b_l3.png" alt="size(BB{ij})" /> is a bounding box around <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" />.</p>
-<h2 id="final-similarity">Final Similarity</h2>
-<p>The final similarity between two regions is defined as a linear combination of aforementioned 4 similarities.</p>
+<p>最后就是一个optimization problem, 优化一下参数</p>
+<p>每张照片有很多个点 就可以解出 K, [R|t]</p>
+<p>不同角度拍出来的照片[R|t]不一样 但是K一样, K可以一起优化</p>
+<h3 id="homogeneous-transformation-review">Homogeneous Transformation review</h3>
+<p>https://www.youtube.com/watch?v=kmceHOsxFDI</p>
+<h3 id="hand-eye-robot-system">Hand-Eye Robot System</h3>
+<p>Core Problem: <span class="math inline">\(AX = XB\)</span></p>
+<p>https://www.youtube.com/watch?v=xQ79ysnrzUk&amp;t=2s</p>
 <figure>
-<img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-67a3c5c3f45a9407ee513056c759f095_l3.png" alt="s(r_i, r_j) = a_1s_{color}(r_i, r_j) + a_2s_{texture}(r_i, r_j) + a_3s_{size}(r_i, r_j)+ a_4s_{fill}(r_i, r_j)" /><figcaption aria-hidden="true">s(r_i, r_j) = a_1s_{color}(r_i, r_j) + a_2s_{texture}(r_i, r_j) + a_3s_{size}(r_i, r_j)+ a_4s_{fill}(r_i, r_j)</figcaption>
+<img src="/Users/nansongyi/Library/Application%20Support/typora-user-images/image-20210929081630505.png" alt="image-20210929081630505" /><figcaption aria-hidden="true">image-20210929081630505</figcaption>
 </figure>
-<p>where <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-3fa563d6b892f311bf3e1c27ee15fe97_l3.png" alt="r_i" /> and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-58103e9010f6c91d7c4f4b38b28fe341_l3.png" alt="r_j" /> are two regions or segments in the image and <img src="https://www.learnopencv.com/wp-content/ql-cache/quicklatex.com-f58c2a1aace1c9f1cf8597ddef03ab60_l3.png" alt="a_i " /> denotes if the similarity measure is used or not.</p>
-<h1 id="results">Results</h1>
-<p>Selective Search implementation in OpenCV gives thousands of region proposals arranged in decreasing order of objectness. For clarity, we are sharing results with top 200-250 boxes drawn over the image. In general 1000-1200 proposals are good enough to get all the correct region proposals.</p>
-<figure>
-<img src="https://i.imgur.com/Ija12KT.png" alt="image-20200330120116871" /><figcaption aria-hidden="true">image-20200330120116871</figcaption>
-</figure>
-<h2 id="selective-search-python">Selective Search: Python</h2>
-<p>Let’s take a look on how can we use Selective Search based segmentation implemented in OpenCV.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">Usage:</span></span><br><span class="line"><span class="string">    ./ssearch.py input_image (f|q)</span></span><br><span class="line"><span class="string">    f=fast, q=quality</span></span><br><span class="line"><span class="string">Use "l" to display less rects, 'm' to display more rects, "q" to quit.</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># If image path and f/q is not passed as command</span></span><br><span class="line">    <span class="comment"># line arguments, quit and display help message</span></span><br><span class="line">    <span class="keyword">if</span> len(sys.argv) &lt; <span class="number">3</span>:</span><br><span class="line">        print(__doc__)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># speed-up using multithreads</span></span><br><span class="line">    cv2.setUseOptimized(<span class="literal">True</span>);</span><br><span class="line">    cv2.setNumThreads(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment"># read image</span></span><br><span class="line">    im = cv2.imread(sys.argv[<span class="number">1</span>])</span><br><span class="line">    <span class="comment"># resize image</span></span><br><span class="line">    newHeight = <span class="number">200</span></span><br><span class="line">    newWidth = int(im.shape[<span class="number">1</span>]*<span class="number">200</span>/im.shape[<span class="number">0</span>])</span><br><span class="line">    im = cv2.resize(im, (newWidth, newHeight))    </span><br><span class="line"></span><br><span class="line">    <span class="comment"># create Selective Search Segmentation Object using default parameters</span></span><br><span class="line">    ss = cv2.ximgproc.segmentation.createSelectiveSearchSegmentation()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># set input image on which we will run segmentation</span></span><br><span class="line">    ss.setBaseImage(im)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Switch to fast but low recall Selective Search method</span></span><br><span class="line">    <span class="keyword">if</span> (sys.argv[<span class="number">2</span>] == <span class="string">'f'</span>):</span><br><span class="line">        ss.switchToSelectiveSearchFast()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Switch to high recall but slow Selective Search method</span></span><br><span class="line">    <span class="keyword">elif</span> (sys.argv[<span class="number">2</span>] == <span class="string">'q'</span>):</span><br><span class="line">        ss.switchToSelectiveSearchQuality()</span><br><span class="line">    <span class="comment"># if argument is neither f nor q print help message</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(__doc__)</span><br><span class="line">        sys.exit(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># run selective search segmentation on input image</span></span><br><span class="line">    rects = ss.process()</span><br><span class="line">    print(<span class="string">'Total Number of Region Proposals: &#123;&#125;'</span>.format(len(rects)))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># number of region proposals to show</span></span><br><span class="line">    numShowRects = <span class="number">100</span></span><br><span class="line">    <span class="comment"># increment to increase/decrease total number</span></span><br><span class="line">    <span class="comment"># of reason proposals to be shown</span></span><br><span class="line">    increment = <span class="number">50</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># create a copy of original image</span></span><br><span class="line">        imOut = im.copy()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># itereate over all the region proposals</span></span><br><span class="line">        <span class="keyword">for</span> i, rect <span class="keyword">in</span> enumerate(rects):</span><br><span class="line">            <span class="comment"># draw rectangle for region proposal till numShowRects</span></span><br><span class="line">            <span class="keyword">if</span> (i &lt; numShowRects):</span><br><span class="line">                x, y, w, h = rect</span><br><span class="line">                cv2.rectangle(imOut, (x, y), (x+w, y+h), (<span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>), <span class="number">1</span>, cv2.LINE_AA)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># show output</span></span><br><span class="line">        cv2.imshow(<span class="string">"Output"</span>, imOut)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># record key press</span></span><br><span class="line">        k = cv2.waitKey(<span class="number">0</span>) &amp; <span class="number">0xFF</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># m is pressed</span></span><br><span class="line">        <span class="keyword">if</span> k == <span class="number">109</span>:</span><br><span class="line">            <span class="comment"># increase total number of rectangles to show by increment</span></span><br><span class="line">            numShowRects += increment</span><br><span class="line">        <span class="comment"># l is pressed</span></span><br><span class="line">        <span class="keyword">elif</span> k == <span class="number">108</span> <span class="keyword">and</span> numShowRects &gt; increment:</span><br><span class="line">            <span class="comment"># decrease total number of rectangles to show by increment</span></span><br><span class="line">            numShowRects -= increment</span><br><span class="line">        <span class="comment"># q is pressed</span></span><br><span class="line">        <span class="keyword">elif</span> k == <span class="number">113</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="comment"># close image show window</span></span><br><span class="line">    cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
+<h2 id="pooling-layer的back-propagation">pooling layer的back-propagation</h2>
+<ul>
+<li>similar logic with forward</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self, dout)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Backward pass of max pooling</span></span><br><span class="line"><span class="string">    :param dout: Upstream derivatives</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x, H_out, W_out = self.cache</span><br><span class="line"></span><br><span class="line">    stride, f = self.stride, self.kernel_size</span><br><span class="line">    N, C, H, W = x.shape</span><br><span class="line">    ConvSize = <span class="keyword">lambda</span> x: (x - f) // stride + <span class="number">1</span></span><br><span class="line">    H_out, W_out = ConvSize(H), ConvSize(W)</span><br><span class="line">    self.dx = np.zeros((N, C, H, W))        </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">for</span> h <span class="keyword">in</span> range(H_out):</span><br><span class="line">            h1, h2 = h * stride, h * stride + f</span><br><span class="line">            <span class="keyword">for</span> w <span class="keyword">in</span> range(W_out):</span><br><span class="line">                w1, w2 = w * stride, w * stride + f</span><br><span class="line">                <span class="keyword">for</span> c <span class="keyword">in</span> range(C):</span><br><span class="line">                    self.dx[i, c, h1: h2, w1: w2] += (x[i, c, h1: h2, w1: w2] &gt;= np.max(x[i, c, h1: h2, w1: w2])).astype(float) * dout[i, c, h, w]</span><br></pre></td></tr></table></figure>
+<h2 id="d-representation-mesh-point-cloud-voxel">3d representation （mesh, point cloud, voxel）</h2>
+<h2 id="stereorectificationdisparity">stereo，rectification，disparity</h2>
 <hr />
 <p>🌲<strong>Recap</strong></p>
 <p>Precision = <span class="math inline">\(\frac{tp}{tp + fp}\)</span></p>
