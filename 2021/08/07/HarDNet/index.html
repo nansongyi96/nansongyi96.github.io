@@ -55,7 +55,7 @@
 <meta property="og:image" content="https://i.imgur.com/UP8a1OS.png">
 <meta property="og:image" content="https://i.imgur.com/WGbHRho.png">
 <meta property="article:published_time" content="2021-08-07T22:16:56.000Z">
-<meta property="article:modified_time" content="2021-10-14T08:17:02.137Z">
+<meta property="article:modified_time" content="2021-10-14T15:47:45.802Z">
 <meta property="article:author" content="Nansong Yi">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.imgur.com/4ctG2vA.jpg">
@@ -251,7 +251,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-10-14 01:17:02" itemprop="dateModified" datetime="2021-10-14T01:17:02-07:00">2021-10-14</time>
+                <time title="Modified: 2021-10-14 08:47:45" itemprop="dateModified" datetime="2021-10-14T08:47:45-07:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -422,6 +422,8 @@
 </blockquote>
 <p>To make all these things clearer, let us go through an example.</p>
 <h2 id="map计算实例">mAP计算实例</h2>
+<p>precision recall 计算实例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># first build confusing matrix</span></span><br><span class="line"><span class="comment"># out是一个N x num_class的array</span></span><br><span class="line"><span class="comment"># target也是 N x 1的ground truth label</span></span><br><span class="line">preds = np.max(out, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">for</span> t, p <span class="keyword">in</span> zip(target, preds):</span><br><span class="line">    cm[t, p] += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># recall: TP / (TP + FN)    </span></span><br><span class="line">recall = cm / cm.sum(<span class="number">1</span>)</span><br><span class="line">per_cls_acc = recall.diag()</span><br><span class="line"><span class="comment"># precision: TP / (TP + FP)</span></span><br><span class="line">precision = cm / cm.sum(<span class="number">0</span>)</span><br><span class="line">per_cls_acc = precision / precision.diag()</span><br><span class="line"><span class="comment"># F1 : 2 / (1 / precision + 1 / recall)</span></span><br><span class="line">F1 = <span class="number">2</span> / (<span class="number">1</span> / precision + <span class="number">1</span> / recall)</span><br></pre></td></tr></table></figure>
 <p>下面这个blog把object detection里面的AP和mAP讲清楚了</p>
 <ul>
 <li>https://towardsdatascience.com/on-object-detection-metrics-with-worked-example-216f173ed31e</li>
