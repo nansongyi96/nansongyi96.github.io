@@ -28,16 +28,20 @@
 <meta property="og:description" content="##Camera 成像原理  Intrisic and Extrinsic Matrix  Object Detections  paper review + blog + algorithm reproduction SPPNet Selective Search R-CNN Fast-RCNN Faster-RCNN Yolo 1,2,3  Image Segementation&#x2F;Semant">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.imgur.com/8DMfFLF.jpg">
+<meta property="og:image" content="https://i.imgur.com/pR6SGJl.png">
+<meta property="og:image" content="https://i.imgur.com/OWSnzJ5.jpg">
+<meta property="og:image" content="https://i.imgur.com/z6Opp98.png">
 <meta property="og:image" content="https://pic2.zhimg.com/80/9ad70be49c408d464c71b8e9a006d141_720w.jpg?source=1940ef5c">
 <meta property="og:image" content="https://i.imgur.com/f26P0te.png">
 <meta property="og:image" content="https://i.imgur.com/ut434m3.png">
 <meta property="og:image" content="https://i.imgur.com/mNKX4Wy.png">
 <meta property="og:image" content="https://i.imgur.com/Ioj7xS1.png">
 <meta property="og:image" content="https://i.imgur.com/yQrQjC3.png">
+<meta property="og:image" content="https://thesong96.github.io/Users/nansongyi/Library/Application%20Support/typora-user-images/image-20211014003839110.png">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Precisionrecall.svg/350px-Precisionrecall.svg.png">
 <meta property="og:image" content="https://i.imgur.com/IlBW3bP.png">
 <meta property="article:published_time" content="2020-03-30T07:41:28.000Z">
-<meta property="article:modified_time" content="2021-09-30T16:39:14.141Z">
+<meta property="article:modified_time" content="2021-10-14T08:03:05.592Z">
 <meta property="article:author" content="Nansong Yi">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.imgur.com/8DMfFLF.jpg">
@@ -233,7 +237,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-09-30 09:39:14" itemprop="dateModified" datetime="2021-09-30T09:39:14-07:00">2021-09-30</time>
+                <time title="Modified: 2021-10-14 01:03:05" itemprop="dateModified" datetime="2021-10-14T01:03:05-07:00">2021-10-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -241,7 +245,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Computer-Vision/" itemprop="url" rel="index"><span itemprop="name">Computer Vision</span></a>
+                  <a href="/categories/Deep-Learning/" itemprop="url" rel="index"><span itemprop="name">Deep Learning</span></a>
                 </span>
             </span>
 
@@ -308,6 +312,17 @@
 <h2 id="rcnn">RCNN</h2>
 <h2 id="fast-rcnn">Fast-RCNN</h2>
 <h2 id="faster-rcnn">Faster-RCNN</h2>
+<h2 id="bceloss-derivation">BCEloss derivation:</h2>
+<p>Numerically stable version of the binary cross-entropy loss function.</p>
+<p>As per https://github.com/pytorch/pytorch/issues/751 See the TensorFlow docs for a derivation of this formula: https://www.tensorflow.org/api_docs/python/tf/nn/sigmoid_cross_entropy_with_logits</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tf.nn.sigmoid_cross_entropy_with_logits(</span><br><span class="line">    labels=<span class="literal">None</span>, logits=<span class="literal">None</span>, name=<span class="literal">None</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>Measures the probability error in discrete classification tasks in which each class is independent and not mutually exclusive. For instance, one could perform multilabel classification where a picture can contain both an elephant and a dog at the same time.</p>
+<p>For brevity, let <code>x = logits</code>, <code>z = labels</code>. The logistic loss is</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  z * -log(sigmoid(x)) + (<span class="number">1</span> - z) * -log(<span class="number">1</span> - sigmoid(x))</span><br><span class="line">= z * -log(<span class="number">1</span> / (<span class="number">1</span> + exp(-x))) + (<span class="number">1</span> - z) * -log(exp(-x) / (<span class="number">1</span> + exp(-x)))</span><br><span class="line">= z * log(<span class="number">1</span> + exp(-x)) + (<span class="number">1</span> - z) * (-log(exp(-x)) + log(<span class="number">1</span> + exp(-x)))</span><br><span class="line">= z * log(<span class="number">1</span> + exp(-x)) + (<span class="number">1</span> - z) * (x + log(<span class="number">1</span> + exp(-x))</span><br><span class="line">= (<span class="number">1</span> - z) * x + log(<span class="number">1</span> + exp(-x))</span><br><span class="line">= x - x * z + log(<span class="number">1</span> + exp(-x))</span><br></pre></td></tr></table></figure>
+<p>For x &lt; 0, to avoid overflow in exp(-x), we reformulate the above</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  x - x * z + log(<span class="number">1</span> + exp(-x))</span><br><span class="line">= log(exp(x)) - x * z + log(<span class="number">1</span> + exp(-x))</span><br><span class="line">= - x * z + log(<span class="number">1</span> + exp(x))</span><br></pre></td></tr></table></figure>
+<p>Hence, to ensure stability and avoid overflow, the implementation uses this equivalent formulation</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max(x, <span class="number">0</span>) - x * z + log(<span class="number">1</span> + exp(-abs(x)))</span><br></pre></td></tr></table></figure>
 <h1 id="one-stage-dense-prediciton">One Stage, Dense Prediciton</h1>
 <p>class imbalance problem:</p>
 <ol type="1">
@@ -317,9 +332,50 @@
 <h2 id="yolo">Yolo</h2>
 <p>v1 <a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="noopener">paper</a></p>
 <p>DarkNet + Multiscale Feature Map + Regression(bbox + label) + YoloLoss</p>
-<p>??? 忘记了 中间那一步是啥 但是应该是和FPN差不多的</p>
+<h3 id="hence-the-entire-process-of-detection-can-be-summed-up-as"><strong>Hence the entire process of detection can be summed up as:</strong></h3>
+<ul>
+<li><p>Dividing the image in a grid of S X S</p></li>
+<li><p>Detecting bounding box</p></li>
+<li><p>Calculating various scores(mentioned in the above image)</p>
+<figure>
+<img src="https://i.imgur.com/pR6SGJl.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure></li>
+<li><p>Depending on the threshold for confidence and IoU, select some boxes</p></li>
+<li><p><strong>Use Non-Max suppression</strong>: It helps us to avoid duplicate detections of the same object by rejecting multiple predictions for the same object. It takes a list of predicted boxes for the same image and accepts detection with maximum confidence.</p></li>
+<li><p>If the detection is over both IOU and Confidence threshold, It is taken as the final prediction</p></li>
+</ul>
+<h2 id="loss-and-evaluaton">Loss and Evaluaton</h2>
+<p><strong>mAP</strong>:</p>
+<p>Mean Average Precision is the metric used for YOLO’s evaluation which can be explored<a href="https://medium.com/@jonathan_hui/map-mean-average-precision-for-object-detection-45c121a31173" target="_blank" rel="noopener">here.</a></p>
+<p><strong>Loss function:</strong></p>
+<figure>
+<img src="https://i.imgur.com/OWSnzJ5.jpg" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>It has 4 major parts:</p>
+<ul>
+<li>Error in X, Y coordinates of the detected object</li>
+<li>Error in Height, width of the detected object(root is taken to give less weightage)</li>
+<li>Error in Classification. Lambda has been used to give more weightage to Confidence error.</li>
+<li>Error in confidence of object detected(similar to log loss)</li>
+</ul>
+<p><strong>YOLOv3:</strong></p>
+<ul>
+<li>106 layers neural network</li>
+<li>Detection on 3 scales for detecting objects of small to very large size</li>
+<li>9 anchor boxes taken; 3 per scale. Hence more bounding boxes are predicted than YOLO9000 &amp; YOLOv1</li>
+<li>MultiClass problem turned in MultiLabel problem</li>
+<li>Certain changes in the Error function.</li>
+<li>Quite good with small objects</li>
+</ul>
 <h2 id="retinanet">RetinaNet</h2>
-<p>ResNet + FPN + Regression(bbox + label) + FocalLoss(solve class imbalance problem)</p>
+<figure>
+<img src="https://i.imgur.com/z6Opp98.png" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<p>ResNet + FPN + classRegression(bbox + label)</p>
+<ul>
+<li>class subnet: It predicts the probability of an object being present at each spatial location for each anchor box and object class.</li>
+<li>box subnet: It's regresses the offset for the bounding boxes from the anchor boxes for each ground-truth object.</li>
+</ul>
 <h2 id="fpn">FPN</h2>
 <p>Goal: Feature integration (combining strong-semantics and weak-semantics) FPN is a general purpose architecture: take a single-scale image as input, generating proportionally sized feature maps at multiple-levels in fully convolutional fashion. FPN is independent to the backbone</p>
 <ul>
@@ -360,6 +416,10 @@
 <li>Short cut connect doesn’t introduce additional parameters</li>
 </ul>
 <h2 id="homography">homography</h2>
+<h2 id="initializer">Initializer</h2>
+<p>why: cuz Vanishing &amp; exploding gradients</p>
+<h3 id="he">He</h3>
+<h3 id="xavier">Xavier</h3>
 <h2 id="optimizer">Optimizer</h2>
 <h3 id="sgd">SGD</h3>
 <p><span class="math display">\[w =w - dw\]</span></p>
@@ -438,6 +498,11 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self, dout)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Backward pass of max pooling</span></span><br><span class="line"><span class="string">    :param dout: Upstream derivatives</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x, H_out, W_out = self.cache</span><br><span class="line"></span><br><span class="line">    stride, f = self.stride, self.kernel_size</span><br><span class="line">    N, C, H, W = x.shape</span><br><span class="line">    ConvSize = <span class="keyword">lambda</span> x: (x - f) // stride + <span class="number">1</span></span><br><span class="line">    H_out, W_out = ConvSize(H), ConvSize(W)</span><br><span class="line">    self.dx = np.zeros((N, C, H, W))        </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">for</span> h <span class="keyword">in</span> range(H_out):</span><br><span class="line">            h1, h2 = h * stride, h * stride + f</span><br><span class="line">            <span class="keyword">for</span> w <span class="keyword">in</span> range(W_out):</span><br><span class="line">                w1, w2 = w * stride, w * stride + f</span><br><span class="line">                <span class="keyword">for</span> c <span class="keyword">in</span> range(C):</span><br><span class="line">                    self.dx[i, c, h1: h2, w1: w2] += (x[i, c, h1: h2, w1: w2] &gt;= np.max(x[i, c, h1: h2, w1: w2])).astype(float) * dout[i, c, h, w]</span><br></pre></td></tr></table></figure>
 <h2 id="d-representation-mesh-point-cloud-voxel">3d representation （mesh, point cloud, voxel）</h2>
 <h2 id="stereorectificationdisparity">stereo，rectification，disparity</h2>
+<h2 id="rrt">RRT</h2>
+<p>https://gitee.com/HaiFengZhiJia/PythonRobotics/blob/master/PathPlanning/RRT/simple_rrt.py</p>
+<figure>
+<img src="/Users/nansongyi/Library/Application%20Support/typora-user-images/image-20211014003839110.png" alt="image-20211014003839110" /><figcaption aria-hidden="true">image-20211014003839110</figcaption>
+</figure>
 <hr />
 <p>🌲<strong>Recap</strong></p>
 <p>Precision = <span class="math inline">\(\frac{tp}{tp + fp}\)</span></p>
@@ -513,8 +578,8 @@
       <i class="fa fa-chevron-left"></i> Hello World
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/10/11/ECE-PMP-545-Mobile-Car/" rel="next" title="ECE PMP 545 - Mobile Car">
-      ECE PMP 545 - Mobile Car <i class="fa fa-chevron-right"></i>
+    <a href="/2020/10/30/VSCode-Tricks/" rel="next" title="VSCode Tricks">
+      VSCode Tricks <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -574,7 +639,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#object-detections"><span class="nav-number">1.</span> <span class="nav-text">Object Detections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#image-segementationsemantic-segmentation"><span class="nav-number">2.</span> <span class="nav-text">Image Segementation&#x2F;Semantic Segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metrics"><span class="nav-number">3.</span> <span class="nav-text">Metrics:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#accuracy"><span class="nav-number">3.1.</span> <span class="nav-text">Accuracy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision-recall"><span class="nav-number">3.2.</span> <span class="nav-text">Precision &amp; recall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision---recall-curve"><span class="nav-number">3.3.</span> <span class="nav-text">Precision - Recall Curve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#roc-curve-tpr---fpr"><span class="nav-number">3.4.</span> <span class="nav-text">ROC curve: TPR - FPR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iou"><span class="nav-number">3.5.</span> <span class="nav-text">IOU</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#two-stage-sparse-predition"><span class="nav-number"></span> <span class="nav-text">Two Stage, Sparse Predition</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rcnn"><span class="nav-number">1.</span> <span class="nav-text">RCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fast-rcnn"><span class="nav-number">2.</span> <span class="nav-text">Fast-RCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#faster-rcnn"><span class="nav-number">3.</span> <span class="nav-text">Faster-RCNN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-stage-dense-prediciton"><span class="nav-number"></span> <span class="nav-text">One Stage, Dense Prediciton</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#yolo"><span class="nav-number">1.</span> <span class="nav-text">Yolo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#retinanet"><span class="nav-number">2.</span> <span class="nav-text">RetinaNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fpn"><span class="nav-number">3.</span> <span class="nav-text">FPN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#review"><span class="nav-number"></span> <span class="nav-text">Review</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#batchnorm"><span class="nav-number">1.</span> <span class="nav-text">BatchNorm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#resnet"><span class="nav-number">2.</span> <span class="nav-text">Resnet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#homography"><span class="nav-number">3.</span> <span class="nav-text">homography</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizer"><span class="nav-number">4.</span> <span class="nav-text">Optimizer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sgd"><span class="nav-number">4.1.</span> <span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#momentum"><span class="nav-number">4.2.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adagrad"><span class="nav-number">4.3.</span> <span class="nav-text">Adagrad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rmsprop"><span class="nav-number">4.4.</span> <span class="nav-text">RMSProp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adam"><span class="nav-number">4.5.</span> <span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vanishing-gradient"><span class="nav-number">5.</span> <span class="nav-text">vanishing gradient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#overfitting"><span class="nav-number">6.</span> <span class="nav-text">overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-normalization"><span class="nav-number">7.</span> <span class="nav-text">data normalization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epipolar-constraints"><span class="nav-number">8.</span> <span class="nav-text">epipolar constraints</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#camera-calibration"><span class="nav-number">9.</span> <span class="nav-text">camera calibration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#homogeneous-transformation-review"><span class="nav-number">9.1.</span> <span class="nav-text">Homogeneous Transformation review</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hand-eye-robot-system"><span class="nav-number">9.2.</span> <span class="nav-text">Hand-Eye Robot System</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pooling-layer的back-propagation"><span class="nav-number">10.</span> <span class="nav-text">pooling layer的back-propagation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-representation-mesh-point-cloud-voxel"><span class="nav-number">11.</span> <span class="nav-text">3d representation （mesh, point cloud, voxel）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stereorectificationdisparity"><span class="nav-number">12.</span> <span class="nav-text">stereo，rectification，disparity</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#object-detections"><span class="nav-number">1.</span> <span class="nav-text">Object Detections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#image-segementationsemantic-segmentation"><span class="nav-number">2.</span> <span class="nav-text">Image Segementation&#x2F;Semantic Segmentation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metrics"><span class="nav-number">3.</span> <span class="nav-text">Metrics:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#accuracy"><span class="nav-number">3.1.</span> <span class="nav-text">Accuracy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision-recall"><span class="nav-number">3.2.</span> <span class="nav-text">Precision &amp; recall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#precision---recall-curve"><span class="nav-number">3.3.</span> <span class="nav-text">Precision - Recall Curve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#roc-curve-tpr---fpr"><span class="nav-number">3.4.</span> <span class="nav-text">ROC curve: TPR - FPR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iou"><span class="nav-number">3.5.</span> <span class="nav-text">IOU</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#two-stage-sparse-predition"><span class="nav-number"></span> <span class="nav-text">Two Stage, Sparse Predition</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#rcnn"><span class="nav-number">1.</span> <span class="nav-text">RCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fast-rcnn"><span class="nav-number">2.</span> <span class="nav-text">Fast-RCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#faster-rcnn"><span class="nav-number">3.</span> <span class="nav-text">Faster-RCNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bceloss-derivation"><span class="nav-number">4.</span> <span class="nav-text">BCEloss derivation:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-stage-dense-prediciton"><span class="nav-number"></span> <span class="nav-text">One Stage, Dense Prediciton</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#yolo"><span class="nav-number">1.</span> <span class="nav-text">Yolo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hence-the-entire-process-of-detection-can-be-summed-up-as"><span class="nav-number">1.1.</span> <span class="nav-text">Hence the entire process of detection can be summed up as:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loss-and-evaluaton"><span class="nav-number">2.</span> <span class="nav-text">Loss and Evaluaton</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#retinanet"><span class="nav-number">3.</span> <span class="nav-text">RetinaNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fpn"><span class="nav-number">4.</span> <span class="nav-text">FPN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#review"><span class="nav-number"></span> <span class="nav-text">Review</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#batchnorm"><span class="nav-number">1.</span> <span class="nav-text">BatchNorm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#resnet"><span class="nav-number">2.</span> <span class="nav-text">Resnet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#homography"><span class="nav-number">3.</span> <span class="nav-text">homography</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#initializer"><span class="nav-number">4.</span> <span class="nav-text">Initializer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#he"><span class="nav-number">4.1.</span> <span class="nav-text">He</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xavier"><span class="nav-number">4.2.</span> <span class="nav-text">Xavier</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimizer"><span class="nav-number">5.</span> <span class="nav-text">Optimizer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sgd"><span class="nav-number">5.1.</span> <span class="nav-text">SGD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#momentum"><span class="nav-number">5.2.</span> <span class="nav-text">Momentum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adagrad"><span class="nav-number">5.3.</span> <span class="nav-text">Adagrad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rmsprop"><span class="nav-number">5.4.</span> <span class="nav-text">RMSProp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#adam"><span class="nav-number">5.5.</span> <span class="nav-text">Adam</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vanishing-gradient"><span class="nav-number">6.</span> <span class="nav-text">vanishing gradient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#overfitting"><span class="nav-number">7.</span> <span class="nav-text">overfitting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-normalization"><span class="nav-number">8.</span> <span class="nav-text">data normalization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#epipolar-constraints"><span class="nav-number">9.</span> <span class="nav-text">epipolar constraints</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#camera-calibration"><span class="nav-number">10.</span> <span class="nav-text">camera calibration</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#homogeneous-transformation-review"><span class="nav-number">10.1.</span> <span class="nav-text">Homogeneous Transformation review</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hand-eye-robot-system"><span class="nav-number">10.2.</span> <span class="nav-text">Hand-Eye Robot System</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pooling-layer的back-propagation"><span class="nav-number">11.</span> <span class="nav-text">pooling layer的back-propagation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-representation-mesh-point-cloud-voxel"><span class="nav-number">12.</span> <span class="nav-text">3d representation （mesh, point cloud, voxel）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stereorectificationdisparity"><span class="nav-number">13.</span> <span class="nav-text">stereo，rectification，disparity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rrt"><span class="nav-number">14.</span> <span class="nav-text">RRT</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -590,20 +655,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

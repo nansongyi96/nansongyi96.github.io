@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/baby.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/baby.png">
+  <link rel="mask-icon" href="/images/baby.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Palatino:300,300italic,400,400italic,700,700italic|Monaco:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"thesong96.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="827. Making A Large Island https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;making-a-large-island&#x2F; 1234567891011121314151617181920212223242526272829303132class Solution(object):    def largestIsland(self, grid):">
+<meta property="og:type" content="article">
+<meta property="og:title" content="coding interview">
+<meta property="og:url" content="https://thesong96.github.io/2021/10/13/coding-interview/index.html">
+<meta property="og:site_name" content="TheSong">
+<meta property="og:description" content="827. Making A Large Island https:&#x2F;&#x2F;leetcode.com&#x2F;problems&#x2F;making-a-large-island&#x2F; 1234567891011121314151617181920212223242526272829303132class Solution(object):    def largestIsland(self, grid):">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.imgur.com/Ud1oI3V.jpg">
+<meta property="article:published_time" content="2021-10-14T02:43:53.000Z">
+<meta property="article:modified_time" content="2021-10-14T08:05:06.105Z">
+<meta property="article:author" content="Nansong Yi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/Ud1oI3V.jpg">
+
+<link rel="canonical" href="https://thesong96.github.io/2021/10/13/coding-interview/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>coding interview | TheSong</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/rss.xml" title="TheSong" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">TheSong</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://thesong96.github.io/2021/10/13/coding-interview/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/baby.png">
+      <meta itemprop="name" content="Nansong Yi">
+      <meta itemprop="description" content="TheSong is named after IG.TheShy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="TheSong">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          coding interview
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-10-13 19:43:53" itemprop="dateCreated datePublished" datetime="2021-10-13T19:43:53-07:00">2021-10-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-10-14 01:05:06" itemprop="dateModified" datetime="2021-10-14T01:05:06-07:00">2021-10-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/interview/" itemprop="url" rel="index"><span itemprop="name">interview</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="making-a-large-island">827. Making A Large Island</h2>
+<p>https://leetcode.com/problems/making-a-large-island/</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">largestIsland</span><span class="params">(self, grid)</span>:</span></span><br><span class="line">        N = len(grid)</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">neighbors</span><span class="params">(r, c)</span>:</span></span><br><span class="line">            <span class="keyword">for</span> nr, nc <span class="keyword">in</span> ((r<span class="number">-1</span>, c), (r+<span class="number">1</span>, c), (r, c<span class="number">-1</span>), (r, c+<span class="number">1</span>)):</span><br><span class="line">                <span class="keyword">if</span> <span class="number">0</span> &lt;= nr &lt; N <span class="keyword">and</span> <span class="number">0</span> &lt;= nc &lt; N:</span><br><span class="line">                    <span class="keyword">yield</span> nr, nc</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span><span class="params">(r, c, index)</span>:</span></span><br><span class="line">            ans = <span class="number">1</span></span><br><span class="line">            grid[r][c] = index</span><br><span class="line">            <span class="keyword">for</span> nr, nc <span class="keyword">in</span> neighbors(r, c):</span><br><span class="line">                <span class="keyword">if</span> grid[nr][nc] == <span class="number">1</span>:</span><br><span class="line">                    ans += dfs(nr, nc, index)</span><br><span class="line">            <span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line">        area = &#123;&#125;</span><br><span class="line">        index = <span class="number">2</span></span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> range(N):</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> range(N):</span><br><span class="line">                <span class="keyword">if</span> grid[r][c] == <span class="number">1</span>:</span><br><span class="line">                    area[index] = dfs(r, c, index)</span><br><span class="line">                    index += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        ans = max(area.values() <span class="keyword">or</span> [<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> range(N):</span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> range(N):</span><br><span class="line">                <span class="keyword">if</span> grid[r][c] == <span class="number">0</span>:</span><br><span class="line">                    seen = &#123;grid[nr][nc] <span class="keyword">for</span> nr, nc <span class="keyword">in</span> neighbors(r, c) <span class="keyword">if</span> grid[nr][nc] &gt; <span class="number">1</span>&#125;</span><br><span class="line">                    ans = max(ans, <span class="number">1</span> + sum(area[i] <span class="keyword">for</span> i <span class="keyword">in</span> seen))</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+<h2 id="shortest-distance-from-all-buildings">317. Shortest Distance from All Buildings</h2>
+<p>https://leetcode.com/problems/shortest-distance-from-all-buildings/</p>
+<figure>
+<img src="https://i.imgur.com/Ud1oI3V.jpg" alt="img" /><figcaption aria-hidden="true">img</figcaption>
+</figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">public:</span><br><span class="line">    int shortestDistance(vector&lt;vector&lt;int&gt;&gt;&amp; grid) &#123;</span><br><span class="line">        // Next four directions.</span><br><span class="line">        int dirs[<span class="number">4</span>][<span class="number">2</span>] = &#123;&#123;<span class="number">1</span>, <span class="number">0</span>&#125;, &#123;<span class="number">-1</span>, <span class="number">0</span>&#125;, &#123;<span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">0</span>, <span class="number">-1</span>&#125;&#125;;</span><br><span class="line">        </span><br><span class="line">        int rows = grid.size();</span><br><span class="line">        int cols = grid[<span class="number">0</span>].size();</span><br><span class="line">        </span><br><span class="line">        // Total Mtrix to store total distance sum <span class="keyword">for</span> each empty cell.</span><br><span class="line">        vector&lt;vector&lt;int&gt;&gt; total(rows, vector&lt;int&gt; (cols, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        int emptyLandValue = <span class="number">0</span>;</span><br><span class="line">        int minDist = INT_MAX;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (int row = <span class="number">0</span>; row &lt; rows; ++row) &#123;</span><br><span class="line">            <span class="keyword">for</span> (int col = <span class="number">0</span>; col &lt; cols; ++col) &#123;</span><br><span class="line"></span><br><span class="line">                // Start a bfs <span class="keyword">from</span> each house.</span><br><span class="line">                <span class="keyword">if</span> (grid[row][col] == <span class="number">1</span>) &#123;</span><br><span class="line">                    minDist = INT_MAX;</span><br><span class="line"></span><br><span class="line">                    // Use a queue to perform a BFS, starting <span class="keyword">from</span> the cell located at (row, col).</span><br><span class="line">                    queue&lt;pair&lt;int, int&gt;&gt; q;</span><br><span class="line">                    q.push(&#123; row, col &#125;);</span><br><span class="line">                    </span><br><span class="line">                    int steps = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">while</span> (!q.empty()) &#123;</span><br><span class="line">                        steps++;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">for</span> (int level = q.size(); level &gt; <span class="number">0</span>; --level) &#123;</span><br><span class="line">                            auto curr = q.front();</span><br><span class="line">                            q.pop();</span><br><span class="line"></span><br><span class="line">                            <span class="keyword">for</span> (auto&amp; dir : dirs) &#123;</span><br><span class="line">                                int nextRow = curr.first + dir[<span class="number">0</span>];</span><br><span class="line">                                int nextCol = curr.second + dir[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">                                // For each cell <span class="keyword">with</span> the value equal to empty land value</span><br><span class="line">                                // add distance <span class="keyword">and</span> decrement the cell value by <span class="number">1.</span></span><br><span class="line">                                <span class="keyword">if</span> (nextRow &gt;= <span class="number">0</span> &amp;&amp; nextRow &lt; rows &amp;&amp;</span><br><span class="line">                                    nextCol &gt;= <span class="number">0</span> &amp;&amp; nextCol &lt; cols &amp;&amp;</span><br><span class="line">                                    grid[nextRow][nextCol] == emptyLandValue) &#123;</span><br><span class="line">                                    grid[nextRow][nextCol]--;</span><br><span class="line">                                    total[nextRow][nextCol] += steps;</span><br><span class="line"></span><br><span class="line">                                    q.push(&#123; nextRow, nextCol &#125;);</span><br><span class="line">                                    minDist = min(minDist, total[nextRow][nextCol]);</span><br><span class="line">                                &#125;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    // Decrement empty land value to be searched <span class="keyword">in</span> next iteration.</span><br><span class="line">                    emptyLandValue--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return minDist == INT_MAX ? -1 : minDist;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="alien-dictionary">269. Alien Dictionary</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict, Counter, deque</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">alienOrder</span><span class="params">(self, words: List[str])</span> -&gt; str:</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Step 0: create data structures + the in_degree of each unique letter to 0.</span></span><br><span class="line">        adj_list = defaultdict(set)</span><br><span class="line">        in_degree = Counter(&#123;c : <span class="number">0</span> <span class="keyword">for</span> word <span class="keyword">in</span> words <span class="keyword">for</span> c <span class="keyword">in</span> word&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Step 1: We need to populate adj_list and in_degree.</span></span><br><span class="line">        <span class="comment"># For each pair of adjacent words...</span></span><br><span class="line">        <span class="keyword">for</span> first_word, second_word <span class="keyword">in</span> zip(words, words[<span class="number">1</span>:]):</span><br><span class="line">            <span class="keyword">for</span> c, d <span class="keyword">in</span> zip(first_word, second_word):</span><br><span class="line">                <span class="keyword">if</span> c != d:</span><br><span class="line">                    <span class="keyword">if</span> d <span class="keyword">not</span> <span class="keyword">in</span> adj_list[c]:</span><br><span class="line">                        adj_list[c].add(d)</span><br><span class="line">                        in_degree[d] += <span class="number">1</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>: <span class="comment"># Check that second word isn't a prefix of first word.</span></span><br><span class="line">                <span class="keyword">if</span> len(second_word) &lt; len(first_word): <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Step 2: We need to repeatedly pick off nodes with an indegree of 0.</span></span><br><span class="line">        output = []</span><br><span class="line">        queue = deque([c <span class="keyword">for</span> c <span class="keyword">in</span> in_degree <span class="keyword">if</span> in_degree[c] == <span class="number">0</span>])</span><br><span class="line">        <span class="keyword">while</span> queue:</span><br><span class="line">            c = queue.popleft()</span><br><span class="line">            output.append(c)</span><br><span class="line">            <span class="keyword">for</span> d <span class="keyword">in</span> adj_list[c]:</span><br><span class="line">                in_degree[d] -= <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> in_degree[d] == <span class="number">0</span>:</span><br><span class="line">                    queue.append(d)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># If not all letters are in output, that means there was a cycle and so</span></span><br><span class="line">        <span class="comment"># no valid ordering. Return "" as per the problem description.</span></span><br><span class="line">        <span class="keyword">if</span> len(output) &lt; len(in_degree):</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line">        <span class="comment"># Otherwise, convert the ordering we found into a string and return it.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>.join(output)</span><br></pre></td></tr></table></figure>
+<h2 id="binary-tree-maximum-path-sum">124. Binary Tree Maximum Path Sum</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, val=0, left=None, right=None):</span></span><br><span class="line"><span class="comment">#         self.val = val</span></span><br><span class="line"><span class="comment">#         self.left = left</span></span><br><span class="line"><span class="comment">#         self.right = right</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxPathSum</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type root: TreeNode</span></span><br><span class="line"><span class="string">        :rtype: int</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">max_gain</span><span class="params">(node)</span>:</span></span><br><span class="line">            <span class="keyword">nonlocal</span> max_sum</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> node:</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># max sum on the left and right sub-trees of node</span></span><br><span class="line">            left_gain = max(max_gain(node.left), <span class="number">0</span>)</span><br><span class="line">            right_gain = max(max_gain(node.right), <span class="number">0</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># the price to start a new path where `node` is a highest node</span></span><br><span class="line">            price_newpath = node.val + left_gain + right_gain</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># update max_sum if it's better to start a new path</span></span><br><span class="line">            max_sum = max(max_sum, price_newpath)</span><br><span class="line">        </span><br><span class="line">            <span class="comment"># for recursion :</span></span><br><span class="line">            <span class="comment"># return the max gain if continue the same path</span></span><br><span class="line">            <span class="keyword">return</span> node.val + max(left_gain, right_gain)</span><br><span class="line">        max_sum = float(<span class="string">'-inf'</span>)</span><br><span class="line">        max_gain(root)</span><br><span class="line">        <span class="keyword">return</span> max_sum</span><br></pre></td></tr></table></figure>
+<h2 id="course-schedule-ii">210. Course Schedule II</h2>
+<p>https://leetcode.com/problems/course-schedule-ii/</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict, deque</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">findOrder</span><span class="params">(self, numCourses, prerequisites)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Prepare the graph</span></span><br><span class="line">        adj_list = defaultdict(list)</span><br><span class="line">        indegree = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> dest, src <span class="keyword">in</span> prerequisites:</span><br><span class="line">            adj_list[src].append(dest)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Record each node's in-degree</span></span><br><span class="line">            indegree[dest] = indegree.get(dest, <span class="number">0</span>) + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Queue for maintainig list of nodes that have 0 in-degree</span></span><br><span class="line">        zero_indegree_queue = deque([k <span class="keyword">for</span> k <span class="keyword">in</span> range(numCourses) <span class="keyword">if</span> k <span class="keyword">not</span> <span class="keyword">in</span> indegree])</span><br><span class="line"></span><br><span class="line">        topological_sorted_order = []</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Until there are nodes in the Q</span></span><br><span class="line">        <span class="keyword">while</span> zero_indegree_queue:</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Pop one node with 0 in-degree</span></span><br><span class="line">            vertex = zero_indegree_queue.popleft()</span><br><span class="line">            topological_sorted_order.append(vertex)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Reduce in-degree for all the neighbors</span></span><br><span class="line">            <span class="keyword">if</span> vertex <span class="keyword">in</span> adj_list:</span><br><span class="line">                <span class="keyword">for</span> neighbor <span class="keyword">in</span> adj_list[vertex]:</span><br><span class="line">                    indegree[neighbor] -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># Add neighbor to Q if in-degree becomes 0</span></span><br><span class="line">                    <span class="keyword">if</span> indegree[neighbor] == <span class="number">0</span>:</span><br><span class="line">                        zero_indegree_queue.append(neighbor)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> topological_sorted_order <span class="keyword">if</span> len(topological_sorted_order) == numCourses <span class="keyword">else</span> []</span><br></pre></td></tr></table></figure>
+<h2 id="word-break-ii">140. Word Break II</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wordBreak</span><span class="params">(self, s: str, wordDict: List[str])</span> -&gt; List[str]:</span></span><br><span class="line">        <span class="comment"># quick check on the characters,</span></span><br><span class="line">        <span class="comment">#   otherwise it would exceed the time limit for certain test cases.</span></span><br><span class="line">        <span class="keyword">if</span> set(Counter(s).keys()) &gt; set(Counter(<span class="string">""</span>.join(wordDict)).keys()):</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line"></span><br><span class="line">        wordSet = set(wordDict)</span><br><span class="line"></span><br><span class="line">        dp = [[]] * (len(s)+<span class="number">1</span>)</span><br><span class="line">        dp[<span class="number">0</span>] = [<span class="string">""</span>]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> endIndex <span class="keyword">in</span> range(<span class="number">1</span>, len(s)+<span class="number">1</span>):</span><br><span class="line">            sublist = []</span><br><span class="line">            <span class="comment"># fill up the values in the dp array.</span></span><br><span class="line">            <span class="keyword">for</span> startIndex <span class="keyword">in</span> range(<span class="number">0</span>, endIndex):</span><br><span class="line">                word = s[startIndex:endIndex]</span><br><span class="line">                <span class="keyword">if</span> word <span class="keyword">in</span> wordSet:</span><br><span class="line">                    <span class="keyword">for</span> subsentence <span class="keyword">in</span> dp[startIndex]:</span><br><span class="line">                        sublist.append((subsentence + <span class="string">' '</span> + word).strip())</span><br><span class="line"></span><br><span class="line">            dp[endIndex] = sublist</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> dp[len(s)]</span><br></pre></td></tr></table></figure>
+<h2 id="subarray-sum-equals-k">560. Subarray Sum Equals K</h2>
+<ul>
+<li>和two sum 的idea有点像</li>
+</ul>
+<p>https://leetcode.com/problems/subarray-sum-equals-k/</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">subarraySum</span><span class="params">(self, nums, k)</span>:</span></span><br><span class="line">        count = <span class="number">0</span></span><br><span class="line">        sums = <span class="number">0</span></span><br><span class="line">        d = dict()</span><br><span class="line">        d[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            sums += nums[i]</span><br><span class="line">            count += d.get(sums-k,<span class="number">0</span>)</span><br><span class="line">            d[sums] = d.get(sums,<span class="number">0</span>) + <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span>(count)</span><br></pre></td></tr></table></figure>
+<h2 id="serialize-and-deserialize-binary-tree">297. Serialize and Deserialize Binary Tree</h2>
+<p>https://leetcode.com/problems/serialize-and-deserialize-binary-tree/</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"># class TreeNode(object):</span></span><br><span class="line"><span class="comment">#     def __init__(self, x):</span></span><br><span class="line"><span class="comment">#         self.val = x</span></span><br><span class="line"><span class="comment">#         self.left = None</span></span><br><span class="line"><span class="comment">#         self.right = None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Codec</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">serialize</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        <span class="string">""" Encodes a tree to a single string.</span></span><br><span class="line"><span class="string">        :type root: TreeNode</span></span><br><span class="line"><span class="string">        :rtype: str</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">rserialize</span><span class="params">(root, string)</span>:</span></span><br><span class="line">            <span class="string">""" a recursive helper function for the serialize() function."""</span></span><br><span class="line">            <span class="comment"># check base case</span></span><br><span class="line">            <span class="keyword">if</span> root <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                string += <span class="string">'None,'</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                string += str(root.val) + <span class="string">','</span></span><br><span class="line">                string = rserialize(root.left, string)</span><br><span class="line">                string = rserialize(root.right, string)</span><br><span class="line">            <span class="keyword">return</span> string</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> rserialize(root, <span class="string">''</span>)</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">deserialize</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        <span class="string">"""Decodes your encoded data to tree.</span></span><br><span class="line"><span class="string">        :type data: str</span></span><br><span class="line"><span class="string">        :rtype: TreeNode</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">rdeserialize</span><span class="params">(l)</span>:</span></span><br><span class="line">            <span class="string">""" a recursive helper function for deserialization."""</span></span><br><span class="line">            <span class="keyword">if</span> l[<span class="number">0</span>] == <span class="string">'None'</span>:</span><br><span class="line">                l.pop(<span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">                </span><br><span class="line">            root = TreeNode(l[<span class="number">0</span>])</span><br><span class="line">            l.pop(<span class="number">0</span>)</span><br><span class="line">            root.left = rdeserialize(l)</span><br><span class="line">            root.right = rdeserialize(l)</span><br><span class="line">            <span class="keyword">return</span> root</span><br><span class="line"></span><br><span class="line">        data_list = data.split(<span class="string">','</span>)</span><br><span class="line">        root = rdeserialize(data_list)</span><br><span class="line">        <span class="keyword">return</span> root</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line"><span class="comment"># Your Codec object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"># ser = Codec()</span></span><br><span class="line"><span class="comment"># deser = Codec()</span></span><br><span class="line"><span class="comment"># ans = deser.deserialize(ser.serialize(root))</span></span><br></pre></td></tr></table></figure>
+<h2 id="k-closest-points-to-origin">973. K Closest Points to Origin</h2>
+<p>https://leetcode.com/problems/k-closest-points-to-origin/</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">kClosest</span><span class="params">(self, points: List[List[int]], k: int)</span> -&gt; List[List[int]]:</span></span><br><span class="line">        minHeap = []</span><br><span class="line">        <span class="keyword">for</span> x, y <span class="keyword">in</span> points:</span><br><span class="line">            minHeap.append([x*x + y*y, x, y])</span><br><span class="line">            </span><br><span class="line">        heapify(minHeap)</span><br><span class="line">        ans = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(k):</span><br><span class="line">            _, x, y = heappop(minHeap)</span><br><span class="line">            ans.append([x, y])</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+<h2 id="cnn">CNN</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Conv2D</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    An implementation of the convolutional layer. We convolve the input with out_channels different filters</span></span><br><span class="line"><span class="string">    and each filter spans all channels in the input.</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels, out_channels, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :param in_channels: the number of channels of the input data</span></span><br><span class="line"><span class="string">        :param out_channels: the number of channels of the output(aka the number of filters applied in the layer)</span></span><br><span class="line"><span class="string">        :param kernel_size: the specified size of the kernel(both height and width)</span></span><br><span class="line"><span class="string">        :param stride: the stride of convolution</span></span><br><span class="line"><span class="string">        :param padding: the size of padding. Pad zeros to the input with padding size.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.in_channels = in_channels</span><br><span class="line">        self.out_channels = out_channels</span><br><span class="line">        self.kernel_size = kernel_size</span><br><span class="line">        self.stride = stride</span><br><span class="line">        self.padding = padding</span><br><span class="line"></span><br><span class="line">        self.cache = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">        self._init_weights()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_init_weights</span><span class="params">(self)</span>:</span></span><br><span class="line">        np.random.seed(<span class="number">1024</span>)</span><br><span class="line">        self.weight = <span class="number">1e-3</span> * np.random.randn(self.out_channels, self.in_channels, self.kernel_size, self.kernel_size)</span><br><span class="line">        self.bias = np.zeros(self.out_channels)</span><br><span class="line"></span><br><span class="line">        self.dx = <span class="literal">None</span></span><br><span class="line">        self.dw = <span class="literal">None</span></span><br><span class="line">        self.db = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        The forward pass of convolution</span></span><br><span class="line"><span class="string">        :param x: input data of shape (N, C, H, W)</span></span><br><span class="line"><span class="string">        :return: output data of shape (N, self.out_channels, H', W') where H' and W' are determined by the convolution</span></span><br><span class="line"><span class="string">                 parameters. Save necessary variables in self.cache for backward pass</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        out = <span class="literal">None</span></span><br><span class="line">        <span class="comment">#############################################################################</span></span><br><span class="line">        <span class="comment"># <span class="doctag">TODO:</span> Implement the convolution forward pass.                             #</span></span><br><span class="line">        <span class="comment"># Hint: 1) You may use np.pad for padding.                                  #</span></span><br><span class="line">        <span class="comment">#       2) You may implement the convolution with loops                     #</span></span><br><span class="line">        <span class="comment">#############################################################################</span></span><br><span class="line">        stride, f, p, C= self.stride, self.kernel_size, self.padding, self.out_channels</span><br><span class="line">        ConvSize = <span class="keyword">lambda</span> x: (x + p * <span class="number">2</span> - f) // stride + <span class="number">1</span></span><br><span class="line">        N, _, H, W = x.shape</span><br><span class="line">        H_out, W_out = ConvSize(H), ConvSize(W)</span><br><span class="line">        out = np.zeros((N, C, H_out, W_out))</span><br><span class="line">        x_pad = np.pad(x, ((<span class="number">0</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">0</span>), (p, p), (p, p)))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(N):</span><br><span class="line">            <span class="keyword">for</span> h <span class="keyword">in</span> range(H_out):</span><br><span class="line">                h1, h2 = h * stride, h * stride + f</span><br><span class="line">                <span class="keyword">for</span> w <span class="keyword">in</span> range(W_out):</span><br><span class="line">                    w1, w2 = w * stride, w * stride + f</span><br><span class="line">                    <span class="keyword">for</span> c <span class="keyword">in</span> range(C):</span><br><span class="line">                        out[i, c, h, w] = np.sum(self.weight[c, ...] * x_pad[i, :, h1: h2, w1: w2]) + self.bias[c]</span><br><span class="line"></span><br><span class="line">        <span class="comment">#############################################################################</span></span><br><span class="line">        <span class="comment">#                              END OF YOUR CODE                             #</span></span><br><span class="line">        <span class="comment">#############################################################################</span></span><br><span class="line">        self.cache = x</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backward</span><span class="params">(self, dout)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        The backward pass of convolution</span></span><br><span class="line"><span class="string">        :param dout: upstream gradients</span></span><br><span class="line"><span class="string">        :return: nothing but dx, dw, and db of self should be updated</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        x = self.cache</span><br><span class="line">        <span class="comment">#############################################################################</span></span><br><span class="line">        <span class="comment"># <span class="doctag">TODO:</span> Implement the convolution backward pass.                            #</span></span><br><span class="line">        <span class="comment"># Hint:                                                                     #</span></span><br><span class="line">        <span class="comment">#       1) You may implement the convolution with loops                     #</span></span><br><span class="line">        <span class="comment">#       2) don't forget padding when computing dx                           #</span></span><br><span class="line">        <span class="comment">#############################################################################</span></span><br><span class="line">        stride, f, p, C = self.stride, self.kernel_size, self.padding, self.out_channels</span><br><span class="line">        N, C_in, H, W = x.shape</span><br><span class="line">        ConvSize = <span class="keyword">lambda</span> x: (x + p * <span class="number">2</span> - f) // stride + <span class="number">1</span></span><br><span class="line">        x_pad = np.pad(x, ((<span class="number">0</span>, <span class="number">0</span>), (<span class="number">0</span>, <span class="number">0</span>), (p, p), (p, p)))</span><br><span class="line">        H_out, W_out = ConvSize(H), ConvSize(W)</span><br><span class="line">        self.dx = np.zeros_like(x_pad)</span><br><span class="line">        self.dw = np.zeros_like(self.weight)</span><br><span class="line">        self.db = np.zeros_like(self.bias)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(N):</span><br><span class="line">            <span class="keyword">for</span> h <span class="keyword">in</span> range(H_out):</span><br><span class="line">                h1, h2 = h * stride, h * stride + f</span><br><span class="line">                <span class="keyword">for</span> w <span class="keyword">in</span> range(W_out):</span><br><span class="line">                    w1, w2 = w * stride, w * stride + f</span><br><span class="line">                    <span class="keyword">for</span> c <span class="keyword">in</span> range(C):</span><br><span class="line">                        <span class="comment"># print(f"i = &#123;i&#125;, c = &#123;c&#125;, h = &#123;h&#125;, w = &#123;w&#125;")</span></span><br><span class="line">                        self.dx[i, :, h1: h2, w1: w2] += self.weight[c, ...] * dout[i, c, h, w]</span><br><span class="line">                        self.dw[c, ...] += x_pad[i, :, h1: h2, w1: w2] * dout[i, c, h, w]</span><br><span class="line">                        self.db[c] += dout[i, c, h, w]</span><br><span class="line">        self.dx = self.dx[:, :, p: -p, p: -p]</span><br><span class="line">        <span class="comment">#############################################################################</span></span><br><span class="line">        <span class="comment">#                              END OF YOUR CODE                             #</span></span><br><span class="line">        <span class="comment">#############################################################################</span></span><br></pre></td></tr></table></figure>
+<p>Logistic Regression</p>
+<p>https://towardsdatascience.com/logistic-regression-detailed-overview-46c4da4303bc</p>
+<h2 id="trapping-rain-water">42 Trapping Rain Water</h2>
+<p>https://leetcode.com/problems/trapping-rain-water/</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">trap</span><span class="params">(self, height: List[int])</span> -&gt; int:</span></span><br><span class="line">        stack = []</span><br><span class="line">        water = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i, e <span class="keyword">in</span> enumerate(height):</span><br><span class="line">            <span class="comment"># we need to see if we can form a container</span></span><br><span class="line">            <span class="keyword">while</span> stack <span class="keyword">and</span> e &gt;= stack[<span class="number">-1</span>][<span class="number">0</span>]:</span><br><span class="line">                popped, _ = stack.pop()</span><br><span class="line">                <span class="comment"># is it a container though? we have a left border?</span></span><br><span class="line">                <span class="keyword">if</span> stack:</span><br><span class="line">                    left_border, j = stack[<span class="number">-1</span>]</span><br><span class="line">                    <span class="comment"># we compute the water</span></span><br><span class="line">                    water += min(left_border-popped, e-popped)*(i-j<span class="number">-1</span>)</span><br><span class="line">            stack.append((e,i))</span><br><span class="line">        <span class="keyword">return</span> water</span><br></pre></td></tr></table></figure>
+<h2 id="huawei">HUAWEI</h2>
+<ul>
+<li><p>给一个grid world, 0: 可以走, 1: 不可以走, 给定start, end</p></li>
+<li><p>找到最短路径 以及多少条路</p></li>
+<li><p>思路 BFS 记得存每个level的长度 一个level就是一步，dist就是在这里++</p></li>
+<li><p>和topology sort有点像</p></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">m, n = data[<span class="number">0</span>]</span><br><span class="line">start, end = tuple(data[<span class="number">1</span>]), tuple(data[<span class="number">2</span>])</span><br><span class="line">dp = [[<span class="number">0</span>] * n <span class="keyword">for</span> _ <span class="keyword">in</span> range(m)]</span><br><span class="line">dp[start[<span class="number">0</span>]][start[<span class="number">1</span>]] = <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> x, y <span class="keyword">in</span> lakes:</span><br><span class="line">    dp[x][y] = <span class="number">-1</span></span><br><span class="line">q = []</span><br><span class="line">q.append(start)</span><br><span class="line">minDist = <span class="number">0</span></span><br><span class="line">neighbors = [[<span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">-1</span>], [<span class="number">1</span>, <span class="number">0</span>], [<span class="number">-1</span>, <span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">valid</span><span class="params">(state)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> state[<span class="number">0</span>] &lt; m <span class="keyword">and</span> state[<span class="number">0</span>] &gt;= <span class="number">0</span> <span class="keyword">and</span> state[<span class="number">1</span>] &lt; n <span class="keyword">and</span> state[<span class="number">1</span>] &gt;= <span class="number">0</span></span><br><span class="line"></span><br><span class="line">found = <span class="literal">False</span></span><br><span class="line"><span class="keyword">while</span> q:</span><br><span class="line">    size = len(q)</span><br><span class="line">    <span class="keyword">while</span> size &gt; <span class="number">0</span>:</span><br><span class="line">        cur = q.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> cur == end:</span><br><span class="line">            found = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">for</span> delta <span class="keyword">in</span> neighbors:</span><br><span class="line">            nei = (cur[<span class="number">0</span>] + delta[<span class="number">0</span>], cur[<span class="number">1</span>] + delta[<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">if</span> valid(nei) <span class="keyword">and</span> nei <span class="keyword">not</span> <span class="keyword">in</span> lakes:</span><br><span class="line">                x, y = nei</span><br><span class="line">                <span class="keyword">if</span> dp[x][y] == <span class="number">0</span>:</span><br><span class="line">                    q.append(nei)</span><br><span class="line">                dp[x][y] += dp[cur[<span class="number">0</span>]][cur[<span class="number">1</span>]]</span><br><span class="line">        size -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> found:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    minDist += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">print(dp[end[<span class="number">0</span>]][end[<span class="number">1</span>]], minDist)</span><br></pre></td></tr></table></figure>
+<h2 id="multibag">MultiBag</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># https://www.acwing.com/problem/content/4/</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">n2b</span><span class="params">(n)</span>:</span></span><br><span class="line">    b = <span class="number">1</span></span><br><span class="line">    f = []</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">if</span> sum(f) + b &lt; n:</span><br><span class="line">            f.append(b)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            f.append(n - sum(f))</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        b *= <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n, K = map(int, input().split())</span><br><span class="line"></span><br><span class="line">c, v = [], []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">    cost, value, number = input().split()</span><br><span class="line">    cost, value, number = int(cost), int(value), int(number)</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> n2b(number):</span><br><span class="line">        c.append(k * cost)</span><br><span class="line">        v.append(k * value)</span><br><span class="line"></span><br><span class="line">n = len(c)</span><br><span class="line">f = [[<span class="number">0</span>] * (K + <span class="number">1</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> range(n + <span class="number">1</span>)]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, n):</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">0</span>, K):</span><br><span class="line">        f[i + <span class="number">1</span>][k + <span class="number">1</span>] = f[i][k + <span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> k + <span class="number">1</span> &gt;= c[i]:</span><br><span class="line">            f[i + <span class="number">1</span>][k + <span class="number">1</span>] = max(f[i][k + <span class="number">1</span>], f[i][k + <span class="number">1</span> - c[i]] + v[i])</span><br><span class="line">print(f[<span class="number">-1</span>][<span class="number">-1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 也可以按01的思路 + 一层k遍历用多少个第i件物品</span></span><br><span class="line"><span class="comment"># f[i][j] = f[i - 1][j]</span></span><br><span class="line"><span class="comment"># for k in range(1, ):</span></span><br><span class="line"><span class="comment">#     if j - k * c[i] &gt;= 0:</span></span><br><span class="line"><span class="comment">#         f[i][j] = max(f[i][j], f[i - 1][j - k * c[i]] + k * v[i])</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>谢谢老板🐱~.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/reward.png" alt="Nansong Yi WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Nansong Yi Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+  <div class="followme">
+    <p>Welcome to my other publishing channels</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/rss.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/25/Deep-Reinforcement-Learning/" rel="prev" title="Deep Reinforcement Learning">
+      <i class="fa fa-chevron-left"></i> Deep Reinforcement Learning
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#making-a-large-island"><span class="nav-number">1.</span> <span class="nav-text">827. Making A Large Island</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shortest-distance-from-all-buildings"><span class="nav-number">2.</span> <span class="nav-text">317. Shortest Distance from All Buildings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#alien-dictionary"><span class="nav-number">3.</span> <span class="nav-text">269. Alien Dictionary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#binary-tree-maximum-path-sum"><span class="nav-number">4.</span> <span class="nav-text">124. Binary Tree Maximum Path Sum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#course-schedule-ii"><span class="nav-number">5.</span> <span class="nav-text">210. Course Schedule II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#word-break-ii"><span class="nav-number">6.</span> <span class="nav-text">140. Word Break II</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#subarray-sum-equals-k"><span class="nav-number">7.</span> <span class="nav-text">560. Subarray Sum Equals K</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#serialize-and-deserialize-binary-tree"><span class="nav-number">8.</span> <span class="nav-text">297. Serialize and Deserialize Binary Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k-closest-points-to-origin"><span class="nav-number">9.</span> <span class="nav-text">973. K Closest Points to Origin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cnn"><span class="nav-number">10.</span> <span class="nav-text">CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trapping-rain-water"><span class="nav-number">11.</span> <span class="nav-text">42 Trapping Rain Water</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#huawei"><span class="nav-number">12.</span> <span class="nav-text">HUAWEI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multibag"><span class="nav-number">13.</span> <span class="nav-text">MultiBag</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Nansong Yi"
+      src="/images/baby.png">
+  <p class="site-author-name" itemprop="name">Nansong Yi</p>
+  <div class="site-description" itemprop="description">TheSong is named after IG.TheShy</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nansongyi" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;nansongyi" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nansong@uw.edu" title="E-Mail → mailto:nansong@uw.edu" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://nansongyi.me/" title="http:&#x2F;&#x2F;nansongyi.me" rel="noopener" target="_blank">my web</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://silencial.github.io/" title="https:&#x2F;&#x2F;silencial.github.io&#x2F;" rel="noopener" target="_blank">silencial</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://3monks.org/en/" title="https:&#x2F;&#x2F;3monks.org&#x2F;en&#x2F;" rel="noopener" target="_blank">sky</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.twistedwg.com/pages/class.html" title="http:&#x2F;&#x2F;www.twistedwg.com&#x2F;pages&#x2F;class.html" rel="noopener" target="_blank">twistedwg</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+      <div style="position:absolute; bottom:120px left:auto; width:85%">
+          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=450 src="//music.163.com/outchain/player?type=0&id=5290225297&auto=1&height=430"></iframe>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Nansong Yi</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+    </div>
+</body>
+</html>
