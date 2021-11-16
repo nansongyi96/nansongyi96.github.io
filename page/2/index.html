@@ -221,7 +221,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-10-14 00:17:53" itemprop="dateModified" datetime="2021-10-14T00:17:53-07:00">2021-10-14</time>
+                <time title="Modified: 2021-11-10 15:07:32" itemprop="dateModified" datetime="2021-11-10T15:07:32-08:00">2021-11-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -272,6 +272,16 @@
 <h3 id="photography-basic">Photography Basic</h3>
 <ul>
 <li><a href="https://improvephotography.com/photography-basics/aperture-shutter-speed-and-iso/" target="_blank" rel="noopener">Photography Basics 101: Aperture, Shutter speed, and ISO</a></li>
+</ul>
+<h1 id="april-tag">April Tag</h1>
+<ul>
+<li><p>april tag serve as a chessboard.</p></li>
+<li><p>you get <span class="math inline">\(^{c}T_{board}\)</span> through the following two equtions: the known ground truth data is <span class="math inline">\(x_{board}\)</span> and <span class="math inline">\(p_{c}\)</span> <span class="math display">\[
+\begin{align}
+x_{c} &amp;=^{c}T_{board} * x_{board}\\
+p_{c} &amp;= Kx_{c}
+\end{align}
+\]</span></p></li>
 </ul>
 <hr />
 <h3 id="reference">Reference</h3>
@@ -610,7 +620,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-10-07 19:44:57" itemprop="dateModified" datetime="2020-10-07T19:44:57-07:00">2020-10-07</time>
+                <time title="Modified: 2021-11-09 16:44:24" itemprop="dateModified" datetime="2021-11-09T16:44:24-08:00">2021-11-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -652,6 +662,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ du -h <span class="comment"># 查看当文件夹及其子文件夹大小</span></span><br><span class="line">$ du -h --max-depth=1 <span class="comment"># depth=1 文件夹大小</span></span><br></pre></td></tr></table></figure>
 <h2 id="find">find</h2>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">$ find ./<span class="built_in">test</span> -name <span class="string">"*.php"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Ignore the case</span></span><br><span class="line">$ find ./<span class="built_in">test</span> -iname <span class="string">"*.Php"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Limit depth of directory traversal</span></span><br><span class="line">$ find ./<span class="built_in">test</span> -maxdepth 2 -name <span class="string">"*.php"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Invert match</span></span><br><span class="line">$ find ./<span class="built_in">test</span> -not -name <span class="string">"*.php"</span></span><br><span class="line">$ find ./<span class="built_in">test</span> ! -name <span class="string">"*.php"</span></span><br><span class="line">./<span class="built_in">test</span></span><br><span class="line">./<span class="built_in">test</span>/abc.txt</span><br><span class="line">./<span class="built_in">test</span>/subdir</span><br><span class="line"></span><br><span class="line"><span class="comment"># Combine multiple search criterias</span></span><br><span class="line">$ find ./<span class="built_in">test</span> -name <span class="string">'abc*'</span> ! -name <span class="string">'*.php'</span></span><br><span class="line">./<span class="built_in">test</span>/abc.txt</span><br><span class="line">./<span class="built_in">test</span>/abc</span><br><span class="line"></span><br><span class="line"><span class="comment"># OR operator</span></span><br><span class="line">$ find -name <span class="string">'*.php'</span> -o -name <span class="string">'*.txt'</span></span><br><span class="line">./abc.txt</span><br><span class="line">./subdir/how.php</span><br><span class="line">./abc.php</span><br><span class="line">./cool.php</span><br><span class="line"></span><br><span class="line"><span class="comment"># Only files</span></span><br><span class="line">$ find ./<span class="built_in">test</span> -<span class="built_in">type</span> f -name <span class="string">"abc*"</span></span><br><span class="line">./<span class="built_in">test</span>/abc.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># Only directories</span></span><br><span class="line">$ find ./<span class="built_in">test</span> -<span class="built_in">type</span> d -name <span class="string">"abc*"</span></span><br><span class="line">./<span class="built_in">test</span>/abc</span><br><span class="line"></span><br><span class="line"><span class="comment"># Search multiple directories together</span></span><br><span class="line">$ find ./<span class="built_in">test</span> ./dir2 -<span class="built_in">type</span> f -name <span class="string">"abc*"</span></span><br><span class="line">./<span class="built_in">test</span>/abc.txt</span><br><span class="line">./dir2/abcdefg.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># Find hidden files</span></span><br><span class="line">$ find ~ -<span class="built_in">type</span> f -name <span class="string">".*"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Find executable files</span></span><br><span class="line">$ find /bin -maxdepth 2 -perm /a=x</span><br><span class="line">/bin</span><br><span class="line">/bin/preseed_command</span><br><span class="line">/bin/mount</span><br><span class="line">/bin/zfgrep</span><br><span class="line">/bin/tempfile</span><br><span class="line">... output truncated ...</span><br></pre></td></tr></table></figure>
+<h2 id="symbolic-link">symbolic link</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s hard_link soft_link</span><br></pre></td></tr></table></figure>
 <p><strong>Reference</strong></p>
 <ul>
 <li><a href="https://www.binarytides.com/linux-find-command-examples/" target="_blank" rel="noopener">25 simple examples of Linux find command</a></li>
